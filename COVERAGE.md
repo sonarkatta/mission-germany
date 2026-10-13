@@ -312,3 +312,9 @@ Voice render lists for the 42 new clips (cfa-fi-1..19, cfa-deriv-1..10, cfa-alt-
 - Highlights persist locally (S.hl in localStorage state) and reapply automatically when the view reopens; tapping an existing highlight offers "✕ Remove highlight".
 - Same pid space for chapter + topic views, so a highlight made in one appears in the other.
 - index.html cache-bust app.enc?v=25.
+
+## v35 - Per-module highlight collections + visible Key Points - Oct 13
+- Every module/unit now shows HER highlights collected below it: "🖍 Your highlights in this unit" - tap a highlight to jump back to its paragraph, ✕ to remove. Live-refreshes on add/remove. Works on German units, CFA chapters and CFA topic modules.
+- Pre-written Key Points now visible below each module: CFA modules show their hand-written CHAPTER_KEYPOINTS (fallback: module keypoint); German units show a "⭐ Key points - carry these" card distilled from the unit's grammar takeaways.
+- Harness-caught scope fix: highlight engine calls route through window.* so views render in any JS context.
+- index.html cache-bust app.enc?v=26.
