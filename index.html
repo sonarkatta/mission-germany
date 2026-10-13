@@ -55,7 +55,7 @@
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function unlock(pw,silent){
   try{
-    const o=await (await fetch("app.enc?v=26")).json();
+    const o=await (await fetch("app.enc?v=27")).json();
     const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
     const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(o.s),iterations:200000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt","encrypt"]);
     const buf=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(o.i)},key,b64(o.d));
@@ -63,7 +63,7 @@ async function unlock(pw,silent){
     localStorage.setItem("mg_pw",pw);window.MG_KEY=key;
     const s=document.createElement("script");s.textContent=code+"\n;startApp();";document.body.appendChild(s);
     document.getElementById("gate").classList.add("hidden");document.getElementById("app").classList.remove("hidden");
-    (async()=>{window.AUDIO_MAP={};const packs=["2-audio.enc","9-cfa-a.enc","10-cfa-b.enc","2-cfa-c1.enc","3-cfa-c2.enc","4-cfa-d.enc","1-cfa-e1.enc","2-cfa-e2.enc","1-cfa-f1.enc","2-cfa-f2.enc","3-cfa-f3.enc","1-cfa-g1.enc","2-cfa-g2.enc","2-cfa-h1.enc","3-cfa-h2.enc","5-cfa-h3.enc","6-cfa-h4.enc","1-cfa-i1.enc","1-cfa-i2.enc","1-cfa-i3.enc","1-cfa-i4.enc","1-cfa-i5.enc"];
+    (async()=>{window.AUDIO_MAP={};const packs=["2-audio.enc","9-cfa-a.enc","10-cfa-b.enc","2-cfa-c1.enc","3-cfa-c2.enc","4-cfa-d.enc","1-cfa-e1.enc","2-cfa-e2.enc","1-cfa-f1.enc","2-cfa-f2.enc","3-cfa-f3.enc","1-cfa-g1.enc","2-cfa-g2.enc","2-cfa-h1.enc","3-cfa-h2.enc","5-cfa-h3.enc","6-cfa-h4.enc","1-cfa-i1.enc","1-cfa-i2.enc","1-cfa-i3.enc","1-cfa-i4.enc","1-cfa-i5.enc","1-cfa-j1.enc","1-cfa-j2.enc","1-cfa-j3.enc"];
       for(const p of packs){try{const ao=await (await fetch(p)).json();
       const ab=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(ao.i)},key,b64(ao.d));
       const dv=new DataView(ab);const hl=dv.getUint32(0);

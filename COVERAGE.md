@@ -318,3 +318,7 @@ Voice render lists for the 42 new clips (cfa-fi-1..19, cfa-deriv-1..10, cfa-alt-
 - Pre-written Key Points now visible below each module: CFA modules show their hand-written CHAPTER_KEYPOINTS (fallback: module keypoint); German units show a "⭐ Key points - carry these" card distilled from the unit's grammar takeaways.
 - Harness-caught scope fix: highlight engine calls route through window.* so views render in any JS context.
 - index.html cache-bust app.enc?v=26.
+
+## v36 - CFA Derivatives voice live - Oct 13
+- CFA voice: Derivatives fully rendered and wired - 10 module narrations (cfa-deriv-1..10), sharded into 3 packs (1-cfa-j1..j3.enc, 4/4/2 clips, letter j), registered in the CFA-VOICE manifest block, loaded via index.html pack list. Byte-verified against sources after packing (packs decrypt, header sizes match mp3s exactly).
+- index.html cache-bust app.enc?v=27.
