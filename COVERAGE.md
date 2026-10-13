@@ -306,3 +306,9 @@ Voice render lists for the 42 new clips (cfa-fi-1..19, cfa-deriv-1..10, cfa-alt-
 - CFA module labels + jump menu (user ask): topic pages now open with a sticky jump bar listing every module as "N: Title" - tapping jumps straight to that module and opens it (zero manual scrolling); module heads also scroll into view on open. Audio player bar now shows module number AND title ("Ethics - Module 3: Professional Standards").
 - Hero copy: "German from zero to C1". index.html cache-bust app.enc?v=23.
 - German audio pack (2-audio.enc) unchanged - C1 clips await render from the 5,900-clip list.
+
+## v34 - My Highlights (user text highlighting) - Oct 13
+- Arya can now highlight her own main points while reading: select any text in German lesson paragraphs, CFA chapter bodies or topic module bodies -> floating "🖍 Highlight" button appears -> tap to mark in warm yellow.
+- Highlights persist locally (S.hl in localStorage state) and reapply automatically when the view reopens; tapping an existing highlight offers "✕ Remove highlight".
+- Same pid space for chapter + topic views, so a highlight made in one appears in the other.
+- index.html cache-bust app.enc?v=25.
