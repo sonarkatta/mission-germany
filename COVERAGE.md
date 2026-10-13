@@ -326,3 +326,12 @@ Voice render lists for the 42 new clips (cfa-fi-1..19, cfa-deriv-1..10, cfa-alt-
 ## v37 - CFA Alternative Investments voice live - Oct 13
 - CFA voice: Alternative Investments fully rendered and wired - 7 module narrations (cfa-alt-1..7), sharded into 2 packs (1-cfa-k1..k2.enc, 4/3 clips, letter k), CFA-VOICE manifest block, index.html pack list. Byte-verified against sources.
 - index.html cache-bust app.enc?v=28.
+
+
+## Recovery v45 - October 14
+- Alphabet stays in A-Z order; vocabulary decks still shuffle.
+- Removed owner names and non-English app captions. German learning stays English + German.
+- Real audio packs load on demand; speech synthesis resumes after cancellation on iOS.
+- English tutor fixed replies use seven rendered voice clips.
+- Decrypt roundtrip passed. Local checks: 102/102 chapters and 21/21 navigation.
+- New packs: German A1 units 1-4, 463 clips; PM 6 clips; tutor core 7 clips.
