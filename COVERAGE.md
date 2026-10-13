@@ -132,6 +132,11 @@ FSA topic now: 12 deep modules covering 100% of official L1 FSA readings (was 2 
 - Browser AUDIO_MAP total: 361 clips (332 German + 10 Ethics + 11 Quant + 8 Economics), verified in a real browser session; all packs decrypt with the app key
 - Next in voice queue: FSA 12 clips (render list with Main)
 
+## Equities deep batch (v20, 2026-10-13)
+
+- Equities topic now: 12 deep modules covering 100% of official L1 Equities readings (was 2 shallow). App total: 68 modules, of which 60 deep (Ethics 10, Quant 11, Econ 8, FSA 12, Corp 7, Equities 12). Remaining 4 topics still shallow: Fixed Income, Derivatives, Alternatives, Portfolio Construction.
+- Render list cfa-equity-1..12 sent to the voice queue (equity-render-1-12.txt).
+
 ## Audio coverage (v19, 2026-10-13)
 
 - CFA Corporate Finance voice live: cfa-corp-1..7 full-length Callirrhoe clips in two packs (1-cfa-g1.enc clips 1-4, 2-cfa-g2.enc clips 5-7) - all five deep CFA topics (Ethics, Quant, Econ, FSA, Corp) now fully voiced: 48 of 58 modules speak Callirrhoe
