@@ -137,3 +137,19 @@ FSA topic now: 12 deep modules covering 100% of official L1 FSA readings (was 2 
 - CFA FSA voice live: cfa-fsa-1..12 full-length Callirrhoe clips in three packs (1-cfa-f1.enc 1-4, 2-cfa-f2.enc 5-8, 3-cfa-f3.enc 9-12) - all four deep CFA topics (Ethics, Quant, Econ, FSA) now fully voiced: 41 of 53 modules speak Callirrhoe
 - Browser AUDIO_MAP total: 373 clips (332 German + 41 CFA), verified live; all 11 packs decrypt with the app key
 - Voice queue: Corporate Finance render list comes with that content batch next
+
+## Deep modules - Corporate Finance batch (v18, 2026-10-13)
+
+Full official 2027 L1 Corporate Finance reading list - 7 deep modules, one per reading, LOS-mapped (l1-los.json), story-first quality bar:
+
+| Module | Official reading | LOS covered |
+|---|---|---|
+| corp-1 | Organizational Forms, Corporate Issuer Features, and Ownership | forms compared; corporate issuer features (legal personality, limited liability, perpetual life, transferability); public vs private issuers |
+| corp-2 | Investors and Other Stakeholders | lender vs shareholder claims and motivations; stakeholder groups and interests; ESG factors |
+| corp-3 | Corporate Governance | principal-agent relationship and conflicts; governance mechanisms; risks of poor governance and benefits of effective governance |
+| corp-4 | Working Capital and Liquidity | cash conversion cycle; liquidity comparison; working capital objectives and methods |
+| corp-5 | Capital Investments and Capital Allocation | investment types; allocation process with NPV/IRR/ROIC calculation and contrast; allocation principles and pitfalls; real options |
+| corp-6 | Capital Structure | WACC calculation; factors affecting structure; Modigliani-Miller propositions; optimal and target structures |
+| corp-7 | Business Models | key features of business models; types of business models |
+
+Corporate Finance topic now: 7 deep modules covering 100% of official L1 Corp Finance readings (was 2 shallow). App total: 58 modules. Remaining 5 topics still shallow: Equities, Fixed Income, Derivatives, Alternatives, Portfolio Management. Render list cfa-corp-1..7 sent to the voice queue.
