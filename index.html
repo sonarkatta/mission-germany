@@ -63,12 +63,13 @@ async function unlock(pw,silent){
     localStorage.setItem("mg_pw",pw);window.MG_KEY=key;
     const s=document.createElement("script");s.textContent=code+"\n;startApp();";document.body.appendChild(s);
     document.getElementById("gate").classList.add("hidden");document.getElementById("app").classList.remove("hidden");
-    (async()=>{try{const ao=await (await fetch("8-audio-v9.enc")).json();
+    (async()=>{window.AUDIO_MAP={};const packs=["8-audio-v9.enc","9-cfa-a.enc","10-cfa-b.enc"];
+      for(const p of packs){try{const ao=await (await fetch(p)).json();
       const ab=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(ao.i)},key,b64(ao.d));
       const dv=new DataView(ab);const hl=dv.getUint32(0);
       const head=JSON.parse(new TextDecoder().decode(new Uint8Array(ab,4,hl)));
-      window.AUDIO_MAP={};for(const n in head){const e=head[n];window.AUDIO_MAP[n]=URL.createObjectURL(new Blob([ab.slice(4+hl+e[0],4+hl+e[0]+e[1])],{type:"audio/mpeg"}))}
-    }catch(e){/* audio bundle optional */}})();
+      for(const n in head){const e=head[n];window.AUDIO_MAP[n]=URL.createObjectURL(new Blob([ab.slice(4+hl+e[0],4+hl+e[0]+e[1])],{type:"audio/mpeg"}))}
+      }catch(e){/* pack optional */}}})();
   }catch(e){localStorage.removeItem("mg_pw");if(!silent)document.getElementById("gateErr").textContent="That password is not right. Try again.";}
 }
 function _primeA(){try{window._pa=new Audio();window._pa.muted=true;const p=window._pa.play();if(p)p.then(()=>{window._pa.pause();window._pa.muted=false;window._pa.currentTime=0}).catch(()=>{})}catch(e){}}
