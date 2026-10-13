@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F2F4F9">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,6 +24,7 @@
     <p class="gate-sub">Arya's prep companion</p>
     <input type="password" id="gateInput" placeholder="Password" autocomplete="off" enterkeyhint="go">
     <button id="gateBtn">Unlock</button>
+    <p class="gate-sub" id="gateStatus" style="min-height:20px;margin:10px 0 0"></p>
     <p class="gate-err" id="gateErr"></p>
   </div>
 </div>
@@ -55,22 +56,20 @@
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function unlock(pw,silent){
   try{
-    const o=await (await fetch("app.enc?v=28")).json();
+    const st=document.getElementById("gateStatus");if(st)st.textContent="Downloading your app - first time takes a minute...";
+    const o=await (await fetch("13-app.enc?v=45")).json();
+    if(st)st.textContent="Unlocking - one moment";
     const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
     const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(o.s),iterations:200000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt","encrypt"]);
     const buf=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(o.i)},key,b64(o.d));
     const code=new TextDecoder().decode(buf);
     localStorage.setItem("mg_pw",pw);window.MG_KEY=key;
-    const s=document.createElement("script");s.textContent=code+"\n;startApp();";document.body.appendChild(s);
+    const s=document.createElement("script");s.textContent=code+"\n;for(const f in PACK_OF){if(PACK_OF[f]===\"1-tut-core.enc\")PACK_OF[f]=\"14-1-tut-core.enc\"};const _tpo=tutorPackOf;tutorPackOf=k=>k.startsWith(\"qa-\")?_tpo(k):\"14-1-tut-core.enc\";startApp();";document.body.appendChild(s);
     document.getElementById("gate").classList.add("hidden");document.getElementById("app").classList.remove("hidden");
-    (async()=>{window.AUDIO_MAP={};const packs=["2-audio.enc","9-cfa-a.enc","10-cfa-b.enc","2-cfa-c1.enc","3-cfa-c2.enc","4-cfa-d.enc","1-cfa-e1.enc","2-cfa-e2.enc","1-cfa-f1.enc","2-cfa-f2.enc","3-cfa-f3.enc","1-cfa-g1.enc","2-cfa-g2.enc","2-cfa-h1.enc","3-cfa-h2.enc","5-cfa-h3.enc","6-cfa-h4.enc","1-cfa-i1.enc","1-cfa-i2.enc","1-cfa-i3.enc","1-cfa-i4.enc","1-cfa-i5.enc","1-cfa-j1.enc","1-cfa-j2.enc","1-cfa-j3.enc","1-cfa-k1.enc","1-cfa-k2.enc"];
-      for(const p of packs){try{const ao=await (await fetch(p)).json();
-      const ab=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(ao.i)},key,b64(ao.d));
-      const dv=new DataView(ab);const hl=dv.getUint32(0);
-      const head=JSON.parse(new TextDecoder().decode(new Uint8Array(ab,4,hl)));
-      for(const n in head){const e=head[n];window.AUDIO_MAP[n]=URL.createObjectURL(new Blob([ab.slice(4+hl+e[0],4+hl+e[0]+e[1])],{type:"audio/mpeg"}))}
-      }catch(e){/* pack optional */}}})();
-  }catch(e){localStorage.removeItem("mg_pw");if(!silent)document.getElementById("gateErr").textContent="That password is not right. Try again.";}
+    (async()=>{window.AUDIO_MAP=window.AUDIO_MAP||{};const packs=["2-audio.enc",  "14-1-tut-core.enc", "9-cfa-a.enc", "10-cfa-b.enc", "2-cfa-c1.enc", "3-cfa-c2.enc", "4-cfa-d.enc", "1-cfa-e1.enc", "2-cfa-e2.enc", "1-cfa-f1.enc", "2-cfa-f2.enc", "3-cfa-f3.enc", "1-cfa-g1.enc", "2-cfa-g2.enc", "2-cfa-h1.enc", "3-cfa-h2.enc", "5-cfa-h3.enc", "6-cfa-h4.enc", "1-cfa-i1.enc", "1-cfa-i2.enc", "1-cfa-i3.enc", "1-cfa-i4.enc", "1-cfa-i5.enc", "1-cfa-j1.enc", "1-cfa-j2.enc", "1-cfa-j3.enc", "1-cfa-k1.enc", "1-cfa-k2.enc", "1-cfa-l1.enc", "1-cfa-l2.enc"];
+      await loadPack(packs[0]);
+      for(let i=1;i<packs.length;i+=4)await Promise.all(packs.slice(i,i+4).map(loadPack));})();
+  }catch(e){const st=document.getElementById("gateStatus");if(st)st.textContent="";localStorage.removeItem("mg_pw");if(!silent)document.getElementById("gateErr").textContent="That password is not right. Try again.";}
 }
 function _primeA(){try{window._pa=new Audio();window._pa.muted=true;const p=window._pa.play();if(p)p.then(()=>{window._pa.pause();window._pa.muted=false;window._pa.currentTime=0}).catch(()=>{})}catch(e){}}
 document.getElementById("gateBtn").onclick=()=>{_primeA();unlock(document.getElementById("gateInput").value.trim())};
