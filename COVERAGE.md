@@ -53,4 +53,24 @@ Backbone: CFA Institute 2027 Level I Topic Outline (official LOS PDF). One app m
 | ethics-9 | Guidance for Standard VII: Responsibilities as a CFA Institute Member or CFA Candidate | explain the ethical responsibilities required by Standard VII(A) Conduct as Participants in CFA Institute Programs, VII(B) Reference to CFA Institute, the CFA Designation, and the CFA Program; recommend practices and procedures designed to prevent violations of Standard VII |
 | ethics-10 | Application of the Code and Standards | evaluate practices, policies, and conduct relative to the CFA Institute Code of Ethics and Standards of Professional Conduct; explain how the practices, policies, and conduct do or do not violate the CFA Institute Code of Ethics and Standards of Professional Conduct |
 
-Ethics topic now: 10 deep modules (was 2 shallow). Remaining 9 topics still shallow (2 modules each) - Quant batch next.
+Ethics topic now: 10 deep modules (was 2 shallow). Quant batch shipped in v13 (see below).
+
+## Deep modules - Quant batch (v13, 2026-10-13)
+
+Full official 2027 L1 Quantitative Methods reading list - 11 deep modules, one per reading, LOS-mapped (l1-los.json):
+
+| Module | Official reading | LOS covered |
+|---|---|---|
+| quant-1 | Returns of Financial Assets and Instruments | describe, compare, and interpret returns; describe, compare, and interpret required rates of return, risk-free rates, risk premia, and inflation |
+| quant-2 | Types of Financial Returns | calculate, compare, and interpret different types of returns for financial assets, instruments, and indicators |
+| quant-3 | Benchmarking Returns | calculate and compare money-weighted and time-weighted rates of return; describe the choices and implications of index weighting methods; calculate, interpret, and explain index values and returns |
+| quant-4 | The Time Value of Money in Finance | PV of fixed-income and equity instruments; implied return (YTM) and implied growth; cash-flow additivity, no arbitrage, implied forward rates |
+| quant-5 | Statistical Characteristics of Asset Returns | central tendency and dispersion measures; skewness and kurtosis; covariance and correlation; semi-deviation and coefficient of variation |
+| quant-6 | Statistical Distributions for Financial Asset Prices and Returns | unconditional expected values; principal moments of key distributions; conditional expectations; Bayesian updating |
+| quant-7 | Estimation and Hypothesis Testing | central limit theorem, confidence intervals, sampling; hypothesis testing components, Type I/II errors, power; parametric vs non-parametric tests |
+| quant-8 | The Return and Risk of a Financial Portfolio | portfolio expected return, variance, covariance, correlation; minimum-variance portfolio and efficient frontier; risk aversion, CAL, market portfolio, CML |
+| quant-9 | Simulation of Financial Asset Prices and Returns | historical simulation; bootstrap resampling; Monte Carlo simulation |
+| quant-10 | Applications of Simple Linear Regression in Finance | least squares estimation; assumptions, residuals, goodness-of-fit, ANOVA; predicted values and prediction intervals; CAPM beta/alpha estimation |
+| quant-11 | Introduction to Financial Data Science | big data, machine learning, and AI in financial data science, fintech, and investment management |
+
+Quant topic now: 11 deep modules covering 100% of official L1 Quant readings (was 2 shallow). App total: 37 modules. Remaining 8 topics still shallow (2 modules each) - Economics batch next.
