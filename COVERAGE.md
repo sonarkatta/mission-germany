@@ -276,3 +276,8 @@ Voice render lists for the 42 new clips (cfa-fi-1..19, cfa-deriv-1..10, cfa-alt-
 - A2 started: u11 Gestern (Perfekt: haben/sein helper + participle-last, participle factory, war/hatte/musste spoken past) - u12 Früher (Präteritum top-20 for reading, regular -te, als vs wenn) - u13 Wo und wohin (two-way prepositions, rest=dative vs motion=accusative, liegen/legen twins, rein/raus, hin/her) - u14 Sich (reflexive mirror table, freuen auf/über, dative mirror + body parts, formal self-intro) - u15 Größer, besser (comparative/superlative, gut-besser-am besten, so...wie, je...desto, adjective endings lite) - u16 Morgen (future: present+time, werden, vorhaben + zu-infinitive; appointments; wishes) - u17 Gesundheit (body, weh tun dative frames, doctor + pharmacy flow, sick-day message).
 - course.js + sync-course-audio.js: clip key prefix now derived from unit level (a1u/a2u); A1 keys unchanged.
 - 1,989 course clips total in render list (render-a1-course.txt covers all levels).
+
+## v29 - German A2 course COMPLETE (units 11-20) - Oct 13
+- u18 Feste (wishes, Herzlichen Glückwunsch zu+dat, birthday rules, cards, holidays, party verbs) - u19 Arbeit (jobs, sich bewerben um, formal letter frame, als/bei/an, first day, CV) - u20 Meinungen (opinion frames denke/finde/glaube, deshalb/trotzdem/denn connector houses, würde lieber, A2 exam preview + full A2 grammar map).
+- A2 COMPLETE: 20 units, 2,342 course clips. Full German track: A1 (10) + A2 (10), grammar arc articles -> cases -> tenses -> connectors.
+- Deployed to main via GitHub API (PAT, repo scope) - no browser.
