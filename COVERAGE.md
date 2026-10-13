@@ -74,3 +74,26 @@ Full official 2027 L1 Quantitative Methods reading list - 11 deep modules, one p
 | quant-11 | Introduction to Financial Data Science | big data, machine learning, and AI in financial data science, fintech, and investment management |
 
 Quant topic now: 11 deep modules covering 100% of official L1 Quant readings (was 2 shallow). App total: 37 modules. Remaining 8 topics still shallow (2 modules each) - Economics batch next.
+
+## Deep modules - Economics batch (v15, 2026-10-13)
+
+Full official 2027 L1 Economics reading list - 8 deep modules, one per reading, LOS-mapped (l1-los.json):
+
+| Module | Official reading | LOS covered |
+|---|---|---|
+| econ-1 | The Firm and Market Structures | breakeven/shutdown and economies/diseconomies of scale; characteristics of the four market structures; monopolistic competition pricing; oligopoly pricing and strategy; concentration measures and their limits |
+| econ-2 | Understanding Business Cycles | business cycle phases; credit cycles; sector variation over the cycle and measurement via indicators |
+| econ-3 | Fiscal Policy | monetary vs fiscal policy; roles, objectives, and the debt-to-GDP debate; fiscal tools with advantages/disadvantages; implementation lags and policy stance |
+| econ-4 | Monetary Policy | central bank roles and objectives; tools, transmission mechanism, and links to growth/inflation/rates/FX; effective central banks, targeting styles, limitations; monetary-fiscal interaction |
+| econ-5 | Introduction to Geopolitics | cooperation vs competition; globalization; World Bank/IMF/WTO; geopolitical risk types; tools of geopolitics; investment impact |
+| econ-6 | International Trade | benefits and costs of trade; tariffs, quotas, export subsidies; trading blocs, common markets, economic unions |
+| econ-7 | Capital Flows and the FX Market | FX market functions and participants; nominal vs real exchange rates and percentage changes; exchange rate regimes; effects on trade and capital flows; capital restriction objectives |
+| econ-8 | Exchange Rate Calculations | cross-rates; covered interest parity, forward points and percentages, forward discount/premium interpretation |
+
+Economics topic now: 8 deep modules covering 100% of official L1 Economics readings (was 2 shallow). App total: 43 modules. Remaining 6 topics still shallow (2 modules each).
+
+## Audio coverage (v15, 2026-10-13)
+
+- German: 332 clips live (259 core + 45 dialogue lines + 12 greetings + 16 cleanup batch) - 100% of AUDIO_MANIFEST German keys
+- CFA: cfa-ethics-1..10 full-length live (10 of 43 modules). cfa-quant-1..11 and cfa-econ-1..8 render lists sent, rendering in progress
+- Pack architecture: index.html loads packs array [2-audio.enc (German), 9-cfa-a.enc (Ethics 1-5), 10-cfa-b.enc (Ethics 6-10)]; all packs keyed to app.enc salt (build.sh reuses salt across builds)
