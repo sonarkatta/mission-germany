@@ -322,3 +322,7 @@ Voice render lists for the 42 new clips (cfa-fi-1..19, cfa-deriv-1..10, cfa-alt-
 ## v36 - CFA Derivatives voice live - Oct 13
 - CFA voice: Derivatives fully rendered and wired - 10 module narrations (cfa-deriv-1..10), sharded into 3 packs (1-cfa-j1..j3.enc, 4/4/2 clips, letter j), registered in the CFA-VOICE manifest block, loaded via index.html pack list. Byte-verified against sources after packing (packs decrypt, header sizes match mp3s exactly).
 - index.html cache-bust app.enc?v=27.
+
+## v37 - CFA Alternative Investments voice live - Oct 13
+- CFA voice: Alternative Investments fully rendered and wired - 7 module narrations (cfa-alt-1..7), sharded into 2 packs (1-cfa-k1..k2.enc, 4/3 clips, letter k), CFA-VOICE manifest block, index.html pack list. Byte-verified against sources.
+- index.html cache-bust app.enc?v=28.
