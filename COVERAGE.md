@@ -143,6 +143,20 @@ FSA topic now: 12 deep modules covering 100% of official L1 FSA readings (was 2 
 - Browser AUDIO_MAP total: 380 clips (332 German + 48 CFA), verified live in a real browser session; corp blob byte-exact
 - Voice queue: Equities render list comes with the Equities deep batch next
 
+## Audio coverage (v22, 2026-10-13)
+
+- CFA Equities voice live: cfa-equity-1..12 full-length Callirrhoe clips in four packs (2-cfa-h1.enc clips 1-3, 3-cfa-h2.enc clips 4-6, 5-cfa-h3.enc clips 7-9, 6-cfa-h4.enc clips 10-12)
+- All six deep CFA topics (Ethics, Quant, Econ, FSA, Corp, Equities) now fully voiced: 60 of 68 modules speak Callirrhoe
+- Browser AUDIO_MAP total: 392 clips (332 German + 60 CFA), verified live
+- Voice queue: Fixed Income, Derivatives, Alternatives, Portfolio Construction clips come with their deep batches
+
+## Player + bookmarks (v21, 2026-10-13)
+
+- New player controller: mini player bar above the tab bar (play/pause, tap-to-seek progress, restart, close) for every mp3 narration and the TTS fallback path
+- Audio bookmarks: position persists per module during play and on pause/leave; Listen resumes from the saved spot (S.audioPos)
+- Reading bookmarks: per-module scroll position persists (S.readPos); the topic view shows a Continue chip on the module left mid-read; marking a module read clears its bookmark
+- Verified live: player bar on mp3 and TTS paths, pause/resume state persisted to device storage, Continue chip on reopen, decrypted clip blob valid MPEG, 68 modules + 380 clips loading
+
 ## Audio coverage (v18, 2026-10-13)
 
 - CFA FSA voice live: cfa-fsa-1..12 full-length Callirrhoe clips in three packs (1-cfa-f1.enc 1-4, 2-cfa-f2.enc 5-8, 3-cfa-f3.enc 9-12) - all four deep CFA topics (Ethics, Quant, Econ, FSA) now fully voiced: 41 of 53 modules speak Callirrhoe
