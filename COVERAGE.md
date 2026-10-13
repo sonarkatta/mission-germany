@@ -178,3 +178,96 @@ Full official 2027 L1 Corporate Finance reading list - 7 deep modules, one per r
 | corp-7 | Business Models | key features of business models; types of business models |
 
 Corporate Finance topic now: 7 deep modules covering 100% of official L1 Corp Finance readings (was 2 shallow). App total: 58 modules. Remaining 5 topics still shallow: Equities, Fixed Income, Derivatives, Alternatives, Portfolio Management. Render list cfa-corp-1..7 sent to the voice queue.
+
+
+## Deep modules - FINAL FOUR TOPICS: FI + Derivatives + Alternatives + Portfolio Construction (v23, 2026-10-13)
+The last 4 shallow topics replaced with full deep coverage. ALL 102 official 2027 CFA L1 readings now have deep modules.
+
+| module | official reading | LOS anchor |
+| --- | --- | --- |
+| fi-1 | Fixed-Income Instrument Features | issuer/face value/coupon/maturity/currency features |
+| fi-2 | Fixed-Income Cash Flows and Types | bullet/amortizing structures; call/put provisions |
+| fi-3 | Fixed-Income Issuance and Trading | primary/secondary bond markets, OTC dealing |
+| fi-4 | Fixed-Income Markets for Corporate Issuers | short vs long-term corporate funding |
+| fi-5 | Fixed-Income Markets for Government Issuers | sovereign/non-sovereign/supranational/agency debt |
+| fi-6 | Fixed-Income Bond Valuation: Prices and Yields | PV pricing, price-yield inverse relation |
+| fi-7 | Yield and Yield Spread Measures for Fixed-Rate Bonds | YTM, compounding, spreads over benchmark |
+| fi-8 | Yield and Yield Spread Measures for Floating-Rate Instruments | reference+margin, discount-rate instruments |
+| fi-9 | The Term Structure of Interest Rates: Spot, Par, and Forward Curves | spot/par/forward curve construction and use |
+| fi-10 | Interest Rate Risk and Return | coupon/reinvestment/price return sources; duration intro |
+| fi-11 | Yield-Based Bond Duration Measures and Properties | Macaulay/modified/effective duration, % price change |
+| fi-12 | Yield-Based Bond Convexity and Portfolio Properties | convexity adjustment, money duration, portfolio aggregates |
+| fi-13 | Curve-Based and Empirical Fixed-Income Risk Measures | effective/key-rate duration, empirical estimates |
+| fi-14 | Credit Risk | PD x LGD, expected loss, ratings, spreads, recovery |
+| fi-15 | Credit Analysis for Government Issuers | sovereign ability vs willingness; own vs foreign currency |
+| fi-16 | Credit Analysis for Corporate Issuers | 4 Cs, leverage/coverage ratios, seniority notching |
+| fi-17 | Fixed-Income Securitization | SPE mechanics, parties, benefits to issuers/investors/economy |
+| fi-18 | Asset-Backed Security (ABS) Instrument and Market Features | covered bonds vs ABS, credit enhancement, CDO waterfall |
+| fi-19 | Mortgage-Backed Security (MBS) Instrument and Market Features | prepayment risk, pass-through, CMO time tranching, CMBS |
+| deriv-1 | Derivative Instrument and Derivative Market Features | derivative definition; exchange-traded vs OTC |
+| deriv-2 | Forward Commitment and Contingent Claim Features and Instruments | forwards/futures/swaps vs options/CDS; option payoffs at expiry |
+| deriv-3 | Derivative Benefits, Risks, and Issuer and Investor Uses | risk allocation, price discovery, leverage risk; issuer vs investor use |
+| deriv-4 | Arbitrage, Replication, and the Cost of Carry in Pricing Derivatives | law of one price, replication, F = S + carry |
+| deriv-5 | Pricing and Valuation of Forward Contracts and for an Underlying with Varying Maturities | price vs value at initiation/life/expiration; FRAs, forward rates |
+| deriv-6 | Pricing and Valuation of Futures Contracts | daily settlement, margin, forward-futures price gap from rate correlation |
+| deriv-7 | Pricing and Valuation of Interest Rate and Other Swaps | swap as FRA strip with uniform rate; swap rate, value, bond-portfolio view |
+| deriv-8 | Pricing and Valuation of Options | exercise value + time value, moneyness, six value factors, bounds |
+| deriv-9 | Option Replication Using Put-Call Parity | S + P = C + PV(X); put-call-forward parity C - P = PV(F - X) |
+| deriv-10 | Valuing a Derivative Using a One-Period Binomial Model | hedge ratio, risk-neutral probabilities, risk-free discounting |
+| alt-1 | Alternative Investment Features, Methods, and Structures | categories; direct/co-investment/fund; GP-LP, 2-and-20, hurdle, high-water mark |
+| alt-2 | Alternative Investment Performance and Returns | IRR vs MOIC/TVPI/DPI/RVPI; fees net; J-curve; appraisal smoothing bias |
+| alt-3 | Investments in Private Capital: Equity and Debt | VC stages, LBO return engines, exits; direct lending/mezzanine/distressed |
+| alt-4 | Real Estate and Infrastructure | rent+appreciation, REITs; brownfield/greenfield, regulatory risk |
+| alt-5 | Natural Resources | raw land/timberland/farmland; commodity price+roll+collateral returns |
+| alt-6 | Hedge Funds | strategies (long-short, event-driven, macro, relative value); FoF fee layers; tail risk |
+| alt-7 | Introduction to Digital Assets | DLT/blockchain, PoW vs PoS, tokenisation; custody; valuation risk |
+| pm-1 | Portfolio Risk and Return: Part I | mean/variance/covariance, diversification term, min-variance/efficient frontier, GMV, CAL |
+| pm-2 | Portfolio Risk and Return: Part II | CML vs SML; systematic vs nonsystematic risk; beta; CAPM; Sharpe/Treynor/M2/Jensen |
+| pm-3 | Portfolio Management: An Overview | portfolio approach, plan-execute-feedback; investor types; DB vs DC; pooled vehicles |
+| pm-4 | Basics of Portfolio Planning and Construction | IPS purpose/components; willingness vs ability (lower governs); 5 constraints; SAA; ESG |
+| pm-5 | The Behavioral Biases of Individuals | cognitive errors (correct) vs emotional biases (accommodate); market anomalies |
+| pm-6 | Introduction to Risk Management | framework, governance, tolerance, risk budgeting; VaR/stress/expected shortfall; avoid/reduce/transfer/retain |
+
+Deep coverage complete: Ethics 10, Quant 11, Econ 8, FSA 12, Corp 7, Equities 12, Fixed Income 19, Derivatives 10, Alternatives 7, Portfolio Construction 6 = 102 deep modules = 100% of official 2027 L1 readings. Zero shallow modules remain.
+Voice render lists for the 42 new clips (cfa-fi-1..19, cfa-deriv-1..10, cfa-alt-1..7, cfa-pm-1..6) sent to the voice queue; audio packs follow when clips arrive.
+
+## 3-Level Library + Q&A sets (v24, 2026-10-13)
+
+### The Arya Library - three levels, open from day one
+- Level I: 102 chapters (10 books, one chapter per official reading), every chapter a full lesson - plain-English body, LOS list, key points (with highlight mode), chapter summary, exhibits, worked examples, MCQ practice, and now a "Common doubts, answered" section.
+- Level II: 51 readings across 10 books - syllabus view live (official learning outcomes listed per reading); lessons to be written in order after Level I.
+- Level III: 50 readings across 7 books - syllabus view live.
+- Chapter id scheme normalised: ethics-1..10, quant-1..11, econ-1..8, fsa-1..12, corp-1..7, equity-1..12, fi-1..19, deriv-1..10, alt-1..7, pm-1..6 (all data banks rekeyed to match).
+
+### New in v24: per-chapter Q&A sets ("Common doubts, answered")
+- 102 chapters x 10 doubts = 1,020 Q&As, one set per chapter, expandable answer cards under each chapter's worked examples.
+- Every answer story/analogy-first, no unexplained jargon, no cost figures (father's rule), all original prose.
+- Doubles as the tutor's offline doubt bank (Doubt Journal design): the same {q,a} records feed recall.
+
+### Level I totals after v24
+- 102 full chapters | 614 exam-style MCQs (explanations on every option) | 13 hand-drawn SVG exhibits | 306 worked examples (3 per chapter, step-by-step) | 1,020 Q&As (10 per chapter) | key points + summaries on all 102 chapters.
+- Bundle: app.enc decrypt-validated locally (1,887,615 bytes); full 102-chapter render check passed after v24 changes.
+
+---
+
+## v25 - Back navigation everywhere + library routing fix (Oct 13, 2026)
+
+- Every screen now has a consistent "‹ Back" button (top-left), powered by a real navigation history - tap Back to return exactly where you came from, across lessons, library, tutor, drills, revision, tools, Path and progress screens.
+- The five bottom tabs (Today, Path, CFA, German, More) stay home bases - they reset the trail, like a phone app should.
+- Fixed a wiring gap from the library upgrade: book and chapter screens are now proper routes in the app router, so every card you tap opens reliably.
+- Quiz screens now keep the "More" tab highlighted; CFA level maps and the progress dashboard are first-class screens too.
+
+---
+
+## v26 - The tutor wakes up (Oct 13, 2026)
+
+- Arya's Tutor is now real: ask anything, typed or spoken (🎤 Bolun vichar), and it answers from her own study world first.
+- Three layers, always-on: (1) the app's 1,020-chapter doubt bank + German grammar answers instantly, even offline; (2) the cloud teacher-friend (private, password-gated, 30 questions a day) for open-ended questions, anchored to her own lesson notes; (3) warm offline fallback if neither is reachable.
+- All tutor copy rewritten in her voice: warm teacher-friend, natural Marathi touches, zero template phrases. Library headline updated to match.
+
+
+## v27 - German A1 full course (10 units) - Oct 13
+- GERMAN_COURSE complete for A1: 10 units, each with 7 narrated lesson sections, 48 vocab cards (article + plural + example), 2 grammar notes, 2 dialogues (7-8 lines), 6 exercises, 6 quiz items.
+- Units: 1 Hallo (greetings, alphabet) - 2 Woher kommst du (countries, languages) - 3 Wie alt bist du (numbers, dates) - 4 Meine Familie (haben, possessives) - 5 Dinge (der/die/das radar, plurals, es gibt) - 6 Essen und Trinken (vowel-changers, accusative) - 7 Mein Tag (clock time, separable verbs) - 8 In der Stadt (directions, transport, modals) - 9 Einkaufen (clothes, dative official) - 10 Zuhause (rooms, renting, weil, A1 case map + review).
+- Grammar arc across units: articles -> sein/haben -> accusative (den) -> separable verbs -> modals -> dative (mir/dir) -> weil side-sentences. Progressive, story-first, zero jargon.
+- 1,165 course clips queued for Callirrhoe rendering (render-a1-course.txt); keys pre-registered in AUDIO_MANIFEST COURSE-CLIPS block.
