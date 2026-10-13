@@ -63,7 +63,7 @@ async function unlock(pw,silent){
     localStorage.setItem("mg_pw",pw);window.MG_KEY=key;
     const s=document.createElement("script");s.textContent=code+"\n;startApp();";document.body.appendChild(s);
     document.getElementById("gate").classList.add("hidden");document.getElementById("app").classList.remove("hidden");
-    (async()=>{window.AUDIO_MAP={};const packs=["2-audio.enc","9-cfa-a.enc","10-cfa-b.enc","2-cfa-c1.enc","3-cfa-c2.enc","4-cfa-d.enc"];
+    (async()=>{window.AUDIO_MAP={};const packs=["2-audio.enc","9-cfa-a.enc","10-cfa-b.enc","2-cfa-c1.enc","3-cfa-c2.enc","4-cfa-d.enc","1-cfa-e1.enc","2-cfa-e2.enc"];
       for(const p of packs){try{const ao=await (await fetch(p)).json();
       const ab=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(ao.i)},key,b64(ao.d));
       const dv=new DataView(ab);const hl=dv.getUint32(0);
