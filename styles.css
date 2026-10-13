@@ -396,3 +396,16 @@ h1,h2{background:linear-gradient(90deg,#1C1C1E,#48484D);-webkit-background-clip:
 .quote-card::before{content:"A thought for today";display:block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#98989E;margin-bottom:10px}
 .quote-card .q{font-size:16.5px;font-weight:600;line-height:1.5;color:#1C1C1E;letter-spacing:-.01em}
 .quote-card .mr{font-size:14px;color:rgba(175,82,222,.9);margin-top:8px;line-height:1.45;font-weight:500}
+
+/* AUDIO PLAYER + BOOKMARKS */
+#player{position:fixed;left:10px;right:10px;bottom:calc(74px + env(safe-area-inset-bottom));max-width:500px;margin:0 auto;background:rgba(255,255,255,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 30px rgba(20,30,60,.18);display:flex;align-items:center;gap:10px;padding:10px 12px;z-index:45}
+#player.hidden{display:none}
+#player button{border:none;cursor:pointer;font-family:inherit}
+#ppBtn{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px;flex:none;display:flex;align-items:center;justify-content:center}
+#pRestart,#pClose{width:30px;height:30px;border-radius:50%;background:rgba(20,30,60,.07);color:var(--ink2);font-size:13px;flex:none;display:flex;align-items:center;justify-content:center}
+.p-grow{flex:1;min-width:0}
+.p-title{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-bar{height:6px;border-radius:99px;background:rgba(20,30,60,.09);margin:6px 0 3px;overflow:hidden;cursor:pointer}
+#pFill{height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s linear}
+.p-time{font-size:11px;color:var(--ink2)}
+.bm-chip{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;background:rgba(255,200,60,.2);color:#8a6d00}
