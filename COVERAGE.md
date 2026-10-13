@@ -97,3 +97,31 @@ Economics topic now: 8 deep modules covering 100% of official L1 Economics readi
 - German: 332 clips live (259 core + 45 dialogue lines + 12 greetings + 16 cleanup batch) - 100% of AUDIO_MANIFEST German keys
 - CFA: cfa-ethics-1..10 full-length live (10 of 43 modules). cfa-quant-1..11 and cfa-econ-1..8 render lists sent, rendering in progress
 - Pack architecture: index.html loads packs array [2-audio.enc (German), 9-cfa-a.enc (Ethics 1-5), 10-cfa-b.enc (Ethics 6-10)]; all packs keyed to app.enc salt (build.sh reuses salt across builds)
+
+## Deep modules - Financial Statement Analysis batch (v16, 2026-10-13)
+
+Full official 2027 L1 FSA reading list - 12 deep modules, one per reading, LOS-mapped (l1-los.json). FSA is the heaviest L1 topic; batch written story-first with the same quality bar as Ethics/Quant/Econ.
+
+| Module | Official reading | LOS covered |
+|---|---|---|
+| fsa-1 | Introduction to Financial Statement Analysis | principal statements, notes and supplementary info; audit opinions; standard-setting vs regulatory bodies; the analysis framework |
+| fsa-2 | Analyzing Income Statements | revenue recognition principles; expense recognition; non-recurring items; EPS; common-size and ratio analysis of the income statement |
+| fsa-3 | Analyzing Balance Sheets | composition and measurement; liquidity and solvency ratios; common-size analysis |
+| fsa-4 | Analyzing Statements of Cash Flows I | CFO/CFI/CFF classification; direct vs indirect method; conversion between methods |
+| fsa-5 | Analyzing Statements of Cash Flows II | free cash flow measures; cash flow ratios; quality of cash flows |
+| fsa-6 | Financial Analysis Techniques | ratio categories, computation and interpretation; DuPont decomposition; equity and credit analysis applications |
+| fsa-7 | Analyzing Inventories | inventory cost flow methods; LIFO vs FIFO effects; LIFO liquidation; inventory adjustments and ratios |
+| fsa-8 | Analyzing Long-Lived Assets | capitalization vs expensing; depreciation methods; impairment; revaluation; derecognition; ratio effects |
+| fsa-9 | Analyzing Income Taxes | tax base vs carrying amount; deferred tax assets and liabilities; valuation allowance; effective tax rate analysis |
+| fsa-10 | Analyzing Non-Current Liabilities | bond issuance at par/premium/discount; amortization; lease accounting; pension obligations; solvency effects |
+| fsa-11 | Financial Reporting Quality | reporting quality vs earnings quality; aggressive/conservative choices; red flags and warning signs |
+| fsa-12 | Introduction to Financial Statement Modeling | revenue and expense drivers; modeling approaches; sensitivity and scenario analysis |
+
+FSA topic now: 12 deep modules covering 100% of official L1 FSA readings (was 2 shallow). App total: 53 modules. Remaining 5 topics still shallow (2 modules each): Corporate Finance, Equities, Fixed Income, Derivatives, Alternatives + Portfolio Management.
+
+## Audio coverage (v16, 2026-10-13)
+
+- CFA Quant voice live: cfa-quant-1..11 full-length Callirrhoe clips in three new packs (cfa-c1 1-3, cfa-c2 4-6, cfa-d 7-11) - 11 of 53 modules now voiced
+- Browser AUDIO_MAP total: 353 clips (332 German + 10 Ethics + 11 Quant)
+- Pack list in index.html: [2-audio.enc, 9-cfa-a.enc, 10-cfa-b.enc, 2-cfa-c1.enc, 3-cfa-c2.enc, 4-cfa-d.enc]; all keyed to app.enc salt
+- cfa-econ-1..8 rendering next on the voice side; fsa-render-1-12.txt sent for the batch after
