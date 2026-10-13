@@ -292,3 +292,9 @@ Voice render lists for the 42 new clips (cfa-fi-1..19, cfa-deriv-1..10, cfa-alt-
 - NEW: नवीन (New) badge on recently added German units (n>=21 = B1+B2) - red chip on the course list + unit hero marker. NEW_UNITS_FROM constant in app.js to bump on future deploys.
 - Hero copy updated: "German from zero to B2", section title "Your German course" (was "Your A1 course").
 - German track now: A1+A2+B1+B2 = 40 units, 4,718 course clips in render list.
+
+## v32 - CFA Fixed Income voice live + Path status chips - Oct 13
+- CFA voice: Fixed Income (fi) fully rendered and wired - 19 module narrations (cfa-fi-1..19), ~62MB, sharded into 5 packs (1-cfa-i1..i5.enc, 4/4/4/4/3 clips), registered in AUDIO_MANIFEST CFA-VOICE block, loaded via index.html pack list. Byte-verified against sources after packing.
+- sync-course-audio.js hardened: trailing comma after regenerated COURSE-CLIPS block so the CFA-VOICE manifest block (outside the markers) survives every sync.
+- Path screen fix (user QA): "Deep content live now" / "Structure now..." no longer render as greyed-out buttons - now clean non-interactive status pills (green dot = live, neutral dot = structure).
+- index.html cache-bust app.enc?v=22; German audio pack (2-audio.enc) unchanged.
