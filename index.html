@@ -92,8 +92,8 @@ async function appAsset(url){
 async function unlock(pw,silent){
   try{
     const st=document.getElementById("gateStatus");if(st)st.textContent="Downloading your app - first time takes a minute...";
-    const advancedRequest=appAsset("25-advanced-v85.enc?v=86").then(r=>r.json());advancedRequest.catch(()=>{});
-    const o=await (await appAsset("13-app.enc?v=54")).json();
+    const advancedRequest=appAsset("34-28-advanced-v88.enc?v=88").then(r=>r.json());advancedRequest.catch(()=>{});
+    const o=await (await appAsset("30-26-app-v88.enc?v=88")).json();
     if(st)st.textContent="Unlocking - one moment";
     const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
     const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(o.s),iterations:200000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt","encrypt"]);
