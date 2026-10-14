@@ -13,6 +13,28 @@
 <title>Mission Germany</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 <link rel="stylesheet" href="styles.css?v=7">
+<style id="liquid-controls-v83">
+/* Clear optical control surfaces. Existing page palette and content stay intact. */
+:root{--control-ink:#24333d;--control-edge:rgba(255,255,255,.66);--control-shadow:inset 0 1px 1px rgba(255,255,255,.92),inset 1px 0 1px rgba(255,255,255,.32),inset 0 -1px 1px rgba(70,87,98,.12),0 5px 14px rgba(45,61,79,.1)}
+.btn,.btn.soft,.btn.ghost,.flash-btns button,.spk,.deck-card,.more-tile,.mark-read,#gateBtn,.backbar button,#player button,#quickJumps button{position:relative;isolation:isolate;color:var(--control-ink);background:radial-gradient(ellipse at 22% 0%,rgba(255,255,255,.5),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.26),rgba(255,255,255,.06) 48%,rgba(255,255,255,.18));border:0;box-shadow:var(--control-shadow);backdrop-filter:blur(3px) saturate(1.2);-webkit-backdrop-filter:blur(3px) saturate(1.2);text-shadow:0 1px 0 rgba(255,255,255,.45);transition:transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease,background .2s ease;letter-spacing:-.015em}
+.btn,.flash-btns button,.mark-read,#gateBtn{border-radius:999px;min-height:48px;font-size:15px;font-weight:600;padding:14px 20px}
+.btn:active,.flash-btns button:active,.deck-card:active,.more-tile:active,.spk:active,#gateBtn:active{transform:scale(.975);box-shadow:inset 0 1px 4px rgba(42,56,70,.12),0 2px 6px rgba(45,61,79,.06)}
+.btn:focus-visible,.flash-btns button:focus-visible,.tab:focus-visible,.spk:focus-visible{outline:2px solid #66573e;outline-offset:4px}
+.btn:disabled,.flash-btns button:disabled{opacity:.42;box-shadow:inset 0 1px 0 rgba(255,255,255,.55);cursor:default}
+.flash-btns{gap:12px;margin-top:14px}
+.flash-btns .no{color:#8b4340;background:linear-gradient(135deg,rgba(255,255,255,.3),rgba(220,125,115,.045));box-shadow:var(--control-shadow)}
+.flash-btns .yes{color:#2f6553;background:linear-gradient(135deg,rgba(255,255,255,.32),rgba(79,147,117,.045));box-shadow:var(--control-shadow)}
+#tabbar{left:14px;right:14px;bottom:calc(12px + env(safe-area-inset-bottom,0px));max-width:492px;padding:6px;border:0;border-radius:34px;background:linear-gradient(120deg,rgba(255,255,255,.32),rgba(255,255,255,.09) 43%,rgba(255,255,255,.22));backdrop-filter:blur(5px) saturate(1.25);-webkit-backdrop-filter:blur(5px) saturate(1.25);box-shadow:inset 0 1px 1px rgba(255,255,255,.92),inset 1px 0 1px rgba(255,255,255,.34),inset 0 -1px 1px rgba(94,106,119,.12),0 8px 26px rgba(45,61,79,.13);overflow:visible}
+.tab{position:relative;isolation:isolate;border-radius:27px;min-height:54px;color:#6a7078;gap:4px;padding:8px 0 7px;transition:transform .2s ease,color .2s ease,background .25s ease;box-shadow:none;background:transparent}
+.tab svg{width:22px;height:22px;stroke-width:1.65;margin:0}.tab .tab-l{font-size:10px;font-weight:600;letter-spacing:0}
+.tab.active{color:#4c4336;background:radial-gradient(ellipse at 30% 0%,rgba(255,255,255,.74),transparent 72%),linear-gradient(145deg,rgba(255,255,255,.35),rgba(239,227,203,.14));box-shadow:inset 0 1px 1px rgba(255,255,255,.96),inset 1px 0 1px rgba(255,255,255,.5),inset 0 -1px 1px rgba(130,117,87,.17),0 3px 9px rgba(76,68,49,.09);text-shadow:none}
+.tab.active svg{color:#8b7249;filter:none}.tab:active{transform:scale(.95);opacity:1}
+#player{bottom:calc(88px + env(safe-area-inset-bottom,0px));background:linear-gradient(135deg,rgba(255,255,255,.42),rgba(255,255,255,.14));border:0;border-radius:25px;backdrop-filter:blur(5px) saturate(1.25);-webkit-backdrop-filter:blur(5px) saturate(1.25);box-shadow:var(--control-shadow)}
+#ppBtn{color:#4c4336!important;background:linear-gradient(145deg,rgba(255,255,255,.5),rgba(255,255,255,.1))!important}#pFill{background:linear-gradient(90deg,#a18b67,#c2ad88)}
+#quickJumps{background:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,255,255,.08))!important;border:0!important;backdrop-filter:blur(4px)!important;-webkit-backdrop-filter:blur(4px)!important;box-shadow:var(--control-shadow)!important}#quickJumps button{color:#426f5b!important;background:transparent!important;box-shadow:none!important}
+@media(prefers-reduced-motion:reduce){.btn,.tab,.flash-btns button,.deck-card,.spk{transition:none;transform:none!important}}
+
+</style>
 </head>
 <body>
 
