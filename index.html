@@ -534,7 +534,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.66-20261015-1850 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.67-20261015-1854 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -597,7 +597,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.66-20261015-1850';
+var APP_BUILD='v97.67-20261015-1854';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -778,7 +778,7 @@ var boot=setInterval(function(){
 
 
 <script>
-// v97.65: parent link (fixed routing: no device-owner uid; linked->remote, else local+code+papa-entry) - papa opens the parent view from his own phone. Hidden #parent route upgraded: link code on her side, code entry + remote live data on his.
+// v97.67: parent link v2 - papa links remotely with HER email (zero action on her side, zero trace in her UI) - papa opens the parent view from his own phone. Hidden #parent route upgraded: link code on her side, code entry + remote live data on his.
 (function(){
 "use strict";
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -786,8 +786,6 @@ function css(t){var s=document.createElement('style');s.textContent=t;document.h
 css('#parentView .pv-codebox{background:#fff8e6;border:1px solid #f0dfa8}#parentView .pv-code{font-size:26px;font-weight:700;letter-spacing:6px;text-align:center;padding:8px 0;font-family:ui-monospace,monospace}'+
 '#parentView .pv-in{width:100%;box-sizing:border-box;padding:13px 14px;border-radius:14px;border:1px solid #ddd3e3;font-size:16px;text-align:center;letter-spacing:4px;text-transform:uppercase;margin:6px 0}'+
 '#parentView .pv-err{color:#c0392b;font-size:13px;min-height:16px}#parentView .pv-sync{font-size:12px;color:#9a93a8;text-align:right}');
-var CODE_ABC='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-function makeCode(){var a=new Uint8Array(6);crypto.getRandomValues(a);var s='';for(var i=0;i<6;i++)s+=CODE_ABC[a[i]%CODE_ABC.length];return s}
 function stateCards(s){
  var readN=Object.keys(s.read||{}).length;
  var mockRows=(s.mocks||[]).slice(-15).reverse().map(function(m){return '<div class="pv-row"><span>'+esc(m.name||m.id||'Mock')+'</span><span>'+esc(m.score!=null?m.score:(m.pct!=null?m.pct+'%':'-'))+'</span></div>'}).join('')||'<div class="pv-row"><span>No mocks yet</span><span></span></div>';
@@ -799,22 +797,17 @@ function stateCards(s){
  '<h3>Time per chapter</h3><div class="pv-card">'+tRows+'</div>'+
  '<h3>Roop conversations</h3><div class="pv-card pv-chat">'+chat+'</div>';
 }
-async function ensureCode(uid){
- var code=localStorage.getItem('mg_parent_code');
- if(code)return code;
- code=makeCode();
- try{await _fbDb.collection('parentCodes').doc(code).set({childUid:uid,created:firebase.firestore.FieldValue.serverTimestamp()});localStorage.setItem('mg_parent_code',code);return code}
- catch(e){console.warn('code',e);return null}
-}
-async function linkWithCode(code){
- code=(code||'').trim().toUpperCase();
- if(!/^[A-Z0-9]{6}$/.test(code))return {err:'The code is 6 letters/numbers.'};
+async function sha256hex(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function linkWithEmail(email){
+ email=(email||'').trim().toLowerCase();
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return {err:'Enter the email she signed in with.'};
  try{
-  var snap=await _fbDb.collection('parentCodes').doc(code).get();
-  if(!snap.exists)return {err:'That code did not work. Check it on her app and try again.'};
-  var childUid=snap.data().childUid;
+  var h=await sha256hex(email);
+  var snap=await _fbDb.collection('emailIndex').doc(h).get();
+  if(!snap.exists)return {err:'If this account exists, it is now linked - reopen this view in a moment.'};
+  var childUid=snap.data().uid;
   var uid=_fbAuth.currentUser.uid;
-  await _fbDb.collection('parentLinks').doc(uid+'_'+childUid).set({childUid:childUid,code:code,created:firebase.firestore.FieldValue.serverTimestamp()});
+  await _fbDb.collection('parentLinks').doc(uid+'_'+childUid).set({childUid:childUid,emailHash:h,created:firebase.firestore.FieldValue.serverTimestamp()});
   localStorage.setItem('mg_linked_child',childUid);
   return {ok:true,childUid:childUid};
  }catch(e){console.warn('link',e);return {err:'Could not link right now. Try again in a bit.'}}
@@ -826,30 +819,25 @@ function renderV64(remote,showPapaEntry){
  var extra='';
  if(remote&&remote.__sync){extra='<div class="pv-sync">Synced '+new Date(remote.__sync).toLocaleString()+'</div>'}
  var linkSection='';
- if(!remote){
-  linkSection='<h3>For papa</h3><div class="pv-card pv-codebox"><div style="font-size:13px;color:#7a6f52">On his phone: open this app, sign in, go to <b>#parent</b>, and enter this code.</div><div class="pv-code" id="pvCode">......</div></div>';
-  if(showPapaEntry)linkSection+='<div class="pv-card" style="text-align:center"><span class="aw-skip" id="pvAmPapa" style="cursor:pointer;text-decoration:underline;font-size:13px;color:#8a8296">I am papa - I have a code</span></div>';
+ if(!remote&&showPapaEntry){
+  linkSection='<div class="pv-card" style="text-align:center"><span class="aw-skip" id="pvAmPapa" style="cursor:pointer;text-decoration:underline;font-size:13px;color:#8a8296">I am papa</span></div>';
  }
  el.innerHTML='<div class="pv-wrap"><button class="btn pv-back" id="pvBack">Back</button><h2>Progress at a glance</h2>'+extra+stateCards(s)+linkSection+'<div class="pv-note">Private view. Nothing here is visible in the normal app screens.</div></div>';
  document.body.appendChild(el);el._v64=true;
  document.getElementById('pvBack').onclick=function(){location.hash='';el.remove()};
  var ap=document.getElementById('pvAmPapa');
  if(ap)ap.onclick=function(){renderLinkEntry()};
- if(!remote){
-  var u=_fbAuth&&_fbAuth.currentUser;
-  if(u)ensureCode(u.uid).then(function(c){var e=document.getElementById('pvCode');if(e)e.textContent=c||'open once online'});
-  else{var e=document.getElementById('pvCode');if(e)e.textContent='sign in first'}
- }
+
 }
 function renderLinkEntry(){
  var old=document.getElementById('parentView');if(old)old.remove();
  var el=document.createElement('div');el.id='parentView';
- el.innerHTML='<div class="pv-wrap"><button class="btn pv-back" id="pvBack">Back</button><h2>Parent view</h2><div class="pv-card"><div style="font-size:14px;margin-bottom:6px">Enter the 6-letter code shown in her app (on her phone: #parent, look for "For papa").</div><input class="pv-in" id="pvIn" maxlength="6" placeholder="CODE"><div class="pv-err" id="pvErr"></div><button class="btn" id="pvGo" style="width:100%">See her progress</button></div></div>';
+ el.innerHTML='<div class="pv-wrap"><button class="btn pv-back" id="pvBack">Back</button><h2>Parent view</h2><div class="pv-card"><div style="font-size:14px;margin-bottom:6px">Enter the email she used to sign in to her app.</div><input class="pv-in" id="pvIn" type="email" placeholder="her email" style="letter-spacing:0;text-transform:none"><div class="pv-err" id="pvErr"></div><button class="btn" id="pvGo" style="width:100%">Link and see her progress</button></div></div>';
  document.body.appendChild(el);el._v64=true;
  document.getElementById('pvBack').onclick=function(){location.hash='';el.remove()};
  document.getElementById('pvGo').onclick=async function(){
   document.getElementById('pvErr').textContent='';
-  var r=await linkWithCode(document.getElementById('pvIn').value);
+  var r=await linkWithEmail(document.getElementById('pvIn').value);
   if(r.err){document.getElementById('pvErr').textContent=r.err;return}
   renderRemote(r.childUid);
  };
@@ -873,7 +861,10 @@ function route(){
 var boot64=setInterval(function(){
  if(!window._fbAuth)return;
  clearInterval(boot64);
- _fbAuth.onAuthStateChanged(function(u){});
+ _fbAuth.onAuthStateChanged(async function(u){
+  if(!u||!u.email)return;
+  try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(u.email.trim().toLowerCase()));const h=[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');await _fbDb.collection('emailIndex').doc(h).set({uid:u.uid})}catch(e){}
+ });
  window.addEventListener('hashchange',function(){setTimeout(route,60)});
  setInterval(function(){if(location.hash==='#parent'&&!document.getElementById('parentView'))route()},1200);
 },1000);
