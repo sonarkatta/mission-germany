@@ -328,7 +328,7 @@ function xbDefBook(bid){const b=XB_BOOKS.find(x=>x.id===bid),chs=XB_DEFS[bid];
 function xbDefCh(bid,cid){const b=XB_BOOKS.find(x=>x.id===bid),c=b.chapters.find(x=>x.id===cid),ds=XB_DEFS[bid][cid];
  view().innerHTML=`<div class="hero"><div class="kicker">${b.name}</div><h1>Ch ${c.n} · ${c.reading}</h1><p>${ds.length} definitions.</p></div>`+ds.map(d=>`<div class="card"><b>${d[0]}</b><p class="muted" style="margin:6px 0 0">${d[1]}</p></div>`).join('')+`<button class="btn soft" onclick="xbDefBook('${bid}')">‹ Chapters</button>`}
 (function _xbDefTile(){try{if(typeof more!=='function'||typeof view!=='function'){setTimeout(_xbDefTile,300);return}
- const _m=more;window.more=function(){_m();try{const g=document.querySelector('.more-grid');if(g&&!document.getElementById('xbDefTile')){const t=document.createElement('button');t.className='more-tile';t.id='xbDefTile';t.setAttribute('onclick','xbDefLib()');t.innerHTML='<div class="emoji">📖</div><b>Definition Library</b><span>Key terms, book by book</span>';g.appendChild(t)}}catch(e){}}}catch(e){setTimeout(_xbDefTile,500)}})();
+ const _m=more;window.more=function(){_m();try{const g=document.querySelector('.more-grid');if(g&&!document.getElementById('xbDefTile')){const t=document.createElement('button');t.className='more-tile arya-motion-tile';t.id='xbDefTile';t.setAttribute('data-movie-ready','1');t.setAttribute('data-scene','g-vocabulary');t.setAttribute('onclick','xbDefLib()');const sc=(typeof ARYA_THEMED_SCENES==='object'&&ARYA_THEMED_SCENES&&ARYA_THEMED_SCENES['g-vocabulary'])||'';t.innerHTML=(sc?'<div class="arya-movie-photo"><img alt="" src="'+sc+'"></div>':'')+'<div class="arya-movie-caption"><div class="emoji">📖</div><b>Definition Library</b><span>Key terms, book by book</span></div>';g.appendChild(t)}}catch(e){}}}catch(e){setTimeout(_xbDefTile,500)}})();
 
 
 // v97.25.1 views (movie-tile-safe): shelf, book, chapter for non-CFA libraries (CBSE/BBA). Deferred wrap of more() like v97.23.
@@ -519,6 +519,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
+/* v97.40: Definition Library tile fix - native arya-motion-tile structure (data-movie-ready + g-vocabulary photo) so the tile renders like the others */
 /* v97.39: Definition Library (More section) - 4 expanded BBA books, 525 terms, browse book>chapter>definitions; grows with each expansion */
 /* v97.38: BBA depth expansion book 4 - Business Accounting 5 -> 16 chapters per official 24BaFinU2101 (equation, concepts+AS1/2/3/21, vouchers, cash book, subsidiary books, rectification, BRS, SLM/WDV, adjustments, Schedule III, Tally) + 12q mock */
 /* v97.37: BBA depth expansion book 3 - Business Cost Accounting 5 -> 16 chapters (cost sheet, EOQ, wage plans, MHR, unit/process/job/contract costing, marginal toolkit, standard costing, problem lab) + 12q board-pattern mock */
