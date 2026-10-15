@@ -427,10 +427,13 @@ function xbApplyMore(){
 // v97.33: universal doubt coverage - Tutor sees all 22 CBSE/BBA books (offline matcher + cloud grounding) + Ask-about-this-chapter
 function xbStrip(h){return String(h).replace(/<[^>]*>/g,'')}
 function xbDoubtNotes(b,c){return 'Lesson: '+b.name+' - '+c.reading+'\nKey points: '+((c.kp||[]).slice(0,5).join(' | '))+'\nSummary: '+c.body.map(xbStrip).join(' ').slice(0,700)}
-var _tutorCtxCore=window.tutorCtx,_localDoubtCore=window.localDoubt;
-window.tutorCtx=function(q){
+function _xbInstallTutor(){
+ var _tutorCtxCore=window.tutorCtx,_localDoubtCore=window.localDoubt;
+ if(window._xbWrapped||typeof _tutorCtxCore!=='function'||typeof _localDoubtCore!=='function')return;
+ window._xbWrapped=true;
+ window.tutorCtx=function(q){
  if(window._xbAsk){var p=window._xbAsk;window._xbAsk=null;var f=xbFind(p);if(f)return {role:'user',content:"Reference notes from Arya's own lessons (use only if relevant to her next question):\n"+xbDoubtNotes(f.b,f.c).slice(0,1400)}}
- var c=_tutorCtxCore?_tutorCtxCore(q):null;if(c)return c;
+ var c=_tutorCtxCore(q);if(c)return c;
  var ws=doubtWords(q);if(!ws.length)return null;var bb=null,bc=null,bs=0;
  for(var bi=0;bi<XB_BOOKS.length;bi++){var b=XB_BOOKS[bi];
   for(var ci=0;ci<b.chapters.length;ci++){var ch=b.chapters[ci];
@@ -439,8 +442,8 @@ window.tutorCtx=function(q){
    if(sc>bs){bs=sc;bb=b;bc=ch}}}
  if(!bc||bs<(ws.length===1?1:2))return null;
  return {role:'user',content:"Reference notes from Arya's own lessons (use only if relevant to her next question):\n"+xbDoubtNotes(bb,bc).slice(0,1400)}};
-window.localDoubt=function(q){
- var m=_localDoubtCore?_localDoubtCore(q):null;if(m)return m;
+ window.localDoubt=function(q){
+ var m=_localDoubtCore(q);if(m)return m;
  var ws=doubtWords(q);if(!ws.length)return null;var best=null,bs=0,bt=null;
  for(var bi=0;bi<XB_BOOKS.length;bi++){var b=XB_BOOKS[bi];
   for(var ci=0;ci<b.chapters.length;ci++){var ch=b.chapters[ci];var kp=ch.kp||[];
@@ -449,6 +452,9 @@ window.localDoubt=function(q){
     if(sc>bs){bs=sc;best=kp[ki]+'\n\nFrom "'+ch.reading+'": '+xbStrip(ch.body[0]).slice(0,280)+'...';bt=b.name}}}}
  var need=ws.length===1?2:Math.min(4,ws.length*2);
  return bs>=need&&best?{a:best,src:bt,k:null}:null};
+}
+var _xbTmr=setInterval(function(){_xbInstallTutor();if(window._xbWrapped)clearInterval(_xbTmr)},300);
+setTimeout(_xbInstallTutor,3000);
 function xbAsk(mid){var f=xbFind(mid);if(!f)return;window._xbAsk=mid;S.chat=S.chat||[];S.chat.push({r:'a',t:'Ask me anything about "'+f.c.reading+'" - I have the chapter open. 📖',k:null});save();tutor()}
 
 </script>
@@ -486,6 +492,7 @@ function xbAsk(mid){var f=xbFind(mid);if(!f)return;window._xbAsk=mid;S.chat=S.ch
 })();
 </script>
 <style id="v9731-hl">
+/* v97.34: fix tutor wrap timing - core decrypts async, so install XB tutor wrappers once core functions exist (poller), not at XB block parse time */
 /* v97.33: Universal doubt Q&A - Tutor offline matcher + cloud grounding now cover all 22 CBSE/BBA books; Ask button in every XB chapter opens Tutor with that chapter loaded */
 /* v97.32: BBA depth expansion begins - Principles of Finance rebuilt to full SPPU coverage: 5 -> 16 chapters (financial planning, sources, capital structure, EPS/EBIT-EPS, cost of capital, WACC, problem lab) + 12-question board-pattern mock */
 /* v97.31: Highlight mode in CBSE/BBA chapters marks the bold key terms with a marker sweep */
