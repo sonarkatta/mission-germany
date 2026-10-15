@@ -324,9 +324,24 @@ const XB_DEFS={"bba-pof": {"bba-pof-1": [["Finance", "The management of money - 
 function xbDefLib(){const bs=XB_BOOKS.filter(b=>XB_DEFS[b.id]);
  view().innerHTML=`<div class="hero"><div class="kicker">Tools</div><h1>Definition Library</h1><p>Every key term, book by book, chapter by chapter. Tap a book to open its glossary.</p></div>`+bs.map(b=>{const chs=XB_DEFS[b.id],n=Object.values(chs).reduce((a,v)=>a+v.length,0);return `<div class="card tappable" onclick="xbDefBook('${b.id}')"><div class="row"><div class="icon-bubble" style="background:${b.color}22">${b.emoji}</div><div class="grow"><b>${b.name}</b><div class="muted small">${Object.keys(chs).length} chapters · ${n} terms</div></div><span class="chip grey">Open ›</span></div></div>`}).join('')+`<div class="muted small" style="text-align:center;margin:10px 0">More books are being added - each expanded subject brings its full glossary.</div><button class="btn soft" onclick="go('more')">‹ Back to More</button>`}
 function xbDefBook(bid){const b=XB_BOOKS.find(x=>x.id===bid),chs=XB_DEFS[bid];
- view().innerHTML=`<div class="hero"><div class="kicker">Definition Library</div><h1>${b.emoji} ${b.name}</h1><p>Pick a chapter to see its definitions.</p></div>`+b.chapters.filter(c=>chs[c.id]).map(c=>`<div class="card tappable" onclick="xbDefCh('${bid}','${c.id}')"><div class="row"><div class="grow"><b>Ch ${c.n} · ${c.reading}</b><div class="muted small">${chs[c.id].length} terms</div></div><span class="chip grey">›</span></div></div>`).join('')+`<button class="btn soft" onclick="xbDefLib()">‹ All books</button>`}
+ view().innerHTML=`<div class="hero"><div class="kicker">Definition Library</div><h1>${XB_BOOK_SVG} ${b.name}</h1><p>Pick a chapter to see its definitions. Tap any term to hear it.</p></div>`+b.chapters.filter(c=>chs[c.id]).map(c=>`<div class="card tappable" onclick="xbDefCh('${bid}','${c.id}')"><div class="row"><div class="grow"><b>Ch ${c.n} · ${c.reading}</b><div class="muted small">${chs[c.id].length} terms</div></div><span class="chip grey">›</span></div></div>`).join('')+`<button class="btn soft" onclick="xbDefLib()">‹ All books</button>`}
 function xbDefCh(bid,cid){const b=XB_BOOKS.find(x=>x.id===bid),c=b.chapters.find(x=>x.id===cid),ds=XB_DEFS[bid][cid];
- view().innerHTML=`<div class="hero"><div class="kicker">${b.name}</div><h1>Ch ${c.n} · ${c.reading}</h1><p>${ds.length} definitions.</p></div>`+ds.map(d=>`<div class="card"><b>${d[0]}</b><p class="muted" style="margin:6px 0 0">${d[1]}</p></div>`).join('')+`<button class="btn soft" onclick="xbDefBook('${bid}')">‹ Chapters</button>`}
+ view().innerHTML=`<div class="hero"><div class="kicker">${b.name}</div><h1>Ch ${c.n} · ${c.reading}</h1><p>${ds.length} definitions. Tap a term to hear it.</p></div>`+ds.map((d,i)=>`<div class="card tappable" onclick="xbDefSpeak('${bid}','${cid}',${i})"><div class="row"><div class="grow"><b>${d[0]}</b><p class="muted" style="margin:6px 0 0">${d[1]}</p></div><span class="muted" aria-hidden="true">${XB_SPK_SVG}</span></div></div>`).join('')+`<button class="btn soft" onclick="xbDefBook('${bid}')">‹ Chapters</button>`}
+const XB_BOOK_SVG='<svg viewBox="0 0 24 24" width="0.95em" height="0.95em" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.12em;margin-right:0.25em" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>';
+const XB_SPK_SVG='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9.5 9.5 0 0 1 0 13"/></svg>';
+window.xbDefSpeak=function(bid,cid,i){
+ const d=(XB_DEFS[bid]&&XB_DEFS[bid][cid]||[])[i];if(!d)return;
+ const key='def-'+bid+'-'+cid.replace(/[^0-9]/g,'')+'-'+(i+1);
+ if(typeof AUDIO_MANIFEST!=='undefined'&&AUDIO_MANIFEST[key]&&typeof playClips==='function'){playClips([key],typeof audioRetry==='function'?audioRetry:function(){});return}
+ try{
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(d[0]+'. '+d[1].replace(/<[^>]+>/g,''));
+  u.lang='en-IN';u.rate=0.95;
+  const vs=speechSynthesis.getVoices(),v=vs.find(x=>/en[-_](IN|GB|US)/i.test(x.lang));
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
+ }catch(e){}
+};
 (function _xbDefTile(){try{if(typeof more!=='function'||typeof view!=='function'){setTimeout(_xbDefTile,300);return}
  const _m=more;window.more=function(){_m();try{const g=document.querySelector('.more-grid');if(g&&!document.getElementById('xbDefTile')){const t=document.createElement('button');t.className='more-tile arya-motion-tile';t.id='xbDefTile';t.setAttribute('data-movie-ready','1');t.setAttribute('data-scene','g-vocabulary');t.setAttribute('onclick','xbDefLib()');const sc=(typeof ARYA_THEMED_SCENES==='object'&&ARYA_THEMED_SCENES&&ARYA_THEMED_SCENES['g-vocabulary'])||'';t.innerHTML=(sc?'<div class="arya-movie-photo"><img alt="" src="'+sc+'"></div>':'')+'<div class="arya-movie-caption"><div class="emoji">📖</div><b>Definition Library</b><span>Key terms, book by book</span></div>';g.appendChild(t)}}catch(e){}}}catch(e){setTimeout(_xbDefTile,500)}})();
 
@@ -519,6 +534,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
+/* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
 /* v97.58: CBSE depth pass book 8 - Physical Education 5 -> 12 chapters (5 deepened with exam workouts; NEW: fixture workshop, development lab, women+yoga lab, CWSN lab, nutrition lab, physiology lab, mind+method lab) + mock 10 -> 12q + 96 definitions - CBSE PASS COMPLETE */
