@@ -519,6 +519,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
+/* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
 /* v97.58: CBSE depth pass book 8 - Physical Education 5 -> 12 chapters (5 deepened with exam workouts; NEW: fixture workshop, development lab, women+yoga lab, CWSN lab, nutrition lab, physiology lab, mind+method lab) + mock 10 -> 12q + 96 definitions - CBSE PASS COMPLETE */
 /* v97.57: CBSE depth pass book 7 - Informatics Practices 5 -> 12 chapters (5 deepened with code drills; NEW: functions lab, pandas labs I+II, visualization lab, SQL lab, networks lab, societal impacts lab) + mock 10 -> 12q + 96 definitions */
@@ -553,7 +554,10 @@ html.arya-dark p.kp-hl b{background:linear-gradient(180deg,rgba(255,214,10,0) 52
 </style>
 <script>
 /* v97.59: CFA Level II full build begins - book 1/10 Quantitative Methods (6 deep lessons: regression engine, fit testing, misspecification triage, log/quadratic/interaction extensions, time-series AR/ARCH/cointegration, machine learning) + 12q practice bank. L2 books ride the XB shelf. */
-window.addEventListener('load',function(){
+var __v9759t=setInterval(function(){
+ if(typeof levelView==="undefined"||typeof xbShelf==="undefined"||typeof CFA_TOPICS==="undefined")return;
+ if(window.__v9759done)return;
+ window.__v9759done=true;clearInterval(__v9759t);
  var _v9759Level=levelView;
  levelView=function(id){
   _v9759Level(id);
@@ -571,7 +575,7 @@ window.addEventListener('load',function(){
   var back=view().querySelector('button.btn.soft');
   if(back){back.setAttribute('onclick',"go('cfa')");back.innerHTML='‹ CFA';}
  };
-});
+},300);
 </script>
 </body>
 </html>
