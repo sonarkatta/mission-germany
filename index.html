@@ -227,5 +227,77 @@ var __v9715t=setInterval(function(){
  },700);
 })();
 </script>
+<script>
+// v97.23 (parent 08:19, user live-testing): (A) kill the dead-end "voice not ready" toast - restore on-device TTS fallbacks everywhere; (B) tutor identity - she is Roop, never Arya/Lena; clean name answer. v97.22 applied at parse time and was clobbered by the app's async boot + legacy stub pass (caught in staging verification); v97.23 applies after they settle.
+(function(){
+ function applyV9723(){
+  // --- A1: restore native speechSynthesis.speak (a past patch replaced it with the toast) ---
+  if("speechSynthesis" in window){try{delete speechSynthesis.speak}catch(e){}}
+  // --- A2: restore the original TTS functions (verbatim from app source) ---
+  speakTTS=function(t,slow){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();try{speechSynthesis.resume()}catch(e){}var u=new SpeechSynthesisUtterance(germanPart(t));u.lang="de-DE";var v=_voice||pickVoice();if(v)u.voice=v;u.rate=slow?0.6:0.85;speechSynthesis.speak(u)};
+  speakEn=function(t){if(!("speechSynthesis" in window))return;
+   if(speechSynthesis.speaking){speechSynthesis.cancel();try{speechSynthesis.resume()}catch(e){}return}
+   try{speechSynthesis.resume()}catch(e){}
+   _enVoice=_enVoice||pickEn();var parts=String(t).replace(/[*_#`]/g,"").replace(/\s+/g," ").match(/[^.!?]+[.!?]*/g)||[t];
+   var buf="",chunks=[];parts.forEach(function(p){if((buf+p).length>180){if(buf)chunks.push(buf);buf=p}else buf+=p});if(buf)chunks.push(buf);
+   chunks.forEach(function(c){var u=new SpeechSynthesisUtterance(c);u.lang=(_enVoice&&_enVoice.lang)||"en-IN";if(_enVoice)u.voice=_enVoice;u.rate=.93;u.pitch=1.0;speechSynthesis.speak(u)})};
+  greetVoice=function(en,de){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();try{speechSynthesis.resume()}catch(e){}
+   _enVoice=_enVoice||pickEn();var u1=new SpeechSynthesisUtterance(en);u1.lang=(_enVoice&&_enVoice.lang)||"en-IN";if(_enVoice)u1.voice=_enVoice;u1.rate=.95;u1.pitch=1.05;
+   var v=_voice||pickVoice();var u2=new SpeechSynthesisUtterance(de);u2.lang="de-DE";if(v)u2.voice=v;u2.rate=.85;
+   speechSynthesis.speak(u1);speechSynthesis.speak(u2)};
+  listenModuleTTS=function(mid,tid){var t=CFA_TOPICS.find(function(x){return x.id===tid}),m=t&&t.modules.find(function(x){return x.id===mid});if(!m)return;
+   if(!("speechSynthesis" in window))return;
+   if(speechSynthesis.speaking){speechSynthesis.cancel();try{speechSynthesis.resume()}catch(e){}document.querySelectorAll(".rd-on").forEach(function(e){e.classList.remove("rd-on")});return}
+   var box=document.querySelector("#m-"+mid+" .module-body");if(!box)return;var ps=[].slice.call(box.querySelectorAll("p"));var kp=box.querySelector(".keypoint");
+   _enVoice=_enVoice||pickEn();var spans=[];
+   ps.forEach(function(p){if(!p.dataset.rd){var ss=(p.textContent.match(/[^.!?]+[.!?]*\s*/g)||[p.textContent]);p.innerHTML=ss.map(function(x){return '<span class="rd">'+x.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</span>'}).join("");p.dataset.rd=1}spans.push.apply(spans,p.querySelectorAll(".rd"))});
+   var q=[{el:null,txt:m.title+"."}].concat([].map.call(spans,function(el){return{el:el,txt:el.textContent}}),[{el:kp,txt:"Key point. "+m.key}]);
+   q.forEach(function(it){var u=new SpeechSynthesisUtterance(it.txt);u.lang=(_enVoice&&_enVoice.lang)||"en-IN";if(_enVoice)u.voice=_enVoice;u.rate=.93;u.pitch=1.0;
+    u.onstart=function(){document.querySelectorAll(".rd-on").forEach(function(e){e.classList.remove("rd-on")});if(it.el){it.el.classList.add("rd-on");it.el.scrollIntoView({block:"center",behavior:"smooth"})}};
+    u.onend=function(){if(it===q[q.length-1])document.querySelectorAll(".rd-on").forEach(function(e){e.classList.remove("rd-on")})};speechSynthesis.speak(u)})};
+  // --- A3: rebind the fallback call sites from toast to TTS ---
+  listenModule=function(mid,tid){playClips(["cfa-"+mid],function(){listenModuleTTS(mid,tid)})};
+  playAll=function(){var d=GERMAN_DIALOGUES.find(function(x){return x.id===DG.id});if(!d)return;playClips(d.lines.map(function(l,i){return "dlg-"+d.id+"-"+(i+1)+"-de"}),function(){d.lines.forEach(function(l){speakTTS(l.de)})})};
+  if(typeof alphabetSpeak==="function"&&typeof _alphabetFiles!=="undefined"){alphabetSpeak=function(i){var file=_alphabetFiles[i],key=file.slice(0,-4);if(!AUDIO_MANIFEST[key]){speakTTS(String.fromCharCode(65+i));return}playClips([key],function(){speakTTS(String.fromCharCode(65+i))})}}
+  // PLAYER greeting fail paths: TTS the greeting instead of the toast
+  if(typeof PLAYER!=="undefined"&&PLAYER&&PLAYER.start&&!PLAYER.start.__v9723){
+   var _pstart=PLAYER.start.bind(PLAYER);
+   var _pw=async function(manual){
+    await _pstart(manual);
+    if(PLAYER.state==="unavailable"||PLAYER.state==="failed"){
+     PLAYER.state="tts";PLAYER.error=null;
+     var h=new Date().getHours();
+     var g=h<5?"Good night":h<12?"Good morning":h<17?"Good afternoon":h<21?"Good evening":"Good night";
+     speakEn(g+", Arya! Welcome back - ready when you are.");
+    }
+   };
+   _pw.__v9723=true;PLAYER.start=_pw;
+  }
+  // last-resort: any path still calling audioRetry gets a spoken notice, never a dead-end toast
+  audioRetry=function(){try{speakEn("That recording is still on its way - reading aloud instead.")}catch(e){}};
+  // --- B: tutor identity - Roop, never Arya/Lena ---
+  var ROOP_NAME="I’m Roop 🙂 - your teacher-friend for this whole Germany mission. Finance, German, study plans, doubts - bring me anything. And you are Arya, the star this app was built for. 💛";
+  function _isIdQ(s){return /(\byour name\b|\breal name\b|\bwho are you\b|\btell me your name\b|\bcall you\b|\bare you (arya|lena|roop)\b|\bnaam\b|\bnaav\b|\bnav\b)/i.test(s||"")}
+  function _badId(r){return /\b(my (real )?name is(n't| not)?|i am|i'?m|call me)\s+(arya|lena)\b/i.test(r||"")}
+  if(typeof tutorCloud==="function"&&!tutorCloud.__roop){
+   var _tutorCloud=tutorCloud;
+   var _tw=async function(messages){
+    try{var last=messages&&messages.length?String(messages[messages.length-1].content||""):"";
+     if(_isIdQ(last))return {reply:ROOP_NAME};
+    }catch(e){}
+    var r=await _tutorCloud(messages);
+    if(r&&r.reply&&_badId(r.reply))return {reply:ROOP_NAME};
+    return r;
+   };
+   _tw.__roop=true;tutorCloud=_tw;
+  }
+ }
+ var _settled=function(){return typeof tutorCloud==="function"&&typeof speakEn==="function"&&(""+speakEn).indexOf("audioRetry")>-1};
+ var _cap=setTimeout(function(){clearInterval(_iv);applyV9723()},4000);
+ var _iv=setInterval(function(){if(_settled()){clearInterval(_iv);clearTimeout(_cap);applyV9723()}},200);
+ setTimeout(function(){if((typeof speakEn==="function"&&(""+speakEn).indexOf("audioRetry")>-1)||(typeof tutorCloud==="function"&&!tutorCloud.__roop))applyV9723()},9000);
+})();
+</script>
+
 </body>
 </html>
