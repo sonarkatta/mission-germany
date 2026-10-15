@@ -457,6 +457,22 @@ var _xbTmr=setInterval(function(){_xbInstallTutor();if(window._xbWrapped)clearIn
 setTimeout(_xbInstallTutor,3000);
 function xbAsk(mid){var f=xbFind(mid);if(!f)return;window._xbAsk=mid;S.chat=S.chat||[];S.chat.push({r:'a',t:'Ask me anything about "'+f.c.reading+'" - I have the chapter open. 📖',k:null});save();tutor()}
 
+
+// v97.36: Quick Revision covers every CBSE + BBA book - each chapter's key points become rapid flip cards
+var _xbRevTmr=setInterval(function(){
+ try{
+  if(typeof REVISION==='undefined'||typeof REV_ORDER==='undefined')return;
+ }catch(e){return}
+ if(window._xbRevDone)return;window._xbRevDone=true;clearInterval(_xbRevTmr);
+ XB_BOOKS.forEach(function(b){
+  var id='xb-'+b.id,cards=[];
+  b.chapters.forEach(function(c){(c.kp||[]).forEach(function(k,ki){cards.push({f:c.reading,b:k,fact:ki===0})})});
+  if(!cards.length)return;
+  REVISION[id]={name:(b.board.indexOf('CBSE')>-1?'12th · ':'BBA · ')+b.name,cards:cards};
+  REV_ORDER.push(id);
+ });
+},400);
+
 </script>
 <script>
 // v97.30: 12th Board (CBSE) and BBA Finance as permanent, clearly separate entries -
@@ -492,6 +508,7 @@ function xbAsk(mid){var f=xbFind(mid);if(!f)return;window._xbAsk=mid;S.chat=S.ch
 })();
 </script>
 <style id="v9731-hl">
+/* v97.36: Quick Revision XB feed - all 22 CBSE/BBA books appear in the Quick Revision deck as rapid key-point cards */
 /* v97.35: BBA depth expansion book 2 - Principles of Management 5 -> 16 chapters (planning/MBO, structures, delegation, staffing, directing, motivation, leadership, communication, controlling + case lab) + 12q board-pattern mock */
 /* v97.34: fix tutor wrap timing - core decrypts async, so install XB tutor wrappers once core functions exist (poller), not at XB block parse time */
 /* v97.33: Universal doubt Q&A - Tutor offline matcher + cloud grounding now cover all 22 CBSE/BBA books; Ask button in every XB chapter opens Tutor with that chapter loaded */
