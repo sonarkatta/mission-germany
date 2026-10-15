@@ -534,7 +534,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.62-20261015-1802 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.63-20261015-1810 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -597,7 +597,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.62-20261015-1802';
+var APP_BUILD='v97.63-20261015-1810';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -640,5 +640,150 @@ document.addEventListener('visibilitychange',function(){if(document.visibilitySt
 })();
 })();
 </script>
+
+<script>
+// v97.63: personal accounts (Firebase Auth: Google + email/password) + server-side progress sync + hidden parent view (#parent).
+(function(){
+"use strict";
+var BUILD63='v97.63';
+var CFG={apiKey:"AIzaSyDXP3S61JMpG0q-gDxE2ldadASZJkYideU",authDomain:"mission-germany-f9c2d.firebaseapp.com",projectId:"mission-germany-f9c2d",storageBucket:"mission-germany-f9c2d.firebasestorage.app",messagingSenderId:"22933924383",appId:"1:22933924383:web:8f20f89705e9291b27432a"};
+var FBV='10.12.2';
+function loadJs(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=function(){res()};s.onerror=function(){rej(new Error('load '+src))};document.head.appendChild(s)})}
+var _ready=null;
+function fbReady(){if(_ready)return _ready;_ready=(async function(){
+ await loadJs('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-app-compat.js');
+ await loadJs('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-auth-compat.js');
+ await loadJs('https://www.gstatic.com/firebasejs/'+FBV+'/firebase-firestore-compat.js');
+ if(!firebase.apps.length)firebase.initializeApp(CFG);
+ window._fbAuth=firebase.auth();window._fbDb=firebase.firestore();
+ return true;})().catch(function(e){console.warn('fb init',e);_ready=null;throw e});return _ready}
+function css(t){var s=document.createElement('style');s.textContent=t;document.head.appendChild(s)}
+css('#authWall{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#fdf6ec,#f3e9f7 55%,#e8f1fb);padding:20px;box-sizing:border-box}'+
+'#authWall .aw-card{width:100%;max-width:380px;background:rgba(255,255,255,.75);backdrop-filter:blur(14px);border-radius:24px;padding:28px 24px;box-shadow:0 18px 50px rgba(80,70,110,.18);text-align:center;font-family:inherit}'+
+'#authWall h2{margin:0 0 4px;font-size:22px}#authWall p.sub{margin:0 0 18px;font-size:14px;color:#6b6478}'+
+'#authWall input{width:100%;box-sizing:border-box;margin:6px 0;padding:13px 14px;border-radius:14px;border:1px solid #ddd3e3;font-size:15px;background:#fff}'+
+'#authWall .aw-err{color:#c0392b;font-size:13px;min-height:18px;margin:6px 0 2px}'+
+'#authWall .aw-or{margin:12px 0;font-size:12px;color:#9a93a8}'+
+'#awGoogle{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;border-radius:999px;border:1px solid #ddd3e3;background:#fff;font-size:15px;font-weight:600;cursor:pointer}'+
+'#awGo{width:100%;margin-top:8px}'+
+'#authWall .aw-skip{display:inline-block;margin-top:14px;font-size:13px;color:#8a8296;text-decoration:underline;cursor:pointer}'+
+'#authWall .aw-swap{margin-top:10px;font-size:13px;color:#6b5bd2;cursor:pointer}'+
+'#parentView{position:fixed;inset:0;z-index:9998;overflow:auto;background:#f6f3fa;padding:18px;box-sizing:border-box;font-family:inherit}'+
+'#parentView .pv-wrap{max-width:640px;margin:0 auto}'+
+'#parentView h2{font-size:20px;margin:6px 0 2px}#parentView h3{font-size:15px;margin:18px 0 6px;color:#5a5270}'+
+'#parentView .pv-card{background:#fff;border-radius:16px;padding:14px 16px;margin:8px 0;box-shadow:0 4px 16px rgba(80,70,110,.08);font-size:14px}'+
+'#parentView .pv-row{display:flex;justify-content:space-between;padding:4px 0;font-size:14px}'+
+'#parentView .pv-chat{max-height:340px;overflow:auto}'+
+'#parentView .pv-msg{margin:6px 0;padding:8px 12px;border-radius:14px;font-size:13.5px;line-height:1.45;white-space:pre-wrap}'+
+'#parentView .pv-u{background:#e8f0fe;margin-left:30px}#parentView .pv-a{background:#fdeef5;margin-right:30px}'+
+'#parentView .pv-back{margin-top:10px}#parentView .pv-note{font-size:12px;color:#9a93a8;margin-top:14px}');
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var _mode='in';
+function showAuthWall(){
+ if(document.getElementById('authWall'))return;
+ var w=document.createElement('div');w.id='authWall';
+ w.innerHTML='<div class="aw-card"><h2>Your own login</h2><p class="sub">One time setup - your progress, mock scores and streaks stay safe on every device.</p>'+
+ '<button id="awGoogle" type="button"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C41 35.4 44 30.2 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg> Continue with Google</button>'+
+ '<div class="aw-or">or with email</div>'+
+ '<input id="awName" type="text" placeholder="Your name" autocomplete="name" style="display:none">'+
+ '<input id="awEmail" type="email" placeholder="Email" autocomplete="email">'+
+ '<input id="awPass" type="password" placeholder="Password (6+ letters)" autocomplete="current-password">'+
+ '<div class="aw-err" id="awErr"></div>'+
+ '<button id="awGo" class="btn" type="button">Sign in</button>'+
+ '<div class="aw-swap" id="awSwap">New here? Create your account</div>'+
+ '<span class="aw-skip" id="awSkip">Not now</span></div>';
+ document.body.appendChild(w);
+ document.getElementById('awGoogle').onclick=function(){doGoogle()};
+ document.getElementById('awGo').onclick=function(){doEmail()};
+ document.getElementById('awSwap').onclick=function(){_mode=(_mode==='in')?'up':'in';
+   document.getElementById('awName').style.display=(_mode==='up')?'block':'none';
+   document.getElementById('awGo').textContent=(_mode==='up')?'Create my account':'Sign in';
+   document.getElementById('awSwap').textContent=(_mode==='up')?'Have an account? Sign in':'New here? Create your account';
+   document.getElementById('awErr').textContent='';};
+ document.getElementById('awSkip').onclick=function(){localStorage.setItem('mg_auth_skip','1');w.remove()};
+}
+function awErr(m){var e=document.getElementById('awErr');if(e)e.textContent=m}
+function friendlyErr(e){var c=(e&&e.code)||'';var m={'auth/invalid-email':'That email does not look right.','auth/user-not-found':'No account with this email yet - create one below.','auth/wrong-password':'That password is not right. Try again.','auth/invalid-credential':'Email or password is not right. Try again.','auth/email-already-in-use':'This email already has an account - sign in instead.','auth/weak-password':'Password needs at least 6 letters.','auth/popup-closed-by-user':'The Google window was closed. Try again.','auth/network-request-failed':'No internet right now. Try again in a bit.'};return m[c]||'Something went wrong. Try again.'}
+async function doGoogle(){try{await fbReady();var p=new firebase.auth.GoogleAuthProvider();await _fbAuth.signInWithPopup(p)}catch(e){awErr(friendlyErr(e))}}
+async function doEmail(){
+ var em=document.getElementById('awEmail').value.trim(),pw=document.getElementById('awPass').value,nm=document.getElementById('awName').value.trim();
+ awErr('');if(!em||!pw){awErr('Email and password, please.');return}
+ try{await fbReady();
+  if(_mode==='up'){if(!nm){awErr('Your name, please.');return}
+   var cr=await _fbAuth.createUserWithEmailAndPassword(em,pw);
+   try{await cr.user.updateProfile({displayName:nm})}catch(_){}
+   try{await _fbDb.collection('users').doc(cr.user.uid).set({name:nm,created:firebase.firestore.FieldValue.serverTimestamp()},{merge:true})}catch(_){}
+  }else{await _fbAuth.signInWithEmailAndPassword(em,pw)}
+ }catch(e){awErr(friendlyErr(e))}
+}
+// ---- sync ----
+var _pushT=null,_pushing=false;
+function schedulePush(){if(_pushT)clearTimeout(_pushT);_pushT=setTimeout(pushNow,2500)}
+async function pushNow(){
+ if(_pushing||!window._fbAuth||!_fbAuth.currentUser)return;_pushing=true;
+ try{var u=_fbAuth.currentUser;var json=localStorage.getItem('mg_state_v1')||'{}';
+  await _fbDb.collection('users').doc(u.uid).collection('data').doc('state').set({json:json,clientTs:Date.now(),build:BUILD63});
+  localStorage.setItem('mg_sync_meta',JSON.stringify({pushed:Date.now()}));
+ }catch(e){console.warn('sync push',e)}_pushing=false;
+}
+async function pullOnLogin(u){
+ try{var doc=await _fbDb.collection('users').doc(u.uid).collection('data').doc('state').get();
+  if(doc.exists){var d=doc.data();var meta={};try{meta=JSON.parse(localStorage.getItem('mg_sync_meta')||'{}')}catch(_){}
+   if((d.clientTs||0)>(meta.pushed||0)+1000){localStorage.setItem('mg_state_v1',d.json);localStorage.setItem('mg_sync_meta',JSON.stringify({pushed:d.clientTs}));location.reload();return}}
+ }catch(e){console.warn('sync pull',e)}
+ schedulePush();
+}
+function hookSave(){
+ if(typeof window.save!=='function'||window.save._v9763)return false;
+ var os=window.save;var ns=function(){var r=os.apply(this,arguments);schedulePush();return r};ns._v9763=true;window.save=ns;return true;
+}
+// ---- parent view ----
+function renderParent(){
+ var old=document.getElementById('parentView');if(old)old.remove();
+ var s={};try{s=JSON.parse(localStorage.getItem('mg_state_v1')||'{}')}catch(_){}
+ var readN=Object.keys(s.read||{}).length;
+ var mockRows=(s.mocks||[]).slice(-15).reverse().map(function(m){return '<div class="pv-row"><span>'+esc(m.name||m.id||'Mock')+'</span><span>'+esc(m.score!=null?m.score:(m.pct!=null?m.pct+'%':'-'))+'</span></div>'}).join('')||'<div class="pv-row"><span>No mocks yet</span><span></span></div>';
+ var tstat=s.tstat||{};var tRows=Object.keys(tstat).slice(0,12).map(function(k){var v=tstat[k];var mins=Math.round((typeof v==='number'?v:(v.t||0))/60000);return '<div class="pv-row"><span>'+esc(k)+'</span><span>'+mins+' min</span></div>'}).join('')||'<div class="pv-row"><span>No time data yet</span><span></span></div>';
+ var days=Object.keys(s.days||{}).length;
+ var chat=(s.chat||[]).slice(-80).map(function(m){return '<div class="pv-msg '+(m.r==='u'?'pv-u':'pv-a')+'">'+esc(m.t)+'</div>'}).join('')||'<div class="pv-msg pv-a">No Roop chats yet</div>';
+ var el=document.createElement('div');el.id='parentView';
+ el.innerHTML='<div class="pv-wrap"><button class="btn pv-back" id="pvBack">Back</button><h2>Progress at a glance</h2>'+
+ '<div class="pv-card"><div class="pv-row"><span>Chapters read</span><span>'+readN+'</span></div><div class="pv-row"><span>Active days</span><span>'+days+'</span></div><div class="pv-row"><span>Level</span><span>'+esc(s.level!=null?s.level:'-')+'</span></div></div>'+
+ '<h3>Mock scores</h3><div class="pv-card">'+mockRows+'</div>'+
+ '<h3>Time per chapter</h3><div class="pv-card">'+tRows+'</div>'+
+ '<h3>Roop conversations</h3><div class="pv-card pv-chat">'+chat+'</div>'+
+ '<div class="pv-note">Private view. Nothing here is visible in the normal app screens.</div></div>';
+ document.body.appendChild(el);
+ document.getElementById('pvBack').onclick=function(){location.hash='';el.remove()};
+}
+function checkHash(){if(location.hash==='#parent'){renderParent()}else{var el=document.getElementById('parentView');if(el)el.remove()}}
+// secret entry: 5 taps on the version line in More
+function hookVersionTap(){
+ var cand=[...document.querySelectorAll('div,span,button')].filter(function(x){return x.offsetParent&&/v97\.\d/.test(x.textContent)&&x.textContent.length<60});
+ if(!cand.length)return false;
+ var el=cand[cand.length-1],n=0,t=null;
+ if(el._pvTap)return true;el._pvTap=true;
+ el.addEventListener('click',function(){n++;if(t)clearTimeout(t);t=setTimeout(function(){n=0},2500);if(n>=5){n=0;location.hash='#parent'}});
+ return true;
+}
+// ---- boot ----
+var boot=setInterval(function(){
+ var appVisible=document.getElementById('app')&&!document.getElementById('app').classList.contains('hidden');
+ if(!appVisible)return;
+ clearInterval(boot);
+ fbReady().then(function(){
+  _fbAuth.onAuthStateChanged(function(u){
+   var w=document.getElementById('authWall');
+   if(u){if(w)w.remove();pullOnLogin(u)}
+   else if(!localStorage.getItem('mg_auth_skip')){showAuthWall()}
+  });
+ }).catch(function(){});
+ var hk=setInterval(function(){if(hookSave())clearInterval(hk)},1500);
+ var hv=setInterval(function(){if(hookVersionTap())clearInterval(hv)},2000);
+ window.addEventListener('hashchange',checkHash);checkHash();
+},800);
+})();
+</script>
+
 </body>
 </html>
