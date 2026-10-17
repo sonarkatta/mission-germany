@@ -84,6 +84,65 @@ button.chip.blue{color:#675b49;background:linear-gradient(135deg,rgba(255,255,25
 </div>
 
 <script>
+// v97.74: Face ID / fingerprint lock (WebAuthn platform authenticator, local-only, no server)
+(function(){
+ function b64u(buf){var b=new Uint8Array(buf),s='';for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+ function b64uDec(str){str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';var bin=atob(str),b=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return b.buffer}
+ function faceAvailable(){if(!(window.PublicKeyCredential&&navigator.credentials&&navigator.credentials.create))return Promise.resolve(false);return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().then(function(a){return!!a}).catch(function(){return false})}
+ window.mgFaceEnabled=function(){return localStorage.getItem('mg_facelock')==='1'&&!!localStorage.getItem('mg_facelock_cred')};
+ window.maybeOfferFaceLock=function(u){
+  try{
+   if(!u||!u.email)return;
+   if(localStorage.getItem('mg_facelock')!==null)return;
+   faceAvailable().then(function(ok){
+    if(!ok||document.getElementById('faceOffer'))return;
+    var d=document.createElement('div');d.id='faceOffer';
+    d.style.cssText='position:fixed;inset:0;background:rgba(20,20,40,.45);display:flex;align-items:center;justify-content:center;z-index:99999;padding:24px';
+    d.innerHTML='<div style="background:#fff;border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25)">'+
+     '<div style="font-size:40px">&#128274;</div>'+
+     '<h2 style="margin:8px 0 6px;font-size:20px">Lock with Face ID?</h2>'+
+     '<p style="color:#555;font-size:14px;line-height:1.45;margin:0 0 18px">Ask for Face ID (or fingerprint) every time the app opens on this phone. Nothing leaves this phone.</p>'+
+     '<button id="faceYes" style="width:100%;padding:14px;border-radius:14px;border:0;background:#0A84FF;color:#fff;font-size:16px;font-weight:600">Turn on Face ID</button>'+
+     '<div id="faceNo" style="margin-top:12px;color:#0A84FF;font-size:15px;text-decoration:underline;cursor:pointer">Not now</div>'+
+     '<div id="faceOfferErr" style="color:#d00;font-size:13px;margin-top:10px"></div></div>';
+    document.body.appendChild(d);
+    document.getElementById('faceNo').onclick=function(){localStorage.setItem('mg_facelock','0');d.remove()};
+    document.getElementById('faceYes').onclick=function(){
+     var ch=new Uint8Array(32);crypto.getRandomValues(ch);
+     var uid=new Uint8Array(16);crypto.getRandomValues(uid);
+     navigator.credentials.create({publicKey:{rp:{name:'Mission Germany'},user:{id:uid,name:u.email,displayName:u.email},challenge:ch,pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required'},timeout:60000,attestation:'none'}})
+     .then(function(cred){localStorage.setItem('mg_facelock_cred',b64u(cred.rawId));localStorage.setItem('mg_facelock','1');d.remove()})
+     .catch(function(){var el=document.getElementById('faceOfferErr');if(el)el.textContent='Face ID did not go through - nothing changed. You can try again.'});
+    };
+   });
+  }catch(e){}
+ };
+ window.showFaceLock=function(pw){
+  if(document.getElementById('faceLock'))return;
+  var d=document.createElement('div');d.id='faceLock';
+  d.style.cssText='position:fixed;inset:0;background:linear-gradient(180deg,#1c1c2e,#2d2d44);display:flex;align-items:center;justify-content:center;z-index:99998;padding:24px';
+  d.innerHTML='<div style="text-align:center;max-width:320px;width:100%">'+
+   '<div style="font-size:52px">&#128274;</div>'+
+   '<h2 style="color:#fff;font-size:22px;margin:10px 0 4px">Mission Germany</h2>'+
+   '<p style="color:#aab;font-size:14px;margin:0 0 22px">Locked on this phone</p>'+
+   '<button id="faceOpen" style="width:100%;padding:15px;border-radius:14px;border:0;background:#0A84FF;color:#fff;font-size:16px;font-weight:600">Unlock with Face ID</button>'+
+   '<div id="faceLockErr" style="color:#ff9b9b;font-size:13px;margin-top:12px;min-height:16px"></div>'+
+   '<div id="faceUsePw" style="margin-top:6px;color:#9ab;font-size:13px;text-decoration:underline;cursor:pointer">Use app password instead</div>'+
+   '<div id="faceOff" style="margin-top:14px;color:#889;font-size:12px;text-decoration:underline;cursor:pointer">Turn off Face ID lock</div></div>';
+  document.body.appendChild(d);
+  function openIt(){d.remove();unlock(pw,true)}
+  function ask(onOk,onErr){
+   var ch=new Uint8Array(32);crypto.getRandomValues(ch);
+   navigator.credentials.get({publicKey:{challenge:ch,allowCredentials:[{type:'public-key',id:b64uDec(localStorage.getItem('mg_facelock_cred'))}],userVerification:'required',timeout:60000}})
+   .then(onOk).catch(onErr);
+  }
+  document.getElementById('faceOpen').onclick=function(){ask(openIt,function(){var el=document.getElementById('faceLockErr');if(el)el.textContent='Not unlocked - try again, or use the app password.'})};
+  document.getElementById('faceUsePw').onclick=function(){d.remove()};
+  document.getElementById('faceOff').onclick=function(){ask(function(){localStorage.removeItem('mg_facelock');localStorage.removeItem('mg_facelock_cred');openIt()},function(){var el=document.getElementById('faceLockErr');if(el)el.textContent='Face ID is needed to turn the lock off.'})};
+ };
+})();
+</script>
+<script>
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function appAsset(url){
  let cache;try{cache=await caches.open('arya-encrypted-v1');const hit=await cache.match(url);if(hit)return hit;}catch(e){}
@@ -113,7 +172,7 @@ let l3code="";try{const l3o=await advancedRequest;l3code=new TextDecoder().decod
 function _primeA(){try{window._pa=new Audio();window._pa.muted=true;const p=window._pa.play();if(p)p.then(()=>{window._pa.pause();window._pa.muted=false;window._pa.currentTime=0}).catch(()=>{})}catch(e){}}
 document.getElementById("gateBtn").onclick=()=>{_primeA();unlock(document.getElementById("gateInput").value.trim())};
 document.getElementById("gateInput").addEventListener("keydown",e=>{if(e.key==="Enter"){_primeA();unlock(e.target.value.trim())}});
-const saved=localStorage.getItem("mg_pw");if(saved)unlock(saved,true);
+const saved=localStorage.getItem("mg_pw");if(saved){if(window.mgFaceEnabled&&mgFaceEnabled()){showFaceLock(saved)}else{unlock(saved,true)}}
 </script>
 <script>
 // v97.3: Liquid Glass page jumps - apply after core renders #quickJumps (appearance pack runs before the element exists).
@@ -531,7 +590,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.73-20261017-0930 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.74-20261017-0940 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -594,7 +653,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.73-20261017-0930';
+var APP_BUILD='v97.74-20261017-0940';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -675,44 +734,25 @@ css('#authWall{position:fixed;inset:0;z-index:9999;display:flex;align-items:cent
 '#parentView .pv-u{background:#e8f0fe;margin-left:30px}#parentView .pv-a{background:#fdeef5;margin-right:30px}'+
 '#parentView .pv-back{margin-top:10px}#parentView .pv-note{font-size:12px;color:#9a93a8;margin-top:14px}');
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-var _mode='in';
 function showAuthWall(){
  if(document.getElementById('authWall'))return;
  var w=document.createElement('div');w.id='authWall';
  w.innerHTML='<div class="aw-card"><h2>Your own login</h2><p class="sub">One time setup - your progress, mock scores and streaks stay safe on every device.</p>'+
  '<button id="awGoogle" type="button"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C41 35.4 44 30.2 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg> Continue with Google</button>'+
- '<div class="aw-or">or with email</div>'+
- '<input id="awName" type="text" placeholder="Your name" autocomplete="name" style="display:none">'+
- '<input id="awEmail" type="email" placeholder="Email" autocomplete="email">'+
- '<input id="awPass" type="password" placeholder="Password (6+ letters)" autocomplete="current-password">'+
  '<div class="aw-err" id="awErr"></div>'+
- '<button id="awGo" class="btn" type="button">Sign in</button>'+
- '<div class="aw-swap" id="awSwap">New here? Create your account</div>'+
  '<span class="aw-skip" id="awSkip">Not now</span></div>';
  document.body.appendChild(w);
  document.getElementById('awGoogle').onclick=function(){doGoogle()};
- document.getElementById('awGo').onclick=function(){doEmail()};
- document.getElementById('awSwap').onclick=function(){_mode=(_mode==='in')?'up':'in';
-   document.getElementById('awName').style.display=(_mode==='up')?'block':'none';
-   document.getElementById('awGo').textContent=(_mode==='up')?'Create my account':'Sign in';
-   document.getElementById('awSwap').textContent=(_mode==='up')?'Have an account? Sign in':'New here? Create your account';
-   document.getElementById('awErr').textContent='';};
  document.getElementById('awSkip').onclick=function(){localStorage.setItem('mg_auth_skip','1');w.remove()};
 }
 function awErr(m){var e=document.getElementById('awErr');if(e)e.textContent=m}
+// v97.74: family-only login allow-list (hashes only, no plaintext emails)
+var ALLOWED_H=["c230ff86b09718d5f91bd36a981ab495f098fef0e265c4ba969240c286064d23"];
+async function _allowHash(em){if(!em)return false;try{var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(em).trim().toLowerCase()));var h=[...new Uint8Array(b)].map(function(x){return x.toString(16).padStart(2,'0')}).join('');return ALLOWED_H.indexOf(h)>=0}catch(e){return false}}
+async function _gateUser(u){if(!u)return false;if(await _allowHash(u.email))return true;try{if(u.metadata&&u.metadata.creationTime===u.metadata.lastSignInTime)await u.delete();else await _fbAuth.signOut()}catch(e){try{await _fbAuth.signOut()}catch(_){}}awErr('This app is private - only family logins work here.');return false}
 function friendlyErr(e){var c=(e&&e.code)||'';var m={'auth/invalid-email':'That email does not look right.','auth/user-not-found':'No account with this email yet - create one below.','auth/wrong-password':'That password is not right. Try again.','auth/invalid-credential':'Email or password is not right. Try again.','auth/email-already-in-use':'This email already has an account - sign in instead.','auth/weak-password':'Password needs at least 6 letters.','auth/popup-closed-by-user':'The Google window was closed. Try again.','auth/network-request-failed':'No internet right now. Try again in a bit.'};return m[c]||'Something went wrong. Try again.'}
-async function doGoogle(){try{await fbReady();var p=new firebase.auth.GoogleAuthProvider();await _fbAuth.signInWithPopup(p)}catch(e){awErr(friendlyErr(e))}}
-async function doEmail(){
- var em=document.getElementById('awEmail').value.trim(),pw=document.getElementById('awPass').value,nm=document.getElementById('awName').value.trim();
- awErr('');if(!em||!pw){awErr('Email and password, please.');return}
- try{await fbReady();
-  if(_mode==='up'){if(!nm){awErr('Your name, please.');return}
-   var cr=await _fbAuth.createUserWithEmailAndPassword(em,pw);
-   try{await cr.user.updateProfile({displayName:nm})}catch(_){}
-   try{await _fbDb.collection('users').doc(cr.user.uid).set({name:nm,created:firebase.firestore.FieldValue.serverTimestamp()},{merge:true})}catch(_){}
-  }else{await _fbAuth.signInWithEmailAndPassword(em,pw)}
- }catch(e){awErr(friendlyErr(e))}
-}
+async function doGoogle(){try{await fbReady();var p=new firebase.auth.GoogleAuthProvider();try{await _fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)}catch(_){}await _fbAuth.signInWithRedirect(p)}catch(e){awErr(friendlyErr(e))}}
+fbReady().then(function(){return _fbAuth.getRedirectResult()}).catch(function(e){try{awErr(friendlyErr(e))}catch(_){}});
 // ---- sync ----
 var _pushT=null,_pushing=false;
 function schedulePush(){if(_pushT)clearTimeout(_pushT);_pushT=setTimeout(pushNow,2500)}
@@ -761,9 +801,9 @@ var boot=setInterval(function(){
  if(!appVisible)return;
  clearInterval(boot);
  fbReady().then(function(){
-  _fbAuth.onAuthStateChanged(function(u){
+  _fbAuth.onAuthStateChanged(async function(u){
    var w=document.getElementById('authWall');
-   if(u){if(w)w.remove();pullOnLogin(u)}
+   if(u){if(await _gateUser(u)){if(w)w.remove();pullOnLogin(u);try{maybeOfferFaceLock(u)}catch(e){}}else if(!document.getElementById('authWall'))showAuthWall()}
    else if(!localStorage.getItem('mg_auth_skip')){showAuthWall()}
   });
  }).catch(function(){});
@@ -775,7 +815,7 @@ var boot=setInterval(function(){
 
 
 <script>
-// v97.73: parent link v2 - papa links remotely with HER email (zero action on her side, zero trace in her UI) - papa opens the parent view from his own phone. Hidden #parent route upgraded: link code on her side, code entry + remote live data on his.
+// v97.74: parent link v2 - papa links remotely with HER email (zero action on her side, zero trace in her UI) - papa opens the parent view from his own phone. Hidden #parent route upgraded: link code on her side, code entry + remote live data on his.
 (function(){
 "use strict";
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
