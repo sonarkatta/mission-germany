@@ -590,7 +590,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.119-20261018-0520 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.120-20261018-0540 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -653,7 +653,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.119-20261018-0520';
+var APP_BUILD='v97.120-20261018-0540';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1086,6 +1086,101 @@ var __v9787w=setInterval(function(){
     if(a&&(a.ended||(a.duration&&a.currentTime>=a.duration-0.2))){clearInterval(guard);adv()}},400);
    setTimeout(function(){clearInterval(guard)},30000);
   }catch(e){adv()}}
+ function xbApplyRp(){if(typeof dgRender!=="function"||dgRender.__rp)return;var _d=dgRender;
+  var w=function(){_d();try{
+   if(typeof DG==="undefined"||!DG.id)return;
+   var v=(typeof view==="function")?view():null;if(!v)return;
+   var row=v.querySelector(".row");if(!row||document.getElementById("rpBtn"))return;
+   var b=document.createElement("button");b.id="rpBtn";b.className="btn ghost";b.style.margin="0";
+   b.innerHTML="🎙 Role-play";b.onclick=function(){rpToggle()};row.appendChild(b)}catch(e){}};
+  w.__rp=true;dgRender=w}
+ window.addEventListener("hashchange",function(){if(RP.on)rpStop()});
+ (function(){
+  var _cap=setTimeout(function(){clearInterval(_iv);xbApplyRp()},4000);
+  var _iv=setInterval(function(){if(typeof dgRender==="function"){clearInterval(_iv);clearTimeout(_cap);xbApplyRp()}},300);
+  setTimeout(function(){if(typeof dgRender==="function"&&!dgRender.__rp)xbApplyRp()},9000);
+ })();
+})();
+</script>
+
+<script>
+// v97.119: dialogue role-play mode (ITEM 7) - the app voices the other side,
+// pauses at the learner's turn, listens where possible, tap-to-confirm fallback.
+(function(){
+ var RP={on:false,i:0};
+ function dlg(){try{return (typeof GERMAN_DIALOGUES!=="undefined"&&typeof DG!=="undefined"&&DG.id)?GERMAN_DIALOGUES.find(function(x){return x.id===DG.id}):null}catch(e){return null}}
+ function cards(){var v=(typeof view==="function")?view():null;return v?v.querySelectorAll(".card"):[]}
+ function hl(i){var cs=cards();for(var k=0;k<cs.length;k++){cs[k].style.outline=(k===i)?"2px solid #a66bff":"";cs[k].style.outlineOffset=(k===i)?"2px":""}
+  if(cs[i])try{cs[i].scrollIntoView({block:"center",behavior:"smooth"})}catch(e){cs[i].scrollIntoView()}}
+ function bar(){var b=document.getElementById("rpBar");if(!b){b=document.createElement("div");b.id="rpBar";
+  b.style.cssText="position:fixed;left:12px;right:12px;bottom:12px;z-index:60;background:#fff;border:2px solid rgba(166,107,255,.55);border-radius:16px;padding:12px 14px;box-shadow:0 10px 34px rgba(80,70,110,.25);display:none;font-size:14px";
+  document.body.appendChild(b)}return b}
+ function barShow(h){var b=bar();b.innerHTML=h;b.style.display="block"}
+ function barHide(){var b=document.getElementById("rpBar");if(b)b.style.display="none"}
+ function msg(t){var m=document.getElementById("rpMsg");if(m)m.textContent=t}
+ function srOK(){return !!(window.SpeechRecognition||window.webkitSpeechRecognition)}
+ function norm(s){return (s||"").toLowerCase().replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss").replace(/[^a-z\s]/g," ").replace(/\s+/g," ").trim()}
+ function score(a,b){var ta=norm(a).split(" ").filter(Boolean);if(!ta.length)return 0;
+  var pool=ta.slice(),hit=0;
+  norm(b).split(" ").filter(Boolean).forEach(function(w){var k=pool.indexOf(w);if(k>=0){hit++;pool.splice(k,1)}});
+  return Math.round(100*hit/ta.length)}
+ window.rpStop=function(){RP.on=false;try{if(typeof stopAudio==="function")stopAudio()}catch(e){}
+  try{if("speechSynthesis" in window)speechSynthesis.cancel()}catch(e){}
+  barHide();var cs=cards();for(var k=0;k<cs.length;k++){cs[k].style.outline="";cs[k].style.outlineOffset=""}
+  if(typeof DG!=="undefined"&&DG.hide){DG.hide=null;DG.shown={};try{dgRender()}catch(e){}}}
+ window.rpToggle=function(){if(RP.on){rpStop();return}var d=dlg();if(!d)return;
+  RP={on:true,i:0};DG.hide="B";DG.shown={};try{dgRender()}catch(e){}
+  barShow("<b>Role-play starting</b><div class='muted small'>You are person B. The app speaks first - answer when it is your turn.</div>");
+  setTimeout(rpStep,900)};
+ window.rpSkip=function(){try{if(typeof stopAudio==="function")stopAudio()}catch(e){}rpAdvance()};
+ window.rpHear=function(){var d=dlg();if(!d||!RP.on)return;var l=d.lines[RP.i];if(!l)return;
+  try{playClips(["dlg-"+d.id+"-"+(RP.i+1)+"-de"],function(){try{var u=new SpeechSynthesisUtterance(l.de);u.lang="de-DE";u.rate=.85;speechSynthesis.speak(u)}catch(e){}})}catch(e){}};
+ window.rpSaid=function(){var d=dlg();if(!d||!RP.on)return;DG.shown[RP.i]=1;rpAdvance()};
+ window.rpMic=function(){var SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){msg("No speech recognition on this device - tap I said it");return}
+  var d=dlg();if(!d||!RP.on)return;var target=d.lines[RP.i].de;
+  msg("Listening - say the line now");
+  var r;try{r=new SR()}catch(e){msg("Mic unavailable - tap I said it");return}
+  r.lang="de-DE";r.interimResults=false;r.maxAlternatives=3;
+  r.onresult=function(ev){var best="";try{for(var i2=0;i2<ev.results[0].length;i2++){if(ev.results[0][i2].transcript.length>best.length)best=ev.results[0][i2].transcript}}catch(e){}
+   var sc=score(target,best);
+   msg("Heard: "+best+" ("+sc+"% match)"+(sc>=60?" - schoen!":" - try again, or tap I said it"));
+   if(sc>=60)setTimeout(rpSaid,800)};
+  r.onerror=function(e2){msg(e2&&e2.error==="not-allowed"?"Mic blocked - allow the microphone, or tap I said it":"Did not catch that - try again")};
+  try{r.start()}catch(e){msg("Mic busy - try again")}};
+ function rpAdvance(){if(!RP.on)return;RP.i++;try{dgRender()}catch(e){}setTimeout(rpStep,250)}
+ function rpStep(){if(!RP.on)return;var d=dlg();if(!d){rpStop();return}
+  if(RP.i>=d.lines.length){RP.on=false;hl(-1);
+   barShow("<b>Dialogue complete - well done!</b><div class='row' style='gap:8px;margin-top:8px'><button class='btn soft' style='margin:0' onclick='rpStop()'>Close</button><button class='btn ghost' style='margin:0' onclick='rpStop();rpToggle()'>Play it again</button></div>");
+   if(DG.hide){DG.hide=null;DG.shown={};try{dgRender()}catch(e){}}
+   return}
+  var l=d.lines[RP.i];hl(RP.i);
+  if(l.s!=="B"){
+   barShow("<b>Their turn ("+(RP.i+1)+" of "+d.lines.length+")</b><div class='muted small'>Listening...</div><div class='row' style='gap:8px;margin-top:8px'><button class='btn ghost' style='margin:0' onclick='rpSkip()'>Skip ahead</button><button class='btn soft' style='margin:0' onclick='rpStop()'>Stop</button></div>");
+   rpPlayA(d,l)
+  }else{
+   barShow("<b>Your turn ("+(RP.i+1)+" of "+d.lines.length+")</b><div class='muted small'>"+l.en+"</div>"
+    +"<div class='row' style='gap:8px;margin-top:8px;flex-wrap:wrap'>"
+    +(srOK()?"<button class='btn ghost' style='margin:0' onclick='rpMic()'>Speak</button>":"")
+    +"<button class='btn ghost' style='margin:0' onclick='rpHear()'>Hear it</button>"
+    +"<button class='btn soft' style='margin:0' onclick='rpSaid()'>I said it</button>"
+    +"<button class='btn soft' style='margin:0' onclick='rpStop()'>Stop</button></div>"
+    +"<div id='rpMsg' class='muted small' style='margin-top:6px'></div>")}}
+ function rpPlayA(d,l){var done=false;
+  var adv=function(){if(done||!RP.on)return;done=true;rpAdvance()};
+  var key="dlg-"+d.id+"-"+(RP.i+1)+"-de";
+  try{
+   playClips([key],function(){
+    try{var u=new SpeechSynthesisUtterance(l.de);u.lang="de-DE";u.rate=.85;u.onend=function(){adv()};speechSynthesis.speak(u);setTimeout(adv,9000)}catch(e){adv()}});
+  }catch(e){adv()}
+  // advance on the clip's real duration - playback internals are re-wrapped
+  // by several layers, so element hooks are unreliable
+  try{
+   if(window.MG_WEB_AUDIO&&window.AUDIO_MANIFEST&&AUDIO_MANIFEST[key]&&window.AUDIO_MAP){
+    MG_WEB_AUDIO.decode(AUDIO_MANIFEST[key]).then(function(buf){
+     if(buf&&buf.duration)setTimeout(adv,Math.min(20000,Math.round(buf.duration*1000)+700));
+     else setTimeout(adv,6000)}).catch(function(){setTimeout(adv,6000)});
+   }else setTimeout(adv,6000);
+  }catch(e2){setTimeout(adv,6000)}}
  function xbApplyRp(){if(typeof dgRender!=="function"||dgRender.__rp)return;var _d=dgRender;
   var w=function(){_d();try{
    if(typeof DG==="undefined"||!DG.id)return;
