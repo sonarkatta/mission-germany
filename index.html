@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.190-20261018-1905 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.191-20261018-1935 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.190-20261018-1905';
+var APP_BUILD='v97.191-20261018-1935';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1320,7 +1320,7 @@ if(typeof o==='function')window.safView=function(){o.apply(this,arguments);try{v
 })();
 (function(){var so=window.safOn;if(typeof so!=='function')return;window.safOn=function(on){var z=S.safety;if(!on&&z&&z.loc){var l=z.loc;z.loc=null;save();try{fetch('https://arya-safety.sonarkatta.workers.dev/admin',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({vk:l.vk,ak:l.ak,action:'revoke'})})}catch(e){}}return so.apply(this,arguments)}})();
 
-// v97.190: live location for mom - Arya-controlled, Find My style screen
+// v97.191: live location for mom - Arya-controlled, Find My style screen
 (function(){
 var B='https://arya-safety.sonarkatta.workers.dev';
 function TM(el){var T=256,st={lat:20.5,lon:78.9,z:4};
@@ -1388,8 +1388,35 @@ window.safView=function(){var v=document.getElementById('view');if(!v)return;var
   +'<div style="display:flex;gap:8px;margin-top:8px"><button class="btn soft" style="flex:1" onclick="lvPlace(\'college\')">'+(z.geo&&z.geo.college?'✓ ':'')+'Set college here</button><button class="btn soft" style="flex:1" onclick="lvPlace(\'home\')">'+(z.geo&&z.geo.home?'✓ ':'')+'Set home here</button></div></details>'
   +'<div class="muted small" style="margin-top:8px;text-align:center">Updates while the app is open on screen. iPhone pauses web apps when locked or closed.</div>';
  }
- h+='</div>';v.innerHTML=h;
+ h+='<button class="btn soft" style="display:block;width:100%;padding:12px;margin-top:10px" onclick="lvAuto()">⚡ Auto messages when I leave or arrive</button></div>';v.innerHTML=h;
  var m=document.getElementById('lvMap');map=TM(m);if(cur){map.set(cur.lat,cur.lon,17);map.pin(true)}else map.set(20.5,78.9,4);paint();if(live)watch()};
+
+function dv(){var z=Z();if(z.dev)return z.dev;var u=navigator.userAgent||'';return /Android/.test(u)?'android':'ios'}
+function tile(i,t,c){return '<div style="flex:1;min-width:0;text-align:center;background:'+c+';border-radius:14px;padding:10px 4px"><div style="font-size:26px">'+i+'</div><div class="small">'+t+'</div></div>'}
+function tb(id,l,v){return '<div style="margin:10px 0"><div class="muted small">'+l+'</div><textarea id="'+id+'" rows="2" readonly style="width:100%;box-sizing:border-box;border-radius:10px;padding:8px;font:inherit">'+E(v)+'</textarea><button class="btn soft" style="width:100%" onclick="lvCopy(\''+id+'\')">Copy text</button></div>'}
+window.lvCopy=function(id){var el=document.getElementById(id);if(!el)return;try{navigator.clipboard.writeText(el.value).then(function(){flash('Copied')},function(){el.select();document.execCommand('copy');flash('Copied')})}catch(e){el.select();document.execCommand('copy');flash('Copied')}};
+window.lvDev=function(x){Z().dev=x;save();lvAuto()};
+window.lvAuto=function(){var v=document.getElementById('view');if(!v)return;var z=Z(),d=dv(),c=z.college||'college',hm=z.home||'home';
+ var h='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="safView()">‹ Back</button></div>'
+ +'<div class="hero"><div class="kicker">⚡ Auto messages</div><h1>Mom gets a message by itself</h1><p>Set up once on your phone. It works with this app closed. You can switch it off any time in the same place.</p></div>'
+ +'<div style="display:flex;gap:8px;margin-bottom:10px"><button class="btn '+(d==='ios'?'':'soft')+'" style="flex:1" onclick="lvDev(\'ios\')">iPhone</button><button class="btn '+(d==='android'?'':'soft')+'" style="flex:1" onclick="lvDev(\'android\')">Android</button></div>';
+ if(d==='ios'){
+  h+='<div style="background:#fff;border-radius:18px;padding:14px;box-shadow:0 2px 10px #0002"><b>Do these 4 steps for each message below</b>'
+  +'<div style="display:flex;gap:6px;margin:10px 0">'+tile('📲','<b>1.</b> Shortcuts app, Automation, then +','rgba(10,132,255,.1)')+tile('📍','<b>2.</b> Leave or Arrive, pick the place','rgba(52,199,89,.12)')+'</div>'
+  +'<div style="display:flex;gap:6px;margin:10px 0">'+tile('💬','<b>3.</b> Add Action, Send Message. Paste the text, pick mom','rgba(255,149,0,.12)')+tile('✅','<b>4.</b> Choose Run Immediately, then Done','rgba(175,82,222,.12)')+'</div>'
+  +'<div class="small muted">Say Anytime for the time. Turn Notify When Run off if you like.</div></div>';
+ }else{
+  h+='<div style="background:#fff;border-radius:18px;padding:14px;box-shadow:0 2px 10px #0002"><b>Do these 4 steps for each message below</b>'
+  +'<div style="display:flex;gap:6px;margin:10px 0">'+tile('📲','<b>1.</b> Install MacroDroid (free) and open it, tap Add Macro','rgba(10,132,255,.1)')+tile('📍','<b>2.</b> Trigger: Location, Geofence. Pick the place, choose Enter or Exit','rgba(52,199,89,.12)')+'</div>'
+  +'<div style="display:flex;gap:6px;margin:10px 0">'+tile('💬','<b>3.</b> Action: Send SMS. Paste the text, add mom\'s number','rgba(255,149,0,.12)')+tile('✅','<b>4.</b> Name it and tap the green tick. Allow Location and SMS when asked','rgba(175,82,222,.12)')+'</div>'
+  +'<div class="small muted">The free version allows 5 macros, so these 3 fit.</div></div>';
+ }
+ h+=(okNum()?tb('lvN','Mom\'s number','+'+digits()):'')
+ +'<b>Leave '+E(c)+'</b>'+tb('lvT1','Text to paste','Hi mom, I have left '+c+' and I am on my way.')
+ +'<b>Arrive at '+E(c)+'</b>'+tb('lvT2','Text to paste','Hi mom, I have reached '+c+'.')
+ +'<b>Arrive at '+E(hm)+'</b>'+tb('lvT3','Text to paste','Hi mom, I have reached '+hm+'.')
+ +'<div class="muted small" style="margin:8px 0 20px">'+(d==='ios'?'iPhone may show a small banner when an automation runs, and on some versions asks you to allow it the first time. After that it runs by itself.':'Some Android phones stop background apps to save battery. In Settings, set MacroDroid to Unrestricted battery use.')+'</div>';
+ v.innerHTML=h;window.scrollTo(0,0)};
 setTimeout(function(){var z=S.safety;if(z&&z.live&&z.loc)watch()},2500);
 })();
 
