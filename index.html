@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.164-20261018-1345 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.165-20261018-1350 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.164-20261018-1345';
+var APP_BUILD='v97.165-20261018-1350';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -741,8 +741,12 @@ function showAuthWall(){
  w.innerHTML='<div class="aw-card"><h2>Your own login</h2><p class="sub">One time setup - your progress, mock scores and streaks stay safe on every device.</p>'+
  '<button id="awGoogle" type="button"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C41 35.4 44 30.2 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg> Continue with Google</button>'+
  '<div class="aw-err" id="awErr"></div>'+
- '<span class="aw-skip" id="awSkip">Not now</span></div>';
+ '<div class="aw-swap" id="awEmailLink">Use email and password instead</div>'+
+ '<div id="awEmailBox" style="display:none"><input id="awEmail" type="email" placeholder="Email" autocomplete="email" autocapitalize="none"><input id="awPass" type="password" placeholder="Password (6+ letters)" autocomplete="current-password"><button id="awGo" class="btn" type="button">Sign in</button></div>'+
+ '<br><span class="aw-skip" id="awSkip">Not now</span></div>';
  document.body.appendChild(w);
+ document.getElementById('awEmailLink').onclick=function(){document.getElementById('awEmailBox').style.display='block';this.style.display='none'};
+ document.getElementById('awGo').onclick=function(){doEmail()};
  document.getElementById('awGoogle').onclick=function(){doGoogle()};
  document.getElementById('awSkip').onclick=function(){localStorage.setItem('mg_auth_skip','1');w.remove()};
 }
@@ -766,6 +770,20 @@ async function doGoogle(){
    else if(c==='auth/cancelled-popup-request'||c==='auth/popup-closed-by-user'){awErr('The Google window was closed. Tap Continue with Google to try again.')}
    else throw e;
   }
+ }catch(e){awErr(friendlyErr(e))}
+}
+async function doEmail(){
+ var em=(document.getElementById('awEmail').value||'').trim(),pw=document.getElementById('awPass').value||'';
+ if(!em||pw.length<6){awErr('Enter your email and a password of at least 6 letters.');return}
+ try{
+  await fbReady();
+  if(!(await _allowHash(em))){awErr('This app is private - only family logins work here.');return}
+  awErr('One moment...');
+  try{await _fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)}catch(_){}
+  try{await _fbAuth.signInWithEmailAndPassword(em,pw)}
+  catch(e){var c=(e&&e.code)||'';
+   if(c==='auth/user-not-found'||c==='auth/invalid-credential'){try{await _fbAuth.createUserWithEmailAndPassword(em,pw)}catch(e2){awErr((e2&&e2.code)==='auth/email-already-in-use'?'That password is not right. Try again.':friendlyErr(e2))}}
+   else awErr(friendlyErr(e))}
  }catch(e){awErr(friendlyErr(e))}
 }
 fbReady().then(function(){return _fbAuth.getRedirectResult()}).catch(function(e){try{awErr(friendlyErr(e))}catch(_){}});
