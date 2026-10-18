@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.186-20261018-1812 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.187-20261018-1822 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.186-20261018-1812';
+var APP_BUILD='v97.187-20261018-1822';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1320,31 +1320,26 @@ if(typeof o==='function')window.safView=function(){o.apply(this,arguments);try{v
 })();
 (function(){var so=window.safOn;if(typeof so!=='function')return;window.safOn=function(on){var z=S.safety;if(!on&&z&&z.loc){var l=z.loc;z.loc=null;save();try{fetch('https://arya-safety.sonarkatta.workers.dev/admin',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({vk:l.vk,ak:l.ak,action:'revoke'})})}catch(e){}}return so.apply(this,arguments)}})();
 
-// v97.186: one simple Safety screen (WhatsApp location + reached), full setup behind Advanced
+// v97.187: one simple Safety screen (open WhatsApp chat with mom, share live location, Find My), full setup behind Advanced
 (function(){
 var full=window.safView;if(typeof full!=='function')return;
 function E(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function Z(){if(!S.safety)S.safety={on:false,num:'',college:'college',home:'home',hours:3,arr:'',lea:'',out:null,dev:''};return S.safety}
 function digits(){var d=(Z().num||'').replace(/\D/g,'');if(d.length===10)d='91'+d;return d}
+function dev0(){var u=navigator.userAgent||'';return /iPhone|iPad|iPod/.test(u)?'ios':(/Android/.test(u)?'android':'ios')}
 function okNum(){var d=digits();return d.length>=11&&d.length<=15}
 function wa(t){return 'https://wa.me/'+digits()+'?text='+encodeURIComponent(t)}
 function flash(m){var d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#222;color:#fff;padding:9px 16px;border-radius:20px;z-index:9999;font-size:14px;max-width:80%;text-align:center';document.body.appendChild(d);setTimeout(function(){d.remove()},2600)}
 window.safAdv=function(on){window.__safAdv=!!on;window.safView();window.scrollTo(0,0)};
 window.safQuickOn=function(){var el=document.getElementById('safQNum');if(el){Z().num=el.value.trim();save()}window.safOn(true)};
-window.safSendLoc=function(){
- if(!okNum()){flash('Add mom\'s number first.');return}
- if(!navigator.geolocation){flash('This phone cannot share location from here.');return}
- flash('Getting your location...');
- navigator.geolocation.getCurrentPosition(function(p){
-  var u='https://www.google.com/maps?q='+p.coords.latitude.toFixed(6)+','+p.coords.longitude.toFixed(6);
-  location.href=wa('Hi mom, this is where I am right now: '+u)
- },function(){flash('Location is off for this app. Allow it in your phone settings, then try again.')},{enableHighAccuracy:true,timeout:15000,maximumAge:30000})};
+window.safOpenWA=function(){if(!okNum()){flash('Add mom\'s number first.');return}var d=digits();location.href='whatsapp://send?phone='+d;setTimeout(function(){if(!document.hidden)location.href='https://wa.me/'+d},1500)};
+window.safFindMy=function(){location.href='findmy://';setTimeout(function(){if(!document.hidden)flash('Open the Find My app on your iPhone.')},1500)};
 window.safReached=function(){var z=Z();location.href=wa(z.arr||('Hi mom, I have reached '+z.college+'.'))};
 window.safView=function(){
- if(window.__safAdv){full();var v=document.getElementById('view')||document.body;var b=document.createElement('div');b.style.cssText='margin:0 0 10px';b.innerHTML='<button class="btn soft" onclick="safAdv(false)">‹ Back to simple view</button>';v.insertBefore(b,v.firstChild);return}
+ if(window.__safAdv){full();var v=document.getElementById('view')||document.body;var b=document.createElement('div');b.style.cssText='margin:0 0 10px';b.innerHTML='<button class="btn soft" onclick="safAdv(false)">‹ Back to simple view</button>';v.insertBefore(b,v.firstChild);var lc=document.getElementById('locCard');if(lc)lc.remove();return}
  var z=Z(),on=!!z.on,v=document.getElementById('view');if(!v)return;
  var h='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="document.querySelector(\'[data-tab=more]\').click()">‹ More</button></div>'
- +'<div class="hero"><div class="kicker">🛡️ Safety</div><h1>Tell mom in one tap</h1><p>You decide when. Nothing is sent until you press send in WhatsApp.</p></div>';
+ +'<div class="hero"><div class="kicker">🛡️ Safety</div><h1>Stay in touch with mom</h1><p>You decide when. Nothing is sent unless you send it.</p></div>';
  if(!on||!okNum()){
   h+='<div class="card"><b>Set it up once</b><div class="muted small" style="margin:6px 0 4px">Mom\'s mobile number (10 digits for India, or with country code)</div>'
   +'<input id="safQNum" type="tel" value="'+E(z.num)+'" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;font:inherit">'
@@ -1352,10 +1347,14 @@ window.safView=function(){
   +'<div class="muted small" style="margin-top:8px">Saved only on this phone. You can turn it off any time.</div></div>';
  }else{
   h+='<div class="card" style="text-align:center"><div style="display:inline-block;background:#34C759;color:#fff;border-radius:20px;padding:4px 14px;font-weight:700;font-size:13px">● ON</div></div>'
-  +'<button class="btn" style="display:block;width:100%;padding:22px 12px;font-size:19px;font-weight:700;margin:10px 0" onclick="safSendLoc()">📍 Send my location to mom</button>'
-  +'<button class="btn soft" style="display:block;width:100%;padding:18px 12px;font-size:17px;font-weight:600;margin:10px 0" onclick="safReached()">✅ I have reached '+E(z.college)+'</button>'
-  +'<div class="muted small" style="text-align:center;margin:4px 0 12px">Opens WhatsApp with the message ready. You press send.</div>'
-  +'<div class="card"><div class="row"><div class="grow"><b>Safety is ON</b><div class="muted small">Turn it off any time. This also stops and deletes any private link.</div></div><button class="btn soft" onclick="safOn(false)">Turn off</button></div></div>';
+  +'<button class="btn" style="display:block;width:100%;padding:22px 12px;font-size:19px;font-weight:700;margin:10px 0" onclick="safOpenWA()">💬 Open my chat with mom</button>'
+  +'<div class="card"><b>Share your live location</b><div class="muted small" style="margin:4px 0 8px">Two taps inside the chat. You choose how long. You can stop any time.</div>'
+  +'<div style="display:flex;gap:8px;align-items:stretch">'
+  +'<div style="flex:1;text-align:center;background:rgba(10,132,255,.1);border-radius:14px;padding:12px 6px"><div style="font-size:30px">➕</div><div class="small"><b>1.</b> Tap the + (iPhone) or the paperclip (Android) next to the message box</div></div>'
+  +'<div style="flex:1;text-align:center;background:rgba(52,199,89,.12);border-radius:14px;padding:12px 6px"><div style="font-size:30px">📍</div><div class="small"><b>2.</b> Tap Location, then Share live location</div></div></div></div>'
+  +(dev0()==='ios'?'<button class="btn soft" style="display:block;width:100%;padding:16px 12px;font-size:16px;font-weight:600;margin:10px 0" onclick="safFindMy()">🧭 Open Find My</button><div class="muted small" style="text-align:center">In Find My: People, Share My Location, mom, Share Indefinitely.</div>':'')
+  +'<button class="btn soft" style="display:block;width:100%;padding:16px 12px;font-size:16px;font-weight:600;margin:10px 0" onclick="safReached()">✅ I have reached '+E(z.college)+'</button>'
+  +'<div class="card"><div class="row"><div class="grow"><b>Safety is ON</b><div class="muted small">Turn it off any time.</div></div><button class="btn soft" onclick="safOn(false)">Turn off</button></div></div>';
  }
  h+='<div style="text-align:center;margin:14px 0"><a href="#" class="muted small" onclick="safAdv(true);return false">Advanced</a></div>';
  v.innerHTML=h};
