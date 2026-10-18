@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.168-20261018-1412 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.169-20261018-1420 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.168-20261018-1412';
+var APP_BUILD='v97.169-20261018-1420';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1085,6 +1085,36 @@ var busy=false;
 function run(){if(busy)return;busy=true;try{var v=document.getElementById('view');if(v){fix(v);hfix(v);lvl()}}catch(e){}busy=false}
 function init(){var v=document.getElementById('view');if(!v){setTimeout(init,500);return}new MutationObserver(run).observe(v,{childList:true,subtree:true,characterData:true});run()}
 init();
+})();
+</script>
+<script>
+// v97.169: speaker icon on Level I glossary terms (recorded clip when one exists, device voice otherwise)
+(function(){
+function spk(){return typeof XB_SPK_SVG!=='undefined'?XB_SPK_SVG:'\ud83d\udd0a'}
+window.l1defSpeak=function(tid,mid,i){
+ var d=(L1_DEFS[tid]&&L1_DEFS[tid][mid]||[])[i];if(!d)return;
+ var key='def-l1-'+tid+'-'+mid.replace(/[^0-9]/g,'')+'-'+(i+1);
+ if(typeof AUDIO_MANIFEST!=='undefined'&&AUDIO_MANIFEST[key]&&typeof playClips==='function'){playClips([key],typeof audioRetry==='function'?audioRetry:function(){});return}
+ try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(d[0]+'. '+String(d[1]).replace(/<[^>]+>/g,''));u.lang='en-IN';u.rate=0.95;var vs=speechSynthesis.getVoices(),v=vs.find(function(x){return /en[-_](IN|GB|US)/i.test(x.lang)});if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}
+};
+var t=setInterval(function(){
+ if(typeof l1defCh!=='function'||typeof L1_DEFS==='undefined')return;clearInterval(t);
+ var _o=l1defCh;
+ window.l1defCh=l1defCh=function(tid,mid){
+  _o(tid,mid);
+  var v=document.getElementById('view');if(!v)return;
+  var cards=v.querySelectorAll('.card');
+  for(var i=0;i<cards.length;i++){(function(c,i){
+   if(c.getAttribute('data-spk'))return;c.setAttribute('data-spk','1');c.classList.add('tappable');
+   var b=c.querySelector('b'),p=c.querySelector('p');if(!b||!p)return;
+   var row=document.createElement('div');row.className='row';var g=document.createElement('div');g.className='grow';
+   c.insertBefore(row,b);g.appendChild(b);g.appendChild(p);row.appendChild(g);
+   var sp=document.createElement('span');sp.className='muted';sp.setAttribute('aria-hidden','true');sp.innerHTML=spk();row.appendChild(sp);
+   c.onclick=function(){l1defSpeak(tid,mid,i)};
+  })(cards[i],i)}
+  var pp=v.querySelector('.hero p');if(pp&&/key terms\.$/.test(pp.textContent))pp.textContent=pp.textContent+' Tap a term to hear it.';
+ };
+},400);
 })();
 </script>
 <script>
