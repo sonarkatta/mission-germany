@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.191-20261018-1935 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.192-20261018-1955 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,11 +654,11 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.191-20261018-1935';
+var APP_BUILD='v97.192-20261018-1955';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
-function showBar(build){
+function showBar(build){window.__lastBuild=build;
  if(document.getElementById('aryaUpdateBar'))return;
  if(gateUp()){setTimeout(function(){showBar(build)},3000);return}
  var bar=document.createElement('div');
@@ -1418,6 +1418,33 @@ window.lvAuto=function(){var v=document.getElementById('view');if(!v)return;var 
  +'<div class="muted small" style="margin:8px 0 20px">'+(d==='ios'?'iPhone may show a small banner when an automation runs, and on some versions asks you to allow it the first time. After that it runs by itself.':'Some Android phones stop background apps to save battery. In Settings, set MacroDroid to Unrestricted battery use.')+'</div>';
  v.innerHTML=h;window.scrollTo(0,0)};
 setTimeout(function(){var z=S.safety;if(z&&z.live&&z.loc)watch()},2500);
+})();
+
+// v97.192: Back from Roop chat to the exact screen, history back, chat bar above nav + keyboard-safe, silent auto-update
+(function(){
+var st=document.createElement('style');st.textContent='.chatbar{bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;z-index:45}body.kb .chatbar{bottom:calc(var(--kb,0px) + 6px)!important}body.kb #tabbar{display:none!important}#chat{padding-bottom:12px}';document.head.appendChild(st);
+var back=null,_pop=false;
+function vv(){return window.visualViewport}
+function kb(){var v=vv();if(!v)return;var off=Math.max(0,window.innerHeight-v.height-v.offsetTop);var on=document.activeElement&&document.activeElement.id==='chatIn'&&off>80;document.body.classList.toggle('kb',!!on);document.documentElement.style.setProperty('--kb',off+'px')}
+if(vv()){vv().addEventListener('resize',kb);vv().addEventListener('scroll',kb)}
+document.addEventListener('focusin',function(){setTimeout(kb,300)});document.addEventListener('focusout',function(){setTimeout(function(){document.body.classList.remove('kb')},200)});
+var _x=window.xbAsk;
+if(typeof _x==='function')window.xbAsk=function(mid){back={k:'ch',mid:mid};return _x.apply(this,arguments)};
+var _t=window.tutor;
+window.tutor=function(){var wasCh=back&&back.k==='ch';if(!wasCh)back={k:'nav'};var r=_t.apply(this,arguments);
+ try{var v=view();var b=document.createElement('div');b.style.cssText='margin:-4px 0 10px';b.innerHTML='<button class="btn soft" onclick="tutorBack()">‹ '+(wasCh?'Back to the lesson':'Back')+'</button>';v.insertBefore(b,v.firstChild);
+  history.pushState({tutor:1},'');window.scrollTo(0,0)}catch(e){}
+ return r};
+window.tutorBack=function(){var b=back;back=null;if(b&&b.k==='ch'&&typeof xbChapter==='function'){var f=window.xbFind&&xbFind(b.mid);if(f){xbChapter(b.mid);window.scrollTo(0,0);return}}goBack()};
+var _g=go;go=function(t,a,np){var r=_g.apply(this,arguments);if(!np&&!_pop&&t!=='tutor'){try{history.pushState({g:1},'')}catch(e){}}if(t!=='tutor')back=null;return r};
+window.addEventListener('popstate',function(){_pop=true;try{if(document.getElementById('chatIn')&&back){tutorBack()}else if(typeof NAV!=='undefined'&&NAV.length>1){goBack()}}finally{setTimeout(function(){_pop=false},50)}});
+// silent auto-update
+var _ap=window.applyUpdate;
+window.__autoUpd=function(build){var k='aryaUpd_'+build;try{if(sessionStorage.getItem(k))return;}catch(e){}
+ var ae=document.activeElement;if(ae&&/INPUT|TEXTAREA/.test(ae.tagName)){setTimeout(function(){window.__autoUpd(build)},20000);return}
+ try{sessionStorage.setItem(k,'1')}catch(e){}if(_ap)_ap(build)};
+var bo=new MutationObserver(function(){var b=document.getElementById('aryaUpdateBar');if(b){var m=(b.onclick+'').match(/applyUpdate\(([^)]*)\)/);b.remove();window.__autoUpd(window.__lastBuild||Date.now())}});
+bo.observe(document.body,{childList:true});
 })();
 
 // v97.119: dialogue role-play mode (ITEM 7) - the app voices the other side,
