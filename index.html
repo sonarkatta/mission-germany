@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.189-20261018-1850 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.190-20261018-1905 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.189-20261018-1850';
+var APP_BUILD='v97.190-20261018-1905';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1320,7 +1320,7 @@ if(typeof o==='function')window.safView=function(){o.apply(this,arguments);try{v
 })();
 (function(){var so=window.safOn;if(typeof so!=='function')return;window.safOn=function(on){var z=S.safety;if(!on&&z&&z.loc){var l=z.loc;z.loc=null;save();try{fetch('https://arya-safety.sonarkatta.workers.dev/admin',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({vk:l.vk,ak:l.ak,action:'revoke'})})}catch(e){}}return so.apply(this,arguments)}})();
 
-// v97.189: live location for mom - Arya-controlled, Find My style screen
+// v97.190: live location for mom - Arya-controlled, Find My style screen
 (function(){
 var B='https://arya-safety.sonarkatta.workers.dev';
 function TM(el){var T=256,st={lat:20.5,lon:78.9,z:4};
@@ -1373,9 +1373,9 @@ window.lvStop=function(){var z=Z();if(!confirm('Stop sharing? Your saved trail i
 window.lvPlace=function(k){if(!navigator.geolocation){return}flash('Getting your spot…');navigator.geolocation.getCurrentPosition(function(p){var z=Z();z.geo=z.geo||{};z.geo[k]={lat:p.coords.latitude,lon:p.coords.longitude};save();inside={};flash('Saved as '+(k==='college'?'college':'home'));safView()},function(){flash('Location was not allowed.')},{enableHighAccuracy:true,timeout:15000})};
 window.lvName=function(k,v){var z=Z();z[k]=(v||'').trim()||k;save()};
 window.safView=function(){var v=document.getElementById('view');if(!v)return;var z=Z(),live=!!z.live;
- var h='<div style="position:relative;margin:-8px -4px 0"><div id="lvMap" style="height:calc(100vh - 330px);min-height:300px;border-radius:0 0 22px 22px"></div>'
+ var h='<div style="position:relative;margin:-8px -4px 0"><div id="lvMap" style="height:calc(100vh - 470px);min-height:240px;border-radius:0 0 22px 22px"></div>'
  +'<button class="btn soft" style="position:absolute;left:10px;top:10px;z-index:5;padding:8px 14px" onclick="document.querySelector(\'[data-tab=more]\').click()">‹ More</button></div>'
- +'<div class="card" style="margin-top:12px"><div class="row"><div style="width:42px;height:42px;border-radius:21px;background:#0A84FF;color:#fff;font:700 20px/42px system-ui;text-align:center;margin-right:12px">A</div><div class="grow"><b style="font-size:18px">Arya</b><div id="lvSt" class="muted small"></div></div>'
+ +'<div style="margin-top:12px;background:#fff;border-radius:22px;padding:16px;box-shadow:0 2px 12px #0002"><div class="row"><div style="width:42px;height:42px;border-radius:21px;background:#0A84FF;color:#fff;font:700 20px/42px system-ui;text-align:center;margin-right:12px">A</div><div class="grow"><b style="font-size:18px">Arya</b><div id="lvSt" class="muted small"></div></div>'
  +(live?'<span style="background:#34C759;color:#fff;border-radius:14px;padding:3px 10px;font-weight:700;font-size:12px">● ON</span>':'')+'</div>';
  if(!live){
   h+='<div class="muted small" style="margin:10px 0 4px">Mom\'s mobile number (10 digits for India, or with country code)</div><input id="lvNum" type="tel" value="'+E(z.num)+'" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;font:inherit">'
