@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.192-20261018-1955 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.193-20261018-2010 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.192-20261018-1955';
+var APP_BUILD='v97.193-20261018-2010';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1420,7 +1420,7 @@ window.lvAuto=function(){var v=document.getElementById('view');if(!v)return;var 
 setTimeout(function(){var z=S.safety;if(z&&z.live&&z.loc)watch()},2500);
 })();
 
-// v97.192: Back from Roop chat to the exact screen, history back, chat bar above nav + keyboard-safe, silent auto-update
+// v97.193: Back from Roop chat to the exact screen, history back, chat bar above nav + keyboard-safe, silent auto-update
 (function(){
 var st=document.createElement('style');st.textContent='.chatbar{bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;z-index:45}body.kb .chatbar{bottom:calc(var(--kb,0px) + 6px)!important}body.kb #tabbar{display:none!important}#chat{padding-bottom:12px}';document.head.appendChild(st);
 var back=null,_pop=false;
@@ -1431,10 +1431,9 @@ document.addEventListener('focusin',function(){setTimeout(kb,300)});document.add
 var _x=window.xbAsk;
 if(typeof _x==='function')window.xbAsk=function(mid){back={k:'ch',mid:mid};return _x.apply(this,arguments)};
 var _t=window.tutor;
-window.tutor=function(){var wasCh=back&&back.k==='ch';if(!wasCh)back={k:'nav'};var r=_t.apply(this,arguments);
- try{var v=view();var b=document.createElement('div');b.style.cssText='margin:-4px 0 10px';b.innerHTML='<button class="btn soft" onclick="tutorBack()">‹ '+(wasCh?'Back to the lesson':'Back')+'</button>';v.insertBefore(b,v.firstChild);
-  history.pushState({tutor:1},'');window.scrollTo(0,0)}catch(e){}
- return r};
+window.tutor=function(){var wasCh=back&&back.k==='ch';if(!wasCh)back={k:'nav'};var r=_t.apply(this,arguments);try{history.pushState({tutor:1},'')}catch(e){}window.scrollTo(0,0);return r};
+function ensureBar(){var v=document.getElementById('view');if(!v||!document.getElementById('chatIn')||document.getElementById('tutorBackBar'))return;var wasCh=back&&back.k==='ch';var b=document.createElement('div');b.id='tutorBackBar';b.style.cssText='margin:-4px 0 10px';b.innerHTML='<button class="btn soft" onclick="tutorBack()">‹ '+(wasCh?'Back to the lesson':'Back')+'</button>';v.insertBefore(b,v.firstChild)}
+new MutationObserver(ensureBar).observe(document.getElementById('view'),{childList:true,subtree:true});
 window.tutorBack=function(){var b=back;back=null;if(b&&b.k==='ch'&&typeof xbChapter==='function'){var f=window.xbFind&&xbFind(b.mid);if(f){xbChapter(b.mid);window.scrollTo(0,0);return}}goBack()};
 var _g=go;go=function(t,a,np){var r=_g.apply(this,arguments);if(!np&&!_pop&&t!=='tutor'){try{history.pushState({g:1},'')}catch(e){}}if(t!=='tutor')back=null;return r};
 window.addEventListener('popstate',function(){_pop=true;try{if(document.getElementById('chatIn')&&back){tutorBack()}else if(typeof NAV!=='undefined'&&NAV.length>1){goBack()}}finally{setTimeout(function(){_pop=false},50)}});
