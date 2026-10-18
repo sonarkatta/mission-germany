@@ -108,6 +108,7 @@ body:has(.chatbar) #view{padding-bottom:280px!important}
 #tutorBackBar .btn,.backbar .btn{width:auto!important;min-width:0!important;padding:10px 22px!important}
 .arya-movie-photo img.lapimg{object-position:center}
 }
+@media(min-width:1024px){#view .german-entry .arya-movie-caption{margin:0!important;transform:none!important;top:0!important}#view .german-entry .arya-movie-photo{margin-bottom:0!important}}
 </style>
 <script id="roop-front-js">(function(){
 function ensureFab(){var app=document.getElementById('app');if(!app||document.getElementById('roopFab'))return;var b=document.createElement('button');b.id='roopFab';b.type='button';b.setAttribute('aria-label','Ask Roop, your teacher-friend');b.innerHTML='<span>\u2728</span>Ask Roop';b.onclick=function(){if(typeof go==='function')go('tutor')};app.appendChild(b)}
@@ -120,7 +121,7 @@ function arFix(){
  var bk=0,l2=0,l3=0,b=window.XB_BOOKS;
  if(b){b.forEach(function(x){if(/BCom/.test(x.board))bk++;else if(/Level II$/.test(x.board))l2++;else if(/Level III/.test(x.board))l3++})}
  var sets=window.L2_SETS?window.L2_SETS.length:0;
- document.querySelectorAll('#view .muted,#view small,#view .arya-movie-caption small').forEach(function(e){
+ document.querySelectorAll('#view .muted,#view p,#view small,#view .arya-movie-caption small').forEach(function(e){
   var t=e.textContent;
   if(bk&&/All 3 years, \d+ books/.test(t))e.textContent=t.replace(/\d+ books/,bk+' books');
   else if(l2&&/^Outline available/.test(t))e.textContent=l2+' study books \u00b7 '+sets+' practice sets';
@@ -748,7 +749,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.242-20261019-0620';
+var APP_BUILD='v97.243-20261019-0635';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
