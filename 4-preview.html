@@ -57,6 +57,19 @@ body:has(.chatbar) #roopFab{display:none}
 #roopHero small{display:block;opacity:.8;margin-top:2px;font-size:14px;line-height:1.35}
 #roopHero .rh-go{margin-left:auto;font-size:26px;font-weight:300;opacity:.6}
 #view:has(#tutorBackBar) .backbar{display:none!important}
+@media(min-width:1000px){
+#app{max-width:none!important;width:100%!important;margin:0!important}
+#view{max-width:1180px!important;width:auto!important;margin-left:auto!important;margin-right:auto!important}
+#tabbar{max-width:640px!important}
+#view:has(.today-head){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 28px;align-items:start}
+#view:has(.today-head)>*{margin-top:0!important;margin-bottom:0!important}
+#view:has(.today-head)>#roopHero,#view:has(.today-head)>.today-head{grid-column:1/-1}
+#roopHero .arya-today-photo{height:190px!important}
+#roopHero .rh-ic{width:64px;height:64px;font-size:32px}
+#roopHero b{font-size:24px}
+#roopHero small{font-size:16px}
+#view:has(.chatbar){max-width:900px!important}
+}
 </style>
 <script id="roop-front-js">(function(){
 function ensureFab(){var app=document.getElementById('app');if(!app||document.getElementById('roopFab'))return;var b=document.createElement('button');b.id='roopFab';b.type='button';b.setAttribute('aria-label','Ask Roop, your teacher-friend');b.innerHTML='<span>\u2728</span>Ask Roop';b.onclick=function(){if(typeof go==='function')go('tutor')};app.appendChild(b)}
@@ -678,7 +691,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.238-20261019-0510';
+var APP_BUILD='v97.239-20261019-0525';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
