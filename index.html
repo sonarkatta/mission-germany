@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.196-20261018-2050 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.197-20261018-2105 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.196-20261018-2050';
+var APP_BUILD='v97.197-20261018-2105';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1504,11 +1504,11 @@ window.bcxIntro=function(bid){var p=P(bid),b=B(bid),g=plan(bid),mx=maxOf(g);
 window.bcxStart=function(bid){S.bcx={bid:bid,end:Date.now()+mins(P(bid))*60000,ans:{}};save();bcxRender()};
 window.bcxIn=function(n,v){S.bcx.ans[n]=v;save()};
 window.bcxRender=function(){var r=S.bcx;if(!r||r.end<=Date.now()&&!r){return bcx()}var p=P(r.bid),b=B(r.bid);stop();
- var h='<div class="card" id="bcxBar" style="position:sticky;top:0;z-index:30;padding:10px 14px"><div class="row"><div class="grow"><div class="muted small">'+esc2(b.name)+'</div><b id="bcxT" style="font-size:22px">-</b></div><button class="btn soft" onclick="bcxSubmit(false)">Submit</button></div></div>';
+ var h='<div id="bcxBar" style="position:sticky;top:8px;z-index:30;padding:10px 14px;border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 6px 24px rgba(0,0,0,.14);margin-bottom:10px"><div class="row"><div class="grow"><div class="muted small">'+esc2(b.name)+'</div><b id="bcxT" style="font-size:22px">-</b></div><button class="btn soft" onclick="bcxSubmit(false)">Submit</button></div></div>';
  p.sections.forEach(function(sec,si){h+='<div class="hero" style="margin-top:6px"><div class="kicker">'+esc2(sec.name)+'</div><p style="margin:2px 0 0">'+esc2(sec.desc)+'</p></div>';
   sec.qs.forEach(function(q){var v=esc2(r.ans[q.n]||''),fill=isFill(sec);
    h+='<div class="card" style="margin:10px 0"><div class="row" style="align-items:flex-start"><div class="grow"><b>Q'+q.n+'.</b> '+esc2(q.q)+'</div><span class="chip blue" style="flex-shrink:0">'+q.marks+' mark'+(q.marks>1?'s':'')+'</span></div>'
-   +(fill?'<input class="card" style="width:100%;margin-top:10px;padding:12px;font-size:16px;font-family:inherit" placeholder="Your answer" value="'+v+'" oninput="bcxIn('+q.n+',this.value)">':'<textarea class="card" style="width:100%;min-height:'+(q.marks>=10?160:100)+'px;margin-top:10px;padding:12px;font-size:16px;font-family:inherit" placeholder="Write your answer here" oninput="bcxIn('+q.n+',this.value)">'+v+'</textarea>')+'</div>'});});
+   +(fill?'<input style="border:1.5px solid rgba(60,60,67,.25);border-radius:14px;background:#fff;color:#111;width:100%;margin-top:10px;box-sizing:border-box;padding:12px;font-size:16px;font-family:inherit" placeholder="Your answer" value="'+v+'" oninput="bcxIn('+q.n+',this.value)">':'<textarea style="border:1.5px solid rgba(60,60,67,.25);border-radius:14px;background:#fff;color:#111;box-sizing:border-box;width:100%;min-height:'+(q.marks>=10?160:100)+'px;margin-top:10px;padding:12px;font-size:16px;font-family:inherit" placeholder="Write your answer here" oninput="bcxIn('+q.n+',this.value)">'+v+'</textarea>')+'</div>'});});
  h+='<div class="card" style="text-align:center"><button class="btn" onclick="bcxSubmit(false)">Submit exam</button></div>';
  view().innerHTML=h;window.scrollTo(0,0);
  var tick=function(){var el=document.getElementById('bcxT');if(!el||!S.bcx){stop();return}var l=S.bcx.end-Date.now();if(l<=0){el.textContent='0:00:00';bcxSubmit(true);return}el.textContent=fmt(l);el.style.color=l<600000?'#C0392B':''};
@@ -1545,7 +1545,7 @@ window.bcxResult=function(){var r=window.BCXR;if(!r)return bcx();var b=B(r.bid),
  view().innerHTML=h;window.scrollTo(0,0)};
 function inj(){var g=document.querySelector('.more-grid');if(g&&!document.getElementById('bcxTile'))g.insertAdjacentHTML('beforeend','<button class="more-tile" id="bcxTile" onclick="bcx()"><div class="arya-movie-caption" style="position:relative"><div class="emoji">⏱️</div><b>BCom Real Exam</b><span>Timed paper, marked for you.</span></div></button>');
  var v=document.getElementById('view'),hh=v&&v.querySelector('.hero h1');if(hh&&/Pune University BCom/.test(hh.textContent)&&!document.getElementById('bcxCard')){var hero=hh.closest('.hero');hero.insertAdjacentHTML('afterend','<div class="card tappable" id="bcxCard" onclick="bcx()"><div class="topic-card"><div class="icon-bubble" style="background:#0A84FF22">⏱️</div><div class="grow"><h3>BCom Real Exam</h3><div class="muted small">Timed paper by semester. Auto-marked result.</div></div></div></div>')}}
-new MutationObserver(inj).observe(document.documentElement,{childList:true,subtree:true});inj();
+new MutationObserver(inj).observe(document.body,{childList:true,subtree:true});inj();
 window.__bcxTest={mark:bcxMark,alts:altsOf,plan:plan,max:maxOf,P:P};
 })();
 
