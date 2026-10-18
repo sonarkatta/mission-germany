@@ -46,7 +46,26 @@ button.chip.blue{color:#675b49;background:linear-gradient(135deg,rgba(255,255,25
 .german-menu{display:grid;gap:14px;margin:24px 0 110px}.german-entry.btn{display:flex;align-items:center;gap:16px;text-align:left;margin:0;padding:19px 20px;border-radius:27px;min-height:91px}.german-entry>svg{width:28px;height:28px;flex:none;color:#8c7857}.german-entry>span:nth-child(2){flex:1;min-width:0}.german-entry b{display:block;font-size:17px;letter-spacing:-.035em;font-weight:600}.german-entry small{display:block;font-size:12px;line-height:1.4;font-weight:400;margin-top:5px;color:#72777e}.entry-arrow{font-size:24px;font-weight:300;color:#9c968c}
 
 </style>
-<style id="tutor-dock-v96">body:has(.chatbar) #view{padding-bottom:220px!important}.chatbar{position:fixed!important;left:18px;right:18px;bottom:calc(92px + env(safe-area-inset-bottom,0px))!important;z-index:45;max-width:466px;margin:0 auto!important;padding:10px!important;border-radius:24px;background:rgba(247,248,250,.94)!important;backdrop-filter:blur(18px);box-shadow:0 4px 20px #25303d18;display:flex;gap:8px}.chatbar textarea{min-width:0;min-height:48px;max-height:120px;background:rgba(255,255,255,.85)!important}.chatbar button{min-width:64px;min-height:48px}html.arya-dark .chatbar{background:rgba(34,43,54,.96)!important}html.arya-dark .chatbar textarea{background:rgba(255,255,255,.08)!important}body:has(.chatbar) #quickJumps{bottom:calc(178px + env(safe-area-inset-bottom,0px))!important}</style></head>
+<style id="tutor-dock-v96">body:has(.chatbar) #view{padding-bottom:220px!important}.chatbar{position:fixed!important;left:18px;right:18px;bottom:calc(92px + env(safe-area-inset-bottom,0px))!important;z-index:45;max-width:466px;margin:0 auto!important;padding:10px!important;border-radius:24px;background:rgba(247,248,250,.94)!important;backdrop-filter:blur(18px);box-shadow:0 4px 20px #25303d18;display:flex;gap:8px}.chatbar textarea{min-width:0;min-height:48px;max-height:120px;background:rgba(255,255,255,.85)!important}.chatbar button{min-width:64px;min-height:48px}html.arya-dark .chatbar{background:rgba(34,43,54,.96)!important}html.arya-dark .chatbar textarea{background:rgba(255,255,255,.08)!important}body:has(.chatbar) #quickJumps{bottom:calc(178px + env(safe-area-inset-bottom,0px))!important}</style><style id="roop-front">
+#roopFab{position:fixed;left:14px;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:46;border:0;border-radius:26px;padding:11px 16px;font:600 15px/1 inherit;font-family:inherit;color:#fff;background:linear-gradient(135deg,#007AFF,#AF52DE);box-shadow:0 6px 18px rgba(31,38,135,.28);display:flex;align-items:center;gap:7px;cursor:pointer}
+#roopFab span{font-size:17px}
+body:has(.chatbar) #roopFab{display:none}
+#roopHero{cursor:pointer;margin:6px 0 14px;background:linear-gradient(135deg,rgba(0,122,255,.16),rgba(175,82,222,.16))!important}
+#roopHero .rh-row{display:flex;align-items:center;gap:14px}
+#roopHero .rh-ic{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#007AFF,#AF52DE);display:flex;align-items:center;justify-content:center;font-size:26px;flex:none}
+#roopHero b{font-size:19px;display:block}
+#roopHero small{display:block;opacity:.8;margin-top:2px;font-size:14px;line-height:1.35}
+#roopHero .rh-go{margin-left:auto;font-size:26px;font-weight:300;opacity:.6}
+</style>
+<script id="roop-front-js">(function(){
+function ensureFab(){var app=document.getElementById('app');if(!app||document.getElementById('roopFab'))return;var b=document.createElement('button');b.id='roopFab';b.type='button';b.setAttribute('aria-label','Ask Roop, your teacher-friend');b.innerHTML='<span>\u2728</span>Ask Roop';b.onclick=function(){if(typeof go==='function')go('tutor')};app.appendChild(b)}
+function ensureHero(){var v=document.getElementById('view');if(!v)return;var h=v.querySelector('.today-head');var ex=document.getElementById('roopHero');if(!h){if(ex)ex.remove();return}if(ex&&ex===v.firstElementChild)return;if(ex)ex.remove();var c=document.createElement('div');c.id='roopHero';c.className='card';c.onclick=function(){if(typeof go==='function')go('tutor')};c.innerHTML='<div class="rh-row"><div class="rh-ic">\u2728</div><div><b>Ask Roop</b><small>Your teacher-friend, any time. CFA, German, studies - ask anything.</small></div><div class="rh-go">\u203A</div></div>';v.insertBefore(c,v.firstChild)}
+function tick(){try{ensureFab();ensureHero()}catch(e){}}
+document.addEventListener('DOMContentLoaded',function(){tick();var v=document.getElementById('view');if(v)try{new MutationObserver(tick).observe(v,{childList:true})}catch(e){}});
+setInterval(tick,1200);
+})();</script>
+
+</head>
 <body>
 
 <!-- PASSWORD GATE -->
@@ -658,7 +677,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.236-20261019-0440';
+var APP_BUILD='v97.237-20261019-0450';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
