@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.184-20261018-1650 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.185-20261018-1745 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.184-20261018-1650';
+var APP_BUILD='v97.185-20261018-1745';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1276,6 +1276,49 @@ function tile(){var g=document.querySelector('.more-grid');if(!g||document.getEl
  g.insertAdjacentHTML('beforeend','<button class="more-tile arya-motion-tile" id="careTile" data-movie-ready="1" data-scene="today-inspiration" onclick="careView()">'+(sc?'<div class="arya-movie-photo"><img alt="" src="'+sc+'"></div>':'')+'<div class="arya-movie-caption"><div class="emoji">🍎</div><b>Eat and drink</b><span>Meals and water reminders</span></div></button>')}
 setInterval(function(){try{tile();careChip()}catch(e){}},1500);
 })();
+
+// v97.185: private location link for mom (Arya-controlled, last-known points only)
+(function(){
+var B='https://arya-safety.sonarkatta.workers.dev';
+function E(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function hex(){var a=new Uint8Array(16);crypto.getRandomValues(a);return Array.prototype.map.call(a,function(x){return ('0'+x.toString(16)).slice(-2)}).join('')}
+function Z(){if(!S.safety)S.safety={on:false,num:'',college:'college',home:'home',hours:3,arr:'',lea:'',out:null,dev:''};return S.safety}
+function post(path,body){return fetch(B+path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){j._s=r.status;return j})})}
+function flash(m){var d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#222;color:#fff;padding:9px 16px;border-radius:20px;z-index:9999;font-size:14px;max-width:80%;text-align:center';document.body.appendChild(d);setTimeout(function(){d.remove()},2200)}
+function link(){var l=Z().loc;return l?B+'/m/'+l.vk:''}
+function digits(){var d=(Z().num||'').replace(/\D/g,'');if(d.length===10)d='91'+d;return d}
+window.locCopy=function(id){var el=document.getElementById(id);if(!el)return;try{navigator.clipboard.writeText(el.value).then(function(){flash('Copied')},function(){el.select();document.execCommand('copy');flash('Copied')})}catch(e){el.select();document.execCommand('copy');flash('Copied')}};
+window.locCreate=function(){var z=Z();if(z.loc&&!confirm('This makes a new private link and stops the old one. Continue?'))return;
+ var n={vk:hex(),wk:hex(),ak:hex()};flash('Creating...');
+ post('/reg',n).then(function(j){if(j.ok){var old=z.loc;z.loc=n;save();if(old)post('/admin',{vk:old.vk,ak:old.ak,action:'revoke'}).catch(function(){});safView()}else flash('Could not create the link. Try again later.')}).catch(function(){flash('No internet right now.')})};
+window.locNow=function(){var z=Z();if(!z.loc)return;if(!navigator.geolocation){flash('This phone cannot share location from here.');return}
+ flash('Getting your location...');navigator.geolocation.getCurrentPosition(function(p){post('/p',{vk:z.loc.vk,wk:z.loc.wk,lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy,ev:'time'}).then(function(j){flash(j.ok?'Sent to your link':'Not sent');safView()}).catch(function(){flash('No internet right now.')})},function(){flash('Location was not allowed on this phone.')},{enableHighAccuracy:true,timeout:15000,maximumAge:60000})};
+window.locWipe=function(){var z=Z();if(!z.loc||!confirm('Delete all saved points from the link?'))return;post('/admin',{vk:z.loc.vk,ak:z.loc.ak,action:'wipe'}).then(function(j){flash(j.ok?'Deleted':'Could not delete');safView()})};
+window.locStop=function(){var z=Z();if(!z.loc||!confirm('Stop sharing? The link stops working and saved points are deleted.'))return;post('/admin',{vk:z.loc.vk,ak:z.loc.ak,action:'revoke'}).then(function(j){if(j.ok){z.loc=null;save();safView();flash('Sharing stopped')}else flash('Could not stop. Try again.')}).catch(function(){flash('No internet right now.')})};
+function card(){var z=Z(),l=z.loc;
+ var h='<div class="card" id="locCard"><b>Private location link for mom</b><div class="muted small" style="margin:4px 0 8px">Your phone can send your place to a private page that only people with the link can open. Mom sees the last places your phone reported, with times. It is not a live moving dot. Only the last 50 points are kept. You can delete them or stop the link any time.</div>';
+ if(!l){h+='<button class="btn" style="width:100%" onclick="locCreate()">Create my private link</button></div>';return h}
+ var wk=B+'/p',mk=link();
+ h+='<div class="muted small">Mom\'s link</div><textarea id="locL" rows="2" readonly style="width:100%;box-sizing:border-box;padding:8px;border-radius:10px;font:inherit">'+E(mk)+'</textarea>'
+ +'<button class="btn soft" style="width:100%;margin:6px 0" onclick="locCopy(\'locL\')">Copy link</button>';
+ if(z.num){var t='This is my private location link. It shows where my phone last reported: '+mk;
+  h+='<a class="btn soft" style="display:block;text-align:center;margin:6px 0" href="https://wa.me/'+digits()+'?text='+encodeURIComponent(t)+'" target="_blank" rel="noopener">Send the link to mom on WhatsApp</a>'}
+ h+='<button class="btn" style="width:100%;margin:6px 0" onclick="locNow()">📍 Send my location now (app open)</button>'
+ +'<div style="margin-top:10px"><b>Make your iPhone send it automatically</b><div class="small muted" style="margin:4px 0">In your Arrive or Leave automation (steps above), add these two actions after the trigger:</div>'
+ +'<div class="small">1. <b>Get Current Location</b>.<br>2. <b>Get Contents of URL</b>. Tap Show More. Method: <b>POST</b>. Request Body: <b>JSON</b>. Add these fields:</div>'
+ +'<div class="small" style="margin:6px 0">Text <b>vk</b> = (copy below)<br>Text <b>wk</b> = (copy below)<br>Number <b>lat</b> = Current Location, then Latitude<br>Number <b>lon</b> = Current Location, then Longitude<br>Text <b>ev</b> = arrive (or leave)</div>'
+ +'<div class="muted small">URL</div><textarea id="locU" rows="1" readonly style="width:100%;box-sizing:border-box;padding:8px;border-radius:10px;font:inherit">'+E(wk)+'</textarea><button class="btn soft" onclick="locCopy(\'locU\')">Copy URL</button>'
+ +'<div class="muted small" style="margin-top:8px">vk</div><textarea id="locV" rows="1" readonly style="width:100%;box-sizing:border-box;padding:8px;border-radius:10px;font:inherit">'+E(l.vk)+'</textarea><button class="btn soft" onclick="locCopy(\'locV\')">Copy vk</button>'
+ +'<div class="muted small" style="margin-top:8px">wk (keep this private, do not share it with anyone)</div><textarea id="locW" rows="1" readonly style="width:100%;box-sizing:border-box;padding:8px;border-radius:10px;font:inherit">'+E(l.wk)+'</textarea><button class="btn soft" onclick="locCopy(\'locW\')">Copy wk</button>'
+ +'<div class="small muted" style="margin-top:8px">Android with MacroDroid: add an HTTP Request action (POST, content type application/json) with the same URL and a body like {"vk":"...","wk":"...","lat":[lat],"lon":[lon],"ev":"arrive"} using its location variables.</div></div>'
+ +'<div style="display:flex;gap:8px;margin-top:12px"><button class="btn soft" style="flex:1" onclick="locWipe()">Delete saved points</button><button class="btn soft" style="flex:1" onclick="locStop()">Stop sharing</button></div>'
+ +'<div class="muted small" style="margin-top:8px" id="locSt">Checking...</div></div>';
+ return h}
+var o=window.safView;
+if(typeof o==='function')window.safView=function(){o.apply(this,arguments);try{var v=document.getElementById('view')||view();var z=Z();if(!z.on)return;v.insertAdjacentHTML('beforeend',card());
+ if(z.loc){post('/admin',{vk:z.loc.vk,ak:z.loc.ak,action:'status'}).then(function(j){var e=document.getElementById('locSt');if(!e)return;e.textContent=j.ok?(j.n?j.n+' point(s) saved. Last at '+new Date(j.last).toLocaleString([], {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'.':'No points saved yet.'):'This link is no longer active. Create a new one.'}).catch(function(){})}}catch(e){}};
+})();
+(function(){var so=window.safOn;if(typeof so!=='function')return;window.safOn=function(on){var z=S.safety;if(!on&&z&&z.loc){var l=z.loc;z.loc=null;save();try{fetch('https://arya-safety.sonarkatta.workers.dev/admin',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({vk:l.vk,ak:l.ak,action:'revoke'})})}catch(e){}}return so.apply(this,arguments)}})();
 
 // v97.119: dialogue role-play mode (ITEM 7) - the app voices the other side,
 // pauses at the learner's turn, listens where possible, tap-to-confirm fallback.
