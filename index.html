@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.175-20261018-1438 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.176-20261018-1445 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.175-20261018-1438';
+var APP_BUILD='v97.176-20261018-1445';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1140,6 +1140,96 @@ init();
 })();
 </script>
 <script>
+// v97.176: Safety alerts - Arya-controlled, opt-in, stored on this phone only
+(function(){
+function E(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function Z(){if(!S.safety)S.safety={on:false,num:'',college:'college',home:'home',hours:3,arr:'',lea:'',out:null,dev:''};return S.safety}
+function dev(){var z=Z();if(z.dev)return z.dev;var u=navigator.userAgent||'';if(/iPhone|iPad|iPod/.test(u))return 'ios';if(/Android/.test(u))return 'android';return 'ios'}
+function digits(){var d=(Z().num||'').replace(/\D/g,'');if(d.length===10)d='91'+d;return d}
+function okNum(){var d=digits();return d.length>=11&&d.length<=15}
+function arrMsg(){var z=Z();return z.arr||('Hi mom, I have reached '+z.college+'.')}
+function leaMsg(){var z=Z();return z.lea||('Hi mom, I have left '+z.college+' and I am on my way.')}
+function smsLink(t){var d=digits();return 'sms:+'+d+(dev()==='ios'?'&':'?')+'body='+encodeURIComponent(t)}
+function waLink(t){return 'https://wa.me/'+digits()+'?text='+encodeURIComponent(t)}
+window.safSet=function(k,v){Z()[k]=v;save()};
+window.safOn=function(on){var z=Z();if(on&&!okNum()){alert('Add your mom\'s number first, with country code if it is not an Indian number.');safView();return}z.on=!!on;if(!on)z.out=null;save();safView()};
+window.safCopy=function(id){var el=document.getElementById(id);if(!el)return;var t=el.value;try{navigator.clipboard.writeText(t).then(function(){safFlash('Copied')},function(){el.select();document.execCommand('copy');safFlash('Copied')})}catch(e){el.select();document.execCommand('copy');safFlash('Copied')}};
+function safFlash(m){var d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#222;color:#fff;padding:9px 16px;border-radius:20px;z-index:9999;font-size:14px';document.body.appendChild(d);setTimeout(function(){d.remove()},1400)}
+window.safDev=function(d){Z().dev=d;save();safView()};
+window.safLeft=function(){var z=Z();z.out={since:Date.now()};save();safView()};
+window.safBack=function(){Z().out=null;save();safView()};
+window.safSave=function(){var z=Z();z.num=document.getElementById('safNum').value.trim();z.college=(document.getElementById('safCol').value.trim()||'college');z.home=(document.getElementById('safHome').value.trim()||'home');var h=parseFloat(document.getElementById('safHrs').value);z.hours=(h>0&&h<=24)?h:3;z.arr=document.getElementById('safArr').value.trim();z.lea=document.getElementById('safLea').value.trim();save();safFlash('Saved')};
+function ovr(){var z=Z();if(!z.on||!z.out)return false;return Date.now()-z.out.since>z.hours*3600000}
+function step(n,t){return '<div style="display:flex;gap:10px;margin:8px 0"><div style="min-width:24px;height:24px;border-radius:12px;background:#0A84FF;color:#fff;text-align:center;font-weight:700;font-size:13px;line-height:24px">'+n+'</div><div>'+t+'</div></div>'}
+function box(id,label,val){return '<div style="margin:10px 0"><div class="muted small">'+label+'</div><textarea id="'+id+'" rows="2" style="width:100%;box-sizing:border-box;border-radius:10px;padding:8px;font:inherit" readonly>'+E(val)+'</textarea><button class="btn soft" onclick="safCopy(\''+id+'\')">Copy this text</button></div>'}
+window.safView=function(){
+ var z=Z(),d=dev(),on=z.on;
+ var h='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="document.querySelector(\'[data-tab=more]\').click()">‹ More</button></div>'
+ +'<div class="hero"><div class="kicker">🛡️ Safety alerts</div><h1>Your safety, your switch</h1><p>This is yours. Nothing here runs unless you turn it on, and you can turn it off any time. Your mom\'s number is saved only on this phone.</p></div>'
+ +'<div class="card"><div class="row"><div class="grow"><b>Safety alerts are '+(on?'ON':'OFF')+'</b><div class="muted small">'+(on?'Turn off whenever you like.':'Turn on when you are ready.')+'</div></div>'
+ +'<button class="btn '+(on?'soft':'')+'" onclick="safOn('+(!on)+')">'+(on?'Turn off':'Turn on')+'</button></div></div>'
+ +'<div class="card"><b>1. Your details</b>'
+ +'<div class="muted small" style="margin-top:6px">Mom\'s mobile number (10 digits for India, or with country code)</div><input id="safNum" type="tel" value="'+E(z.num)+'" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;font:inherit">'
+ +'<div class="muted small" style="margin-top:8px">Name of your college place</div><input id="safCol" value="'+E(z.college)+'" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;font:inherit">'
+ +'<div class="muted small" style="margin-top:8px">Name of your home place</div><input id="safHome" value="'+E(z.home)+'" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;font:inherit">'
+ +'<div class="muted small" style="margin-top:8px">Remind me to check in with mom if I am out for more than (hours)</div><input id="safHrs" type="number" min="1" max="24" step="0.5" value="'+E(z.hours)+'" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;font:inherit">'
+ +'<div class="muted small" style="margin-top:8px">Your message when you reach (you can change the words)</div><textarea id="safArr" rows="2" style="width:100%;box-sizing:border-box;padding:8px;border-radius:10px;font:inherit">'+E(arrMsg())+'</textarea>'
+ +'<div class="muted small" style="margin-top:8px">Your message when you leave</div><textarea id="safLea" rows="2" style="width:100%;box-sizing:border-box;padding:8px;border-radius:10px;font:inherit">'+E(leaMsg())+'</textarea>'
+ +'<button class="btn" style="margin-top:10px;width:100%" onclick="safSave();safView()">Save</button></div>';
+ if(on&&okNum()){
+  h+='<div class="card"><b>2. Quick check-in (while this app is open)</b><div class="muted small" style="margin:4px 0 8px">Each button opens a ready message to mom. You press send yourself.</div>'
+  +'<a class="btn" style="display:block;text-align:center;margin:6px 0" href="'+E(smsLink(arrMsg()))+'">✅ I have reached '+E(z.college)+' (text)</a>'
+  +'<a class="btn soft" style="display:block;text-align:center;margin:6px 0" href="'+E(waLink(arrMsg()))+'" target="_blank" rel="noopener">… same on WhatsApp</a>'
+  +'<a class="btn" style="display:block;text-align:center;margin:6px 0" href="'+E(smsLink(leaMsg()))+'">🚶 I am leaving '+E(z.college)+' (text)</a>'
+  +'<a class="btn soft" style="display:block;text-align:center;margin:6px 0" href="'+E(waLink(leaMsg()))+'" target="_blank" rel="noopener">… same on WhatsApp</a>'
+  +'<a class="btn soft" style="display:block;text-align:center;margin:6px 0" href="tel:+'+digits()+'">📞 Call mom</a></div>'
+  +'<div class="card"><b>3. Out-too-long reminder</b><div class="muted small" style="margin:4px 0 8px">Tap when you leave '+E(z.home)+'. If '+E(z.hours)+' hours pass and the app is open, you will see a nudge to call or text mom. Tap again when you are back.</div>'
+  +(z.out?'<div style="margin:6px 0">Out since '+new Date(z.out.since).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+'</div><button class="btn" style="width:100%" onclick="safBack()">I am back at '+E(z.home)+'</button>':'<button class="btn" style="width:100%" onclick="safLeft()">I have left '+E(z.home)+'</button>')+'</div>';
+ }
+ h+='<div class="card"><b>Automatic messages on your phone</b><div class="muted small" style="margin:4px 0 8px">Your phone itself can send the arrive and leave messages for you, even when this app is closed. You set it up once, here is how.</div>'
+ +'<div style="display:flex;gap:8px"><button class="btn '+(d==='ios'?'':'soft')+'" onclick="safDev(\'ios\')">iPhone</button><button class="btn '+(d==='android'?'':'soft')+'" onclick="safDev(\'android\')">Android</button></div>';
+ if(d==='ios'){
+  h+='<div style="margin-top:10px"><b>Arrive at '+E(z.college)+'</b>'
+  +step(1,'Open the <b>Shortcuts</b> app, tap <b>Automation</b>, then <b>+</b> (New Automation).')
+  +step(2,'Choose <b>Arrive</b>. Tap <b>Location</b>, search for your college and pick it. Set <b>Anytime</b>. Tap Next.')
+  +step(3,'Tap <b>Add Action</b>, search <b>Send Message</b>. Tap the message and paste the text below. Tap <b>Recipients</b> and pick mom.')
+  +step(4,'Tap Next. Choose <b>Run Immediately</b> (not "Ask Before Running"). Turn <b>Notify When Run</b> off if you like. Tap Done.')
+  +box('safC1','Message to paste for arriving',arrMsg())
+  +'<b>Leave '+E(z.college)+'</b>'+step(5,'Repeat the same steps but pick <b>Leave</b> and paste this:')+box('safC2','Message to paste for leaving',leaMsg())
+  +'<div class="muted small">Same again for home if you want: Arrive or Leave, pick your home place.</div>'
+  +'<div class="card" style="background:rgba(255,159,10,.12);margin-top:10px"><b>Honest limits on iPhone</b><div class="small" style="margin-top:4px">Apple lets arrive and leave automations run without asking when you pick Run Immediately. Newer iOS versions show a small banner saying the automation ran. Some iPhones ask you to allow Shortcuts to send messages the first time. Test it once by walking out of the place, and check that the message arrives. Location must be set to Always for Shortcuts, and Low Power Mode or switching off location can delay it.</div></div>'
+  +'<div style="margin-top:12px"><b>Share your live location with mom (Apple\'s own feature)</b>'
+  +step(1,'Open the <b>Find My</b> app, tap <b>People</b>, then <b>Share My Location</b>.')
+  +step(2,'Pick mom, then choose <b>Share Indefinitely</b>.')
+  +step(3,'You can stop any time: Find My, People, tap mom, <b>Stop Sharing My Location</b>.')+'</div></div>';
+ }else{
+  h+='<div style="margin-top:10px"><b>Automatic arrive and leave messages</b>'
+  +'<div class="small" style="margin:4px 0">Android phones differ. Samsung has <b>Modes and Routines</b>, but it cannot always send a custom text to a person. The reliable way is a free automation app such as <b>MacroDroid</b> (from the Play Store).</div>'
+  +step(1,'Install <b>MacroDroid</b> and open it. Tap <b>Add Macro</b>.')
+  +step(2,'Trigger: <b>Location</b>, then <b>Geofence</b>. Pick your college on the map and choose <b>Area Entered</b>.')
+  +step(3,'Action: <b>Messaging</b>, then <b>Send SMS</b>. Enter mom\'s number and paste the message below. Turn <b>Confirm before sending</b> off.')
+  +step(4,'Allow the permissions it asks for: location (Always), SMS. Turn off battery optimisation for MacroDroid so it keeps running.')
+  +box('safC1','Message to paste for arriving',arrMsg())
+  +step(5,'Add a second macro with <b>Area Exited</b> and this text:')+box('safC2','Message to paste for leaving',leaMsg())
+  +'<div class="card" style="background:rgba(255,159,10,.12)"><b>Honest limits on Android</b><div class="small" style="margin-top:4px">This uses a free third-party app, not Google. Your phone may ask you to confirm SMS permission once. Some phones stop background apps to save battery, so keep MacroDroid excluded from battery saving and test it once.</div></div></div>'
+  +'<div style="margin-top:12px"><b>Share your live location with mom (Google Maps)</b>'
+  +step(1,'Open <b>Google Maps</b>, tap your profile picture, then <b>Location sharing</b>.')
+  +step(2,'Tap <b>New share</b>, choose <b>Until you turn this off</b>, and pick mom.')
+  +step(3,'You can stop any time from the same screen.')+'</div></div>';
+ }
+ h+='<div class="card"><b>What this app can and cannot do</b><div class="small" style="margin-top:4px">This app does not track you. It cannot see your location in the background. The check-in buttons and reminders work only while the app is open. The automatic messages come from your own phone, set by you.</div></div>';
+ view().innerHTML=h;window.scrollTo(0,0)};
+function tile(){var g=document.querySelector('.more-grid');if(!g||document.getElementById('safTile'))return;
+ g.insertAdjacentHTML('beforeend','<button class="more-tile" id="safTile" onclick="safView()"><div class="arya-movie-caption" style="position:relative"><div class="emoji">🛡️</div><b>Safety alerts</b><span>You choose. On or off.</span></div></button>')}
+function chip(){var z=Z();var v=document.getElementById('view');if(!v||typeof tab==='undefined'||tab!=='today')return;
+ var ex=document.getElementById('safChip'),want=z.on&&okNum();
+ if(!want){if(ex)ex.remove();return}
+ var o=ovr(),html=o?'<b>⏰ You have been out for a while.</b> Check in with mom: <a href="tel:+'+digits()+'">Call</a> · <a href="'+E(smsLink('Hi mom, I am fine and on my way.'))+'">Text</a> · <a href="#" onclick="safBack();return false">I am back</a>':'<b>🛡️ Safety alerts ON</b> · <a href="#" onclick="safView();return false">Open</a>';
+ if(!ex){ex=document.createElement('div');ex.id='safChip';ex.className='card';v.insertBefore(ex,v.firstChild)}
+ if(ex.getAttribute('data-o')!==String(o)||!ex.innerHTML){ex.setAttribute('data-o',String(o));ex.style.cssText='margin-bottom:10px;font-size:14px;'+(o?'background:rgba(255,59,48,.12)':'background:rgba(52,199,89,.14)');ex.innerHTML=html}}
+setInterval(function(){try{tile();chip()}catch(e){}},1200);
+})();
+
 // v97.119: dialogue role-play mode (ITEM 7) - the app voices the other side,
 // pauses at the learner's turn, listens where possible, tap-to-confirm fallback.
 (function(){
