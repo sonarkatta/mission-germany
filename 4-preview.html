@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.176-20261018-1445 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.177-20261018-1451 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.176-20261018-1445';
+var APP_BUILD='v97.177-20261018-1451';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1220,7 +1220,7 @@ window.safView=function(){
  h+='<div class="card"><b>What this app can and cannot do</b><div class="small" style="margin-top:4px">This app does not track you. It cannot see your location in the background. The check-in buttons and reminders work only while the app is open. The automatic messages come from your own phone, set by you.</div></div>';
  view().innerHTML=h;window.scrollTo(0,0)};
 function tile(){var g=document.querySelector('.more-grid');if(!g||document.getElementById('safTile'))return;
- g.insertAdjacentHTML('beforeend','<button class="more-tile" id="safTile" onclick="safView()"><div class="arya-movie-caption" style="position:relative"><div class="emoji">🛡️</div><b>Safety alerts</b><span>You choose. On or off.</span></div></button>')}
+ var sc=(typeof ARYA_THEMED_SCENES==="object"&&ARYA_THEMED_SCENES&&ARYA_THEMED_SCENES["today-coach"])||"";g.insertAdjacentHTML('beforeend','<button class="more-tile arya-motion-tile" id="safTile" data-movie-ready="1" data-scene="today-coach" onclick="safView()">'+(sc?'<div class="arya-movie-photo"><img alt="" src="'+sc+'"></div>':'')+'<div class="arya-movie-caption"><div class="emoji">🛡️</div><b>Safety alerts</b><span>You choose. On or off.</span></div></button>')}
 function chip(){var z=Z();var v=document.getElementById('view');if(!v||typeof tab==='undefined'||tab!=='today')return;
  var ex=document.getElementById('safChip'),want=z.on&&okNum();
  if(!want){if(ex)ex.remove();return}
