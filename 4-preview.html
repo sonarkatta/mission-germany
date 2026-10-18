@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.193-20261018-2010 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.194-20261018-2030 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.193-20261018-2010';
+var APP_BUILD='v97.194-20261018-2030';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1444,6 +1444,109 @@ window.__autoUpd=function(build){var k='aryaUpd_'+build;try{if(sessionStorage.ge
  try{sessionStorage.setItem(k,'1')}catch(e){}if(_ap)_ap(build)};
 var bo=new MutationObserver(function(){var b=document.getElementById('aryaUpdateBar');if(b){var m=(b.onclick+'').match(/applyUpdate\(([^)]*)\)/);b.remove();window.__autoUpd(window.__lastBuild||Date.now())}});
 bo.observe(document.body,{childList:true});
+})();
+
+// v97.194: BCom Real Exam mode (timed paper, auto-marked fill-ins, estimated written marks, section + unit result)
+(function(){
+var SEM=[
+ {n:'Semester 1',ids:['bba-acc','bba-bca','bba-mom','bba-fom','bba-bee','bba-bnf','bba-ils','bba-sda','bba-beco1','bba-sec','bba-eng']},
+ {n:'Semester 2',ids:['bba-acc2','bba-ilo','bba-pom2','bba-fom2','bba-pmc','bba-fii','bba-sel','bba-pt','bba-mse','bba-sec2','bba-vec']},
+ {n:'More practice papers',note:'These books are in the library; their semester is not confirmed yet.',ids:['bba-pof','bba-pom','bba-bos','bba-beco2','bba-macc','bba-tax','bba-afs','bba-laf','bba-fm','bba-ifm']}];
+var OVR={'bba-pom:0':['taylor'],'bba-pt:0':['npr','permutation'],'bba-sda:3':['chance','random','common cause'],'bba-pmc:3':['amul'],'bba-pmc:4':['vaikunth mehta','vamnicom'],'bba-sec2:1':['reserve fund'],'bba-bos:1':['50','fifty']};
+var STOP='which where their there these those about after before because between other should would could being through while under again within without during against every first second third'.split(' ');
+function norm(s){return String(s).toLowerCase().replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim()}
+function esc2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function P(bid){return XB_PAPERS[bid]}
+function B(bid){return XB_BOOKS.find(function(b){return b.id===bid})}
+function mins(p){var m=/(\d+)\s*hour/.exec(p.time);return (m?+m[1]:3)*60}
+function isFill(sec){return /1 mark each/.test(sec.desc)}
+function altsOf(bid,si,qi,a){var k=bid+':'+qi;if(si===0&&OVR[k])return OVR[k];
+ var base=a.split(/\.\s|\.$|;| - /)[0],out=[],inner=[];
+ base.replace(/\(([^)]*)\)/g,function(m,x){inner=inner.concat(x.split(/,| or /).map(function(y){return y.replace(/^(also called|or)\s+/,'')}))});
+ var plain=base.replace(/\([^)]*\)/g,' ');out.push(plain);inner.forEach(function(x){out.push(x)});
+ out.push(plain+' '+inner.join(' '));
+ return out.map(norm).filter(function(x){return x})}
+function fillOK(al,t){t=norm(t);if(!t)return false;var ts=t.replace(/ /g,'');
+ return al.some(function(a){if(t===a||ts===a.replace(/ /g,''))return true;return a.length>=2&&(' '+t+' ').indexOf(' '+a+' ')>=0})}
+function terms(a){var w=norm(a).split(' '),seen={},o=[];w.forEach(function(x){var d=/\d/.test(x);if((x.length>=5||d)&&STOP.indexOf(x)<0){var k=d?x:x.slice(0,5);if(!seen[k]){seen[k]=1;o.push({k:k,d:d})}}});return o.slice(0,40)}
+function estimate(q,txt){var t=norm(txt||'');if(!t)return 0;var tw=t.split(' ');var T=terms(q.a);if(!T.length)return 0;
+ var have={};tw.forEach(function(x){have[/\d/.test(x)?x:x.slice(0,5)]=1});
+ var m=T.filter(function(x){return have[x.k]}).length,cov=m/T.length;
+ var f=Math.min(1,cov/0.7);
+ var mw=norm(q.a).split(' ').length,need=Math.min(mw,q.marks*14);
+ if(tw.length<need*0.3)f=Math.min(f,tw.length/(need*0.3)*0.6);
+ if(q.type==='numerical'){var nums=T.filter(function(x){return x.d});if(nums.length){var nm=nums.filter(function(x){return have[x.k]}).length/nums.length;f=Math.min(f,0.2+0.8*nm)}}
+ return Math.round(f*q.marks*2)/2}
+function plan(bid){var p=P(bid),g=[],byM={};
+ p.sections.forEach(function(sec,si){var fill=isFill(sec),one=/attempt one/.test(sec.desc);
+  if(fill){g.push({qs:sec.qs.map(function(q){return[si,q]}),need:sec.qs.length,fill:1,name:sec.name});return}
+  if(one){g.push({qs:sec.qs.map(function(q){return[si,q]}),need:1,name:sec.name});return}
+  var m=sec.qs[0].marks;if(!byM[m]){byM[m]={qs:[],need:m>=15?3:(m<=5?2:sec.qs.length),name:m+'-mark questions'};g.push(byM[m])}
+  sec.qs.forEach(function(q){byM[m].qs.push([si,q])})});
+ return g}
+function maxOf(g){return g.reduce(function(a,x){return a+x.need*x.qs[0][1].marks},0)}
+function hist(){S.bcxh=S.bcxh||[];return S.bcxh}
+function stop(){if(window.__bcxT){clearInterval(window.__bcxT);window.__bcxT=null}}
+function fmt(l){var h=Math.floor(l/3600000),m=Math.floor(l%3600000/60000),s=Math.floor(l%60000/1000);return h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+window.bcx=function(){stop();var h='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="more()">‹ More</button></div><div class="hero"><div class="kicker">Real exam</div><h1>BCom Real Exam</h1><p>SPPU paper format with a running clock. Fill-ins are marked exactly. Written answers get an estimated mark. Your result shows marks by section and the units to revise.</p></div>';
+ var r=S.bcx;if(r&&r.end>Date.now())h+='<div class="card tappable" onclick="bcxRender()"><div class="topic-card"><div class="icon-bubble" style="background:#FF9F0A22">▶️</div><div class="grow"><h3>Resume your exam</h3><div class="muted small">'+esc2((B(r.bid)||{}).name||'')+' · the clock kept running</div></div></div></div>';
+ SEM.forEach(function(s){var ready=s.ids.filter(function(i){return P(i)&&B(i)}),all=s.ids.filter(function(i){return B(i)});if(!all.length)return;
+  h+='<div class="section-title"><h2>'+s.n+'</h2></div>'+(s.note?'<p class="muted small" style="margin:0 0 8px">'+s.note+'</p>':'<p class="muted small" style="margin:0 0 8px">'+ready.length+' of '+all.length+' papers ready</p>');
+  all.forEach(function(i){var b=B(i),p=P(i),best=hist().filter(function(x){return x.bid===i}).reduce(function(a,x){return Math.max(a,x.score/x.max)},-1);
+   h+=p?'<div class="card tappable" onclick="bcxIntro(\''+i+'\')"><div class="row"><div class="grow"><b>'+esc2(b.name)+'</b><div class="muted small">'+p.marks+' marks · '+p.time+(best>=0?' · best '+Math.round(best*100)+'%':'')+'</div></div><span class="chip blue">Start ›</span></div></div>':'<div class="card" style="opacity:.55"><div class="row"><div class="grow"><b>'+esc2(b.name)+'</b><div class="muted small">Paper coming soon</div></div></div></div>'});
+ });
+ view().innerHTML=h;window.scrollTo(0,0)};
+window.bcxIntro=function(bid){var p=P(bid),b=B(bid),g=plan(bid),mx=maxOf(g);
+ view().innerHTML='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="bcx()">‹ All papers</button></div><div class="hero"><div class="kicker">'+b.emoji+' Practice paper in the SPPU pattern</div><h1>'+esc2(b.name)+'</h1><p>'+mx+' marks · '+p.time+'</p></div>'
+ +'<div class="card"><b>Before you start</b><ol style="margin:8px 0 0;padding-left:20px;font-size:14px;line-height:1.55">'+p.general.map(function(x){return '<li>'+esc2(x)+'</li>'}).join('')+'</ol></div>'
+ +'<div class="card"><b>How marks work here</b><div class="small" style="margin-top:6px;line-height:1.55">Fill-ins: marked exactly against the key. Written answers: type your answer; the app estimates marks by checking how many of the key points in the model answer you covered. This is an estimate, not an examiner. When you attempt more questions than needed, the best ones count, as in the paper rules. This is a practice paper written for revision, not a past university paper.</div></div>'
+ +'<div class="card" style="text-align:center"><button class="btn" onclick="bcxStart(\''+bid+'\')">Start exam - clock begins</button></div>';window.scrollTo(0,0)};
+window.bcxStart=function(bid){S.bcx={bid:bid,end:Date.now()+mins(P(bid))*60000,ans:{}};save();bcxRender()};
+window.bcxIn=function(n,v){S.bcx.ans[n]=v;save()};
+window.bcxRender=function(){var r=S.bcx;if(!r||r.end<=Date.now()&&!r){return bcx()}var p=P(r.bid),b=B(r.bid);stop();
+ var h='<div class="card" id="bcxBar" style="position:sticky;top:0;z-index:30;padding:10px 14px"><div class="row"><div class="grow"><div class="muted small">'+esc2(b.name)+'</div><b id="bcxT" style="font-size:22px">-</b></div><button class="btn soft" onclick="bcxSubmit(false)">Submit</button></div></div>';
+ p.sections.forEach(function(sec,si){h+='<div class="hero" style="margin-top:6px"><div class="kicker">'+esc2(sec.name)+'</div><p style="margin:2px 0 0">'+esc2(sec.desc)+'</p></div>';
+  sec.qs.forEach(function(q){var v=esc2(r.ans[q.n]||''),fill=isFill(sec);
+   h+='<div class="card" style="margin:10px 0"><div class="row" style="align-items:flex-start"><div class="grow"><b>Q'+q.n+'.</b> '+esc2(q.q)+'</div><span class="chip blue" style="flex-shrink:0">'+q.marks+' mark'+(q.marks>1?'s':'')+'</span></div>'
+   +(fill?'<input class="card" style="width:100%;margin-top:10px;padding:12px;font-size:16px;font-family:inherit" placeholder="Your answer" value="'+v+'" oninput="bcxIn('+q.n+',this.value)">':'<textarea class="card" style="width:100%;min-height:'+(q.marks>=10?160:100)+'px;margin-top:10px;padding:12px;font-size:16px;font-family:inherit" placeholder="Write your answer here" oninput="bcxIn('+q.n+',this.value)">'+v+'</textarea>')+'</div>'});});
+ h+='<div class="card" style="text-align:center"><button class="btn" onclick="bcxSubmit(false)">Submit exam</button></div>';
+ view().innerHTML=h;window.scrollTo(0,0);
+ var tick=function(){var el=document.getElementById('bcxT');if(!el||!S.bcx){stop();return}var l=S.bcx.end-Date.now();if(l<=0){el.textContent='0:00:00';bcxSubmit(true);return}el.textContent=fmt(l);el.style.color=l<600000?'#C0392B':''};
+ window.__bcxT=setInterval(tick,1000);tick()};
+window.bcxSubmit=function(auto){var r=S.bcx;if(!r)return;if(!auto&&!confirm('Submit your exam now? You cannot change answers after this.'))return;stop();
+ var res=bcxMark(r.bid,r.ans);res.auto=!!auto;res.left=Math.max(0,r.end-Date.now());hist().push({bid:r.bid,score:res.score,max:res.max,d:new Date().toISOString().slice(0,10)});S.bcx=null;save();window.BCXR=res;bcxResult()};
+function bcxMark(bid,ans){var p=P(bid),g=plan(bid),res={bid:bid,ans:ans,groups:[],ov:{}};
+ g.forEach(function(gr){var items=gr.qs.map(function(x){var si=x[0],q=x[1],qi=p.sections[si].qs.indexOf(q),t=ans[q.n]||'',got=0,att=!!norm(t);
+   if(gr.fill){got=fillOK(altsOf(bid,si,qi,q.a),t)?q.marks:0}else if(att){got=estimate(q,t)}
+   return{q:q,si:si,qi:qi,t:t,got:got,att:att,fill:!!gr.fill}});
+  res.groups.push({name:gr.name,need:gr.need,fill:gr.fill,items:items})});
+ res.max=maxOf(g);bcxTotal(res);return res}
+function bcxTotal(res){var tot=0;res.groups.forEach(function(gr){var arr=gr.items.map(function(i){return i.got+(res.ov[i.q.n]?i.q.marks-i.got:0)}).sort(function(a,b){return b-a});gr.score=arr.slice(0,gr.need).reduce(function(a,b){return a+b},0);gr.max=gr.need*gr.items[0].q.marks;tot+=gr.score});res.score=Math.round(tot*2)/2}
+window.bcxFix=function(n){var r=window.BCXR;r.ov[n]=!r.ov[n];bcxTotal(r);bcxResult()};
+window.bcxResult=function(){var r=window.BCXR;if(!r)return bcx();var b=B(r.bid),pct=Math.round(r.score/r.max*100);
+ var h='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="bcx()">‹ All papers</button></div><div class="hero"><div class="kicker">'+(r.auto?'Time is up · ':'')+'Exam result</div><h1>'+(pct>=70?'Strong result 🎉':pct>=40?'Passing range - keep building':'Needs more revision')+'</h1><p>'+esc2(b.name)+'</p></div>'
+ +'<div class="card" style="text-align:center;padding:26px"><div class="score-big">'+r.score+' / '+r.max+'</div><p class="muted" style="margin:6px 0 0">'+pct+'% · written marks are <b>estimated</b></p></div>';
+ h+='<div class="card"><b>Marks by section</b>';
+ r.groups.forEach(function(gr){h+='<div class="row" style="margin-top:10px"><div class="grow">'+esc2(gr.name)+'<div class="muted small">'+(gr.fill?'marked exactly':'best '+gr.need+' of '+gr.items.length+' counted · estimated')+'</div></div><b>'+gr.score+' / '+gr.max+'</b></div>'});
+ h+='</div>';
+ var weak=[];r.groups.forEach(function(gr){if(gr.fill)return;gr.items.forEach(function(i){var g=i.got+(r.ov[i.q.n]?i.q.marks-i.got:0);if(!i.att)weak.push({u:i.qi+1,n:i.q.n,why:'not attempted',f:-1});else if(g/i.q.marks<0.5)weak.push({u:i.qi+1,n:i.q.n,why:Math.round(g/i.q.marks*100)+'% of the key points',f:g/i.q.marks})})});
+ var fills=r.groups.filter(function(x){return x.fill});var fm=[];fills.forEach(function(gr){gr.items.forEach(function(i){if(!(i.got||r.ov[i.q.n]))fm.push(i.q.n)})});
+ weak.sort(function(a,b){return a.f-b.f});
+ h+='<div class="card"><b>Topics to revise</b>'+(weak.length||fm.length?'':'<p class="muted small">Nothing below 50%. Good work.</p>');
+ weak.slice(0,8).forEach(function(w){h+='<div style="margin-top:8px;font-size:14px">• Q'+w.n+' (unit '+w.u+' of the book): '+w.why+'</div>'});
+ if(fm.length)h+='<div style="margin-top:8px;font-size:14px">• Fill-ins missed: Q'+fm.join(', Q')+'</div>';
+ h+='<div style="margin-top:12px"><button class="btn soft" onclick="xbBook(\''+r.bid+'\')">Open the book</button></div></div>';
+ h+='<div class="section-title"><h2>Review</h2></div>';
+ r.groups.forEach(function(gr){gr.items.forEach(function(i){var q=i.q,g=i.got+(r.ov[q.n]?q.marks-i.got:0);
+  h+='<div class="card"><div class="row" style="align-items:flex-start"><div class="grow"><b>Q'+q.n+'.</b> '+esc2(q.q)+'</div><span class="chip '+(g>=q.marks*0.5?'green':'blue')+'" style="flex-shrink:0">'+(i.fill?'':'~')+g+'/'+q.marks+'</span></div>'
+  +'<div class="small" style="margin-top:8px"><b>Your answer:</b> '+(i.att?esc2(i.t):'<i>not attempted</i>')+'</div>'
+  +'<div class="small" style="margin-top:8px;padding:10px 12px;border-radius:14px;background:rgba(52,199,89,.09);line-height:1.55"><b>Model answer:</b> '+esc2(q.a)+'</div>'
+  +(i.fill&&i.att&&!i.got?'<div style="margin-top:8px"><button class="btn soft" style="min-height:36px;font-size:13px" onclick="bcxFix('+q.n+')">'+(r.ov[q.n]?'Undo - mark wrong':'My answer was right - count it')+'</button></div>':'')+'</div>'})});
+ view().innerHTML=h;window.scrollTo(0,0)};
+function inj(){var g=document.querySelector('.more-grid');if(g&&!document.getElementById('bcxTile'))g.insertAdjacentHTML('beforeend','<button class="more-tile" id="bcxTile" onclick="bcx()"><div class="arya-movie-caption" style="position:relative"><div class="emoji">⏱️</div><b>BCom Real Exam</b><span>Timed paper, marked for you.</span></div></button>');
+ var v=document.getElementById('view'),hh=v&&v.querySelector('.hero h1');if(hh&&/Pune University BCom/.test(hh.textContent)&&!document.getElementById('bcxCard')){var hero=hh.closest('.hero');hero.insertAdjacentHTML('afterend','<div class="card tappable" id="bcxCard" onclick="bcx()"><div class="topic-card"><div class="icon-bubble" style="background:#0A84FF22">⏱️</div><div class="grow"><h3>BCom Real Exam</h3><div class="muted small">Timed paper by semester. Auto-marked result.</div></div></div></div>')}}
+new MutationObserver(inj).observe(document.body,{childList:true,subtree:true});inj();
+window.__bcxTest={mark:bcxMark,alts:altsOf,plan:plan,max:maxOf,P:P};
 })();
 
 // v97.119: dialogue role-play mode (ITEM 7) - the app voices the other side,
