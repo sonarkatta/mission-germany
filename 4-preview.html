@@ -595,7 +595,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.204-20261018-2300 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.205-20261018-2330 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -658,7 +658,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.204-20261018-2300';
+var APP_BUILD='v97.205-20261018-2330';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -832,6 +832,24 @@ function renderParent(){
 }
 function checkHash(){if(location.hash==='#parent'){renderParent()}else{var el=document.getElementById('parentView');if(el)el.remove()}}
 // no visible entry to the parent view anywhere - hash-only secret route (his rule: Arya must never see a trace)
+// v97.205: Google first. A new phone signs in with Google (allow-list), then a small service gives it the unlock key. No password box for family accounts.
+var UNLOCK_URL='https://arya-unlock.sonarkatta.workers.dev';
+function _preFallback(){document.documentElement.classList.remove('mg-auto');var w=document.getElementById('authWall');if(w)w.remove()}
+async function preAuth(){
+ if(localStorage.getItem('mg_pw'))return;
+ document.documentElement.classList.add('mg-auto');
+ try{await fbReady()}catch(e){_preFallback();return}
+ var done=false;
+ _fbAuth.onAuthStateChanged(async function(u){
+  if(done)return;
+  var app=document.getElementById('app');if(app&&!app.classList.contains('hidden'))return;
+  if(!u){showAuthWall();return}
+  if(!(await _gateUser(u))){showAuthWall();return}
+  try{var tok=await u.getIdToken();var r=await fetch(UNLOCK_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({t:tok})});var j=await r.json();
+   if(j&&j.k){done=true;var w=document.getElementById('authWall');if(w)w.remove();window.unlock(j.k,true)}else{_preFallback()}}catch(e){_preFallback()}
+ });
+}
+try{preAuth()}catch(e){_preFallback()}
 // ---- boot ----
 var boot=setInterval(function(){
  var appVisible=document.getElementById('app')&&!document.getElementById('app').classList.contains('hidden');
