@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.174-20261018-1432 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.175-20261018-1438 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.174-20261018-1432';
+var APP_BUILD='v97.175-20261018-1438';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1126,11 +1126,12 @@ var t=setInterval(function(){
 <script>
 // v97.173: college track text is BCom (SPPU) only - no school-board or BBA wording
 (function(){
-var R=[["boards, BBA, CFA, German, Germany", "BCom, CFA, German, Germany"], ["Board exams come first - they decide your BBA college\\. Alongside", "Your BCom 1st year comes first. Alongside"], ["Accounts, Economics, Business Studies, Maths/Applied Maths, English\\. Target: strong percentage - this is your BBA entry ticket\\.", "Your first-year BCom subjects. Target: strong marks from day one - they carry into every later year."], ["CBSE Class 12 board exams \\(Feb-Mar 2027\\)", "BCom 1st year university exams"], ["CBSE Class 12 board exams", "BCom 1st year university exams"], ["BBA applications \\(2027\\)", "Plan next year's subjects (2027)"], ["CBSE Class 12 \\(Commerce\\)", "BCom 1st year (SPPU)"], ["CBSE Class 12 \\+ Foundation phase\\. Next unlock: BBA Finance in \\d+ days\\.", "BCom 1st year + Foundation phase."], ["CBSE Class 12 \\+ the base of everything", "BCom 1st year + the base of everything"], ["CBSE Class 12 - 90 min deep study", "BCom 1st year - 90 min deep study"], ["Dates are announced by CBSE\\. Update when the official datesheet is out\\.", "Dates are announced by the university. Update when the official timetable is out."], ["BBA begins \\+ CFA Level 1 deep prep", "BCom 2nd year + CFA Level 1 deep prep"], ["College starts - your BBA subjects overlap beautifully with CFA\\.", "Your BCom subjects overlap beautifully with CFA."], ["BBA 1st year exams", "BCom 2nd year exams"], ["BBA 1st year", "BCom 2nd year"], ["CFA Level 1 exam \\+ BBA middle year", "CFA Level 1 exam + BCom final year"], ["BBA 2nd year exams", "BCom final year exams"], ["BBA 2nd year", "BCom final year"], ["Level 2, final BBA year, and the Germany", "Level 2 and the Germany"], ["BBA final year", "Level 2 preparation"], ["BBA degree complete", "BCom degree complete"], ["\\bCBSE Class 12\\b", "BCom 1st year"]].map(function(x){return[new RegExp(x[0]),x[1]]});
+var R=[["BBA first-year university exams", "BCom 2nd year university exams"], ["^School$", "College"], ["During BBA \\(2027-2029\\)", "During BCom (2026-2029)"], ["Strong BBA grades every semester", "Strong BCom grades every semester"], ["3-year BBA fits", "3-year BCom fits"], ["boards, BBA, CFA, German, Germany", "BCom, CFA, German, Germany"], ["Board exams come first - they decide your BBA college\\. Alongside", "Your BCom 1st year comes first. Alongside"], ["Accounts, Economics, Business Studies, Maths/Applied Maths, English\\. Target: strong percentage - this is your BBA entry ticket\\.", "Your first-year BCom subjects. Target: strong marks from day one - they carry into every later year."], ["CBSE Class 12 board exams \\(Feb-Mar 2027\\)", "BCom 1st year university exams"], ["CBSE Class 12 board exams", "BCom 1st year university exams"], ["BBA applications \\(2027\\)", "Plan next year's subjects (2027)"], ["CBSE Class 12 \\(Commerce\\)", "BCom 1st year (SPPU)"], ["CBSE Class 12 \\+ Foundation phase\\. Next unlock: BBA Finance in \\d+ days\\.", "BCom 1st year + Foundation phase."], ["CBSE Class 12 \\+ the base of everything", "BCom 1st year + the base of everything"], ["CBSE Class 12 - 90 min deep study", "BCom 1st year - 90 min deep study"], ["Dates are announced by CBSE\\. Update when the official datesheet is out\\.", "Dates are announced by the university. Update when the official timetable is out."], ["BBA begins \\+ CFA Level 1 deep prep", "BCom 2nd year + CFA Level 1 deep prep"], ["College starts - your BBA subjects overlap beautifully with CFA\\.", "Your BCom subjects overlap beautifully with CFA."], ["BBA 1st year exams", "BCom 2nd year exams"], ["BBA 1st year", "BCom 2nd year"], ["CFA Level 1 exam \\+ BBA middle year", "CFA Level 1 exam + BCom final year"], ["BBA 2nd year exams", "BCom final year exams"], ["BBA 2nd year", "BCom final year"], ["Level 2, final BBA year, and the Germany", "Level 2 and the Germany"], ["BBA final year", "Level 2 preparation"], ["BBA degree complete", "BCom degree complete"], ["\\bCBSE Class 12\\b", "BCom 1st year"]].map(function(x){return[new RegExp(x[0]),x[1]]});
 function fix(root){
  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n,ch=[];
- while(n=w.nextNode()){var t=n.nodeValue;if(t&&/CBSE|BBA|Board exams come|boards,/.test(t))ch.push(n)}
- ch.forEach(function(n){var t=n.nodeValue,o=t;for(var i=0;i<R.length;i++)t=t.replace(R[i][0],R[i][1]);if(t!==o)n.nodeValue=t});
+ while(n=w.nextNode()){var t=n.nodeValue;if(t&&/CBSE|BBA|Board exams come|boards,|^School$/.test(t))ch.push(n)}
+ ch.forEach(function(n){if(!n.parentNode)return;var t=n.nodeValue,o=t;if(/BBA entrance and admission window/.test(t)){var cd=n.parentNode.closest&&n.parentNode.closest('.card');if(cd&&cd.innerText.length<400){cd.remove();return}}for(var i=0;i<R.length;i++)t=t.replace(R[i][0],R[i][1]);if(t!==o)n.nodeValue=t});
+ root.querySelectorAll('div.muted').forEach(function(e){var h=e.innerHTML;if(/Next unlock: BBA Finance/.test(h))e.innerHTML=h.replace(/\s*Next unlock: BBA Finance in <b>\d+<\/b> days\./,'')});
 }
 var busy=false;
 function run(){if(busy)return;busy=true;try{var v=document.getElementById('view');if(v)fix(v)}catch(e){}busy=false}
