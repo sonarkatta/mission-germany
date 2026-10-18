@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.167-20261018-1405 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.168-20261018-1412 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.167-20261018-1405';
+var APP_BUILD='v97.168-20261018-1412';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1066,21 +1066,23 @@ var __v9787w=setInterval(function(){
 <script>
 // v97.167: hand-over wording (no money talk), Level labels in Definition Library
 (function(){
-var R=[["Track your documents, costs and next steps\\.", "Track your documents and next steps."], ["Prepare the required proof of funds", "Prepare the required financial documents"], ["Check coverage, enrolment requirements and cost", "Check coverage and enrolment requirements"], ["Visa \\+ university fees", "Visa and university formalities"], ["Check the current amounts and payment deadlines", "Check the current steps on each official page"], ["^MONEY MATTERS$", "OPPORTUNITIES"], ["Every rupee and euro you do not have to borrow\\. ", "Programmes worth applying to. "], ["Cuts the CFA Program exam registration fee to USD 400 \\(Premium package, Practice Pack included\\) plus tax\\. For candidates who cannot comfortably afford the full fee\\. ", "A reduced-cost route into the CFA Program for eligible candidates. "], ["Most commerce colleges keep merit and need-based fee waivers that never appear on any portal\\. Ask the admissions office directly before paying the first instalment\\.", "Many colleges keep their own merit support that never appears on any portal. Ask the admissions office directly."], ["\u20ac300 per month for talented students at German universities", "A merit award for talented students at German universities"], ["^The family-expense rule$", "Apply widely"], [" - an hour of effort, lakhs in return\\.", "."], ["Small, free or cheap things that make", "Small things that make"], ["The study version has often been free; check the current fee before you start\\.", "Check the current terms before you start."], ["Free, self-paced job simulations", "Self-paced job simulations"], ["^Free resources$", "Your own resources"], ["already the free-resource core", "already your core"]].map(function(x){return[new RegExp(x[0]),x[1]]});
+var R=[["Track your documents, costs and next steps\\.", "Track your documents and next steps."], ["Prepare the required proof of funds", "Prepare the required financial documents"], ["Check coverage, enrolment requirements and cost", "Check coverage and enrolment requirements"], ["Visa \\+ university fees", "Visa and university formalities"], ["Check the current amounts and payment deadlines", "Check the current steps on each official page"], ["^Money matters$", "Opportunities"], ["Every rupee and euro you do not have to borrow\\. ", "Programmes worth applying to. "], ["Cuts the CFA Program exam registration fee to USD 400 \\(Premium package, Practice Pack included\\) plus tax\\. For candidates who cannot comfortably afford the full fee\\. ", "A reduced-cost route into the CFA Program for eligible candidates. "], ["Most commerce colleges keep merit and need-based fee waivers that never appear on any portal\\. Ask the admissions office directly before paying the first instalment\\.", "Many colleges keep their own merit support that never appears on any portal. Ask the admissions office directly."], ["\u20ac300 per month for talented students at German universities", "A merit award for talented students at German universities"], ["^The family-expense rule$", "Apply widely"], [" - an hour of effort, lakhs in return\\.", "."], ["Small, free or cheap things that make", "Small things that make"], ["The study version has often been free; check the current fee before you start\\.", "Check the current terms before you start."], ["Free, self-paced job simulations", "Self-paced job simulations"], ["^Free resources$", "Your own resources"], ["already the free-resource core", "already your core"]].map(function(x){return[new RegExp(x[0]),x[1]]});
 function fix(root){
  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n,ch=[];
  while(n=w.nextNode()){var t=n.nodeValue;if(!t||t.length<8)continue;ch.push(n)}
  ch.forEach(function(n){var t=n.nodeValue,o=t;for(var i=0;i<R.length;i++)t=t.replace(R[i][0],R[i][1]);if(t!==o)n.nodeValue=t});
 }
+var H=[[/Cuts the CFA Program exam registration fee to <b>USD 400<\/b>[^<]*?plus tax\. For candidates who cannot comfortably afford the full fee\. /,'A reduced-cost route into the CFA Program for eligible candidates. ']];
+function hfix(root){root.querySelectorAll('div.muted').forEach(function(e){var h=e.innerHTML,o=h;H.forEach(function(r){h=h.replace(r[0],r[1])});if(h!==o)e.innerHTML=h})}
 function lvl(){
  var v=document.getElementById('view');if(!v||!/Definition Library/.test(v.innerText))return;
  if(v.querySelector('.lvl-tag-done'))return;
  var cards=v.querySelectorAll('.card.tappable'),seenL2=false;
- cards.forEach(function(c){var oc=c.getAttribute('onclick')||'';var m=oc.match(/xbDefBook\('([^']+)'/);if(!m)return;var id=m[1];var tag=/^l2-/.test(id)?'Level II':/^l3-/.test(id)?'Level III':(/^(bba|bcom|cbse|sppu)/.test(id)?'':'Level I');if(!tag)return;var b=c.querySelector('b');if(b&&b.textContent.indexOf(tag)!==0)b.textContent=tag+' - '+b.textContent});
+ cards.forEach(function(c){var oc=c.getAttribute('onclick')||'';var m=oc.match(/xbDefBook\('([^']+)'/);if(!m){if(/l1def/.test(oc)){var b1=c.querySelector('b');if(b1&&b1.textContent.indexOf('Level I')!==0)b1.textContent='Level I - '+b1.textContent}return}var id=m[1];var tag=/^l2-/.test(id)?'Level II':/^l3-/.test(id)?'Level III':(/^(bba|bcom|cbse|sppu)/.test(id)?'':'Level I');if(!tag)return;var b=c.querySelector('b');if(b&&b.textContent.indexOf(tag)!==0)b.textContent=tag+' - '+b.textContent});
  var mark=document.createElement('span');mark.className='lvl-tag-done';mark.style.display='none';v.appendChild(mark);
 }
 var busy=false;
-function run(){if(busy)return;busy=true;try{var v=document.getElementById('view');if(v){fix(v);lvl()}}catch(e){}busy=false}
+function run(){if(busy)return;busy=true;try{var v=document.getElementById('view');if(v){fix(v);hfix(v);lvl()}}catch(e){}busy=false}
 function init(){var v=document.getElementById('view');if(!v){setTimeout(init,500);return}new MutationObserver(run).observe(v,{childList:true,subtree:true,characterData:true});run()}
 init();
 })();
