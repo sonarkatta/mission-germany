@@ -167,12 +167,14 @@ let l3code="";try{const l3o=await advancedRequest;l3code=new TextDecoder().decod
     document.getElementById("gate").classList.add("hidden");document.getElementById("app").classList.remove("hidden");
     // v90: render first, then prepare a no-bar recorded greeting.
     requestAnimationFrame(()=>requestAnimationFrame(()=>autoGreet()));
-  }catch(e){const st=document.getElementById("gateStatus");if(st)st.textContent="";localStorage.removeItem("mg_pw");if(!silent)document.getElementById("gateErr").textContent="That password is not right. Try again.";}
+  }catch(e){const st=document.getElementById("gateStatus");if(st)st.textContent="";const net=silent&&(!navigator.onLine||/fetch|network|load failed|NetworkError/i.test(String(e&&e.message||e)));if(net&&(window.__unlockRetry=(window.__unlockRetry||0)+1)<=8){const st2=document.getElementById("gateStatus");if(st2)st2.textContent="Reconnecting...";setTimeout(function(){unlock(pw,true)},3000);return}if(!net)localStorage.removeItem("mg_pw");if(!silent)document.getElementById("gateErr").textContent="That password is not right. Try again.";}
 }
 function _primeA(){try{window._pa=new Audio();window._pa.muted=true;const p=window._pa.play();if(p)p.then(()=>{window._pa.pause();window._pa.muted=false;window._pa.currentTime=0}).catch(()=>{})}catch(e){}}
 document.getElementById("gateBtn").onclick=()=>{_primeA();unlock(document.getElementById("gateInput").value.trim())};
 document.getElementById("gateInput").addEventListener("keydown",e=>{if(e.key==="Enter"){_primeA();unlock(e.target.value.trim())}});
-const saved=localStorage.getItem("mg_pw");if(saved){if(window.mgFaceEnabled&&mgFaceEnabled()){showFaceLock(saved)}else{unlock(saved,true)}}
+(function(){var K="mg_last_active";function touch(){try{localStorage.setItem(K,String(Date.now()))}catch(e){}}
+document.addEventListener("visibilitychange",touch);window.addEventListener("pagehide",touch);setInterval(function(){if(!document.hidden)touch()},15000);window.__mgTouch=touch;})();
+const saved=localStorage.getItem("mg_pw");if(saved){if(window.mgFaceEnabled&&mgFaceEnabled()){var _last=+localStorage.getItem("mg_last_active")||0;if(_last&&Date.now()-_last<30*60*1000){window.__mgTouch&&window.__mgTouch();unlock(saved,true)}else{showFaceLock(saved)}}else{unlock(saved,true)}}
 </script>
 <script>
 // v97.3: Liquid Glass page jumps - apply after core renders #quickJumps (appearance pack runs before the element exists).
@@ -591,7 +593,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.202-20261018-2220 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.203-20261018-2240 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +656,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.202-20261018-2220';
+var APP_BUILD='v97.203-20261018-2240';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
