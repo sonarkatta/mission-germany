@@ -57,24 +57,49 @@ body:has(.chatbar) #roopFab{display:none}
 #roopHero small{display:block;opacity:.8;margin-top:2px;font-size:14px;line-height:1.35}
 #roopHero .rh-go{margin-left:auto;font-size:26px;font-weight:300;opacity:.6}
 #view:has(#tutorBackBar) .backbar{display:none!important}
-@media(min-width:1000px){
-#app{max-width:none!important;width:100%!important;margin:0!important}
-#view{max-width:1180px!important;width:auto!important;margin-left:auto!important;margin-right:auto!important}
-#tabbar{max-width:640px!important}
-#view:has(.today-head){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 28px;align-items:start}
+#roopSide,#arSite{display:none}
+@media(min-width:1024px){
+#arSite{display:block}
+#app{max-width:none!important;width:auto!important;margin:0!important;padding:0!important}
+#view{max-width:1100px!important;width:auto!important;margin:0 auto!important;padding:116px 0 56px!important;animation:lapIn .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes lapIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#tabbar{left:50%!important;right:auto!important;top:16px!important;bottom:auto!important;transform:translateX(-50%)!important;width:min(1100px,calc(100vw - 48px))!important;max-width:none!important;height:64px!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;gap:6px!important;padding:8px 10px 8px 24px!important;border-radius:32px!important;backdrop-filter:blur(14px) saturate(1.3)!important;-webkit-backdrop-filter:blur(14px) saturate(1.3)!important;background:linear-gradient(120deg,rgba(255,255,255,.7),rgba(255,255,255,.38))!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.95),0 14px 40px rgba(45,61,79,.13)!important;z-index:60}
+#tabbar::before{content:"Arya";display:block;font-size:24px;font-weight:700;letter-spacing:.3px;margin-right:28px}
+#tabbar .tab{flex:none!important;width:auto!important;height:44px!important;min-height:44px;flex-direction:row!important;justify-content:center!important;align-items:center!important;gap:9px!important;padding:0 18px!important;border-radius:22px!important;transition:background .22s,transform .22s,box-shadow .22s}
+#tabbar .tab:hover{background:rgba(255,255,255,.8)!important;transform:translateY(-2px);box-shadow:0 8px 20px rgba(45,61,79,.1)}
+#tabbar .tab .tab-l{font-size:15px!important;font-weight:600}
+#tabbar .tab svg{width:20px;height:20px;flex:none}
+#roopSide{display:flex;margin-left:auto;align-items:center;gap:8px;padding:0 20px;height:44px;border:0;border-radius:22px;background:linear-gradient(135deg,#007AFF,#AF52DE);color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 8px 22px rgba(0,122,255,.3);transition:transform .22s,box-shadow .22s}
+#roopSide:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 28px rgba(0,122,255,.4)}
+#roopSide small{display:none}
+#arSite{display:block;margin:30px auto 0;max-width:1100px;padding:34px 0 40px;border-top:1px solid rgba(60,70,90,.12);color:#5b6572;font-size:14px;line-height:1.6;text-align:center}
+#arSite b{display:block;font-size:20px;color:#222;margin-bottom:6px}
+#arSite nav{margin:14px 0 8px;display:flex;gap:26px;justify-content:center}
+#arSite nav a{cursor:pointer;color:#345;font-weight:600;transition:color .2s}
+#arSite nav a:hover{color:#007AFF}
+#roopFab{display:none!important}
+#view:has(.today-head){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 28px;align-items:stretch}
 #view:has(.today-head)>*{margin-top:0!important;margin-bottom:0!important}
 #view:has(.today-head)>#roopHero,#view:has(.today-head)>.today-head{grid-column:1/-1}
-#roopHero .arya-today-photo{height:190px!important}
-#roopHero .rh-ic{width:64px;height:64px;font-size:32px}
-#roopHero b{font-size:24px}
-#roopHero small{font-size:16px}
-#view:has(.chatbar){max-width:900px!important}
+#roopHero .arya-today-photo{display:none!important}
+#roopHero{padding:26px 30px!important}
+#roopHero b{font-size:26px!important}
+#roopHero .rh-ic{width:64px!important;height:64px!important}
+.arya-today-photo{height:150px!important;overflow:hidden}
+.arya-today-photo img,.arya-movie-photo img{width:100%!important;height:100%!important;object-fit:cover!important;transform:none!important}
+.card.tappable,.arya-motion-tile{transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s}
+.card.tappable:hover,.arya-motion-tile:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(45,61,79,.16)}
+.chatbar{left:0!important;right:0!important;max-width:760px!important;bottom:24px!important}
+#view:has(.today-head) h1{font-size:44px!important;letter-spacing:-.5px}
+#view:has(.chatbar){max-width:860px!important;padding-bottom:200px!important}
+#view:has(.chatbar)~#arSite{display:none}
 }
 </style>
 <script id="roop-front-js">(function(){
 function ensureFab(){var app=document.getElementById('app');if(!app||document.getElementById('roopFab'))return;var b=document.createElement('button');b.id='roopFab';b.type='button';b.setAttribute('aria-label','Ask Roop, your teacher-friend');b.innerHTML='<span>\u2728</span>Ask Roop';b.onclick=function(){if(typeof go==='function')go('tutor')};app.appendChild(b)}
 function ensureHero(){var v=document.getElementById('view');if(!v)return;var h=v.querySelector('.today-head');var ex=document.getElementById('roopHero');if(!h){if(ex)ex.remove();return}if(ex&&ex===v.firstElementChild)return;if(ex)ex.remove();var c=document.createElement('div');c.id='roopHero';c.className='card';c.onclick=function(){if(typeof go==='function')go('tutor')};c.innerHTML='<div class="rh-row"><div class="rh-ic">\u2728</div><div><b>Ask Roop</b><small>Your teacher-friend, any time. CFA, German, studies - ask anything.</small></div><div class="rh-go">\u203A</div></div>';v.insertBefore(c,v.firstChild)}
-function tick(){try{ensureFab();ensureHero()}catch(e){}}
+function ensureSite(){var n=document.getElementById('tabbar');if(n&&!document.getElementById('roopSide')){var b=document.createElement('button');b.id='roopSide';b.type='button';b.innerHTML='<span>\u2728</span><span>Ask Roop</span>';b.onclick=function(){go('tutor')};n.appendChild(b)}var app=document.getElementById('app');if(app&&!document.getElementById('arSite')){var f=document.createElement('footer');f.id='arSite';f.innerHTML='<b>Arya</b>Your study companion - CFA, German and your BCom books, with Roop by your side.<nav><a data-g="today">Today</a><a data-g="path">Path</a><a data-g="cfa">CFA</a><a data-g="german">German</a><a data-g="tutor">Ask Roop</a></nav>';f.querySelectorAll('a').forEach(function(a){a.onclick=function(){go(a.getAttribute('data-g'));window.scrollTo(0,0)}});app.appendChild(f)}}
+function tick(){try{ensureFab();ensureHero();ensureSite()}catch(e){}}
 document.addEventListener('DOMContentLoaded',function(){tick();var v=document.getElementById('view');if(v)try{new MutationObserver(tick).observe(v,{childList:true})}catch(e){}});
 setInterval(tick,1200);
 })();</script>
@@ -691,7 +716,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.239-20261019-0525';
+var APP_BUILD='v97.240-20261019-0550';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
