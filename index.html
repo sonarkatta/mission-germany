@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.195-20261018-2040 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.196-20261018-2050 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.195-20261018-2040';
+var APP_BUILD='v97.196-20261018-2050';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1433,7 +1433,7 @@ if(typeof _x==='function')window.xbAsk=function(mid){back={k:'ch',mid:mid};retur
 var _t=window.tutor;
 window.tutor=function(){var wasCh=back&&back.k==='ch';if(!wasCh)back={k:'nav'};var r=_t.apply(this,arguments);try{history.pushState({tutor:1},'')}catch(e){}window.scrollTo(0,0);return r};
 function ensureBar(){var v=document.getElementById('view');if(!v||!document.getElementById('chatIn')||document.getElementById('tutorBackBar'))return;var wasCh=back&&back.k==='ch';var b=document.createElement('div');b.id='tutorBackBar';b.style.cssText='margin:-4px 0 10px';b.innerHTML='<button class="btn soft" onclick="tutorBack()">‹ '+(wasCh?'Back to the lesson':'Back')+'</button>';v.insertBefore(b,v.firstChild)}
-new MutationObserver(ensureBar).observe(document.body,{childList:true,subtree:true});
+new MutationObserver(ensureBar).observe(document.documentElement,{childList:true,subtree:true});
 window.tutorBack=function(){var b=back;back=null;if(b&&b.k==='ch'&&typeof xbChapter==='function'){var f=window.xbFind&&xbFind(b.mid);if(f){xbChapter(b.mid);window.scrollTo(0,0);return}}goBack()};
 var _g=go;go=function(t,a,np){var r=_g.apply(this,arguments);if(!np&&!_pop&&t!=='tutor'){try{history.pushState({g:1},'')}catch(e){}}if(t!=='tutor')back=null;return r};
 window.addEventListener('popstate',function(){_pop=true;try{if(document.getElementById('chatIn')&&back){tutorBack()}else if(typeof NAV!=='undefined'&&NAV.length>1){goBack()}}finally{setTimeout(function(){_pop=false},50)}});
@@ -1545,7 +1545,7 @@ window.bcxResult=function(){var r=window.BCXR;if(!r)return bcx();var b=B(r.bid),
  view().innerHTML=h;window.scrollTo(0,0)};
 function inj(){var g=document.querySelector('.more-grid');if(g&&!document.getElementById('bcxTile'))g.insertAdjacentHTML('beforeend','<button class="more-tile" id="bcxTile" onclick="bcx()"><div class="arya-movie-caption" style="position:relative"><div class="emoji">⏱️</div><b>BCom Real Exam</b><span>Timed paper, marked for you.</span></div></button>');
  var v=document.getElementById('view'),hh=v&&v.querySelector('.hero h1');if(hh&&/Pune University BCom/.test(hh.textContent)&&!document.getElementById('bcxCard')){var hero=hh.closest('.hero');hero.insertAdjacentHTML('afterend','<div class="card tappable" id="bcxCard" onclick="bcx()"><div class="topic-card"><div class="icon-bubble" style="background:#0A84FF22">⏱️</div><div class="grow"><h3>BCom Real Exam</h3><div class="muted small">Timed paper by semester. Auto-marked result.</div></div></div></div>')}}
-new MutationObserver(inj).observe(document.body,{childList:true,subtree:true});inj();
+new MutationObserver(inj).observe(document.documentElement,{childList:true,subtree:true});inj();
 window.__bcxTest={mark:bcxMark,alts:altsOf,plan:plan,max:maxOf,P:P};
 })();
 
