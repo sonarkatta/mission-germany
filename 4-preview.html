@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.181-20261018-1540 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.182-20261018-1550 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.181-20261018-1540';
+var APP_BUILD='v97.182-20261018-1550';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1264,7 +1264,7 @@ window.careView=function(){var c=C(),l=L();
  view().innerHTML=h;window.scrollTo(0,0)};
 function careChip(){var v=document.getElementById('view');if(!v||typeof tab==='undefined'||tab!=='today')return;var ex=document.getElementById('careChip'),d=due();
  if(!d.length){if(ex)ex.remove();return}
- var html=d.map(function(x){return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0"><div style="flex:1">'+x[2]+'</div><button class="btn soft" onclick="'+(x[0]==='m'?'careMeal(\''+x[1]+'\')':'careWater()')+'">'+(x[0]==='m'?'Done':'Drank')+'</button></div>'}).join('');
+ var html=d.map(function(x){return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0"><div style="flex:1 1 auto;min-width:0">'+x[2]+'</div><button class="btn soft" style="width:auto;flex:0 0 auto;padding:8px 16px;margin:0" onclick="'+(x[0]==='m'?'careMeal(\''+x[1]+'\')':'careWater()')+'">'+(x[0]==='m'?'Done':'Drank')+'</button></div>'}).join('');
  if(!ex){ex=document.createElement('div');ex.id='careChip';ex.style.cssText='margin:0 0 10px;padding:12px 14px;font-size:14px;background:rgba(10,132,255,.10);border-radius:16px;box-sizing:border-box';(v.querySelector('.today-head')||v).appendChild(ex)}
  if(ex.getAttribute('data-k')!==html){ex.setAttribute('data-k',html);ex.innerHTML=html}}
 function tile(){var g=document.querySelector('.more-grid');if(!g||document.getElementById('careTile'))return;
