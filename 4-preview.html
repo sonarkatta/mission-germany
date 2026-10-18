@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.188-20261018-1830 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.189-20261018-1850 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.188-20261018-1830';
+var APP_BUILD='v97.189-20261018-1850';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1320,31 +1320,77 @@ if(typeof o==='function')window.safView=function(){o.apply(this,arguments);try{v
 })();
 (function(){var so=window.safOn;if(typeof so!=='function')return;window.safOn=function(on){var z=S.safety;if(!on&&z&&z.loc){var l=z.loc;z.loc=null;save();try{fetch('https://arya-safety.sonarkatta.workers.dev/admin',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({vk:l.vk,ak:l.ak,action:'revoke'})})}catch(e){}}return so.apply(this,arguments)}})();
 
-// v97.188: Safety screen = Find My or WhatsApp live location only
+// v97.189: live location for mom - Arya-controlled, Find My style screen
 (function(){
-function dev0(){var u=navigator.userAgent||'';return /iPhone|iPad|iPod/.test(u)?'ios':(/Android/.test(u)?'android':'ios')}
-function flash(m){var d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#222;color:#fff;padding:9px 16px;border-radius:20px;z-index:9999;font-size:14px;max-width:80%;text-align:center';document.body.appendChild(d);setTimeout(function(){d.remove()},2600)}
-window.safOpenWA=function(){location.href='whatsapp://';setTimeout(function(){if(!document.hidden)location.href='https://wa.me/'},1500)};
-window.safFindMy=function(){location.href='findmy://';setTimeout(function(){if(!document.hidden)flash('Open the Find My app on your iPhone.')},1500)};
-function st(n,t){return '<div style="display:flex;gap:10px;margin:8px 0"><div style="min-width:24px;height:24px;border-radius:12px;background:#0A84FF;color:#fff;text-align:center;font-weight:700;font-size:13px;line-height:24px">'+n+'</div><div>'+t+'</div></div>'}
-var BTN='display:block;width:100%;padding:20px 12px;font-size:18px;font-weight:700;margin:10px 0';
-window.safView=function(){
- var v=document.getElementById('view');if(!v)return;
- var h='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="document.querySelector(\'[data-tab=more]\').click()">‹ More</button></div>'
- +'<div class="hero"><div class="kicker">🛡️ Safety</div><h1>Share your location with mom</h1><p>You choose it, you start it, and you can stop it any time.</p></div>';
- if(dev0()==='ios'){
-  h+='<div class="card"><button class="btn" style="'+BTN+'" onclick="safFindMy()">🧭 Share with Find My</button>'
-  +'<div class="muted small" style="margin-bottom:4px">Stays on until you stop it.</div>'
-  +st(1,'In Find My, tap <b>People</b>, then <b>Share My Location</b> (or the <b>+</b>).')
-  +st(2,'Pick mom, tap <b>Send</b>, then choose <b>Share Indefinitely</b>.')
-  +'<div class="muted small">To stop: Find My, People, tap mom, <b>Stop Sharing My Location</b>.</div></div>';
+var B='https://arya-safety.sonarkatta.workers.dev';
+function TM(el){var T=256,st={lat:20.5,lon:78.9,z:4};
+ el.style.position='relative';el.style.overflow='hidden';el.style.background='#e8eef3';
+ var lay=document.createElement('div');lay.style.cssText='position:absolute;inset:0';el.appendChild(lay);
+ var pin=document.createElement('div');pin.style.cssText='position:absolute;left:50%;top:50%;width:0;height:0;display:none;z-index:3';
+ pin.innerHTML='<div style="position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:30px;background:rgba(10,132,255,.22);animation:tmp 2s infinite"></div><div style="position:absolute;left:-17px;top:-17px;width:34px;height:34px;border-radius:17px;background:#0A84FF;border:3px solid #fff;box-shadow:0 2px 8px #0005;color:#fff;font:700 16px/28px system-ui;text-align:center">A</div>';
+ el.appendChild(pin);
+ if(!document.getElementById('tmcss')){var c=document.createElement('style');c.id='tmcss';c.textContent='@keyframes tmp{0%{transform:scale(.6);opacity:1}100%{transform:scale(1.5);opacity:0}}';document.head.appendChild(c)}
+ function px(lat,lon,z){var n=Math.pow(2,z),r=lat*Math.PI/180;return [(lon+180)/360*n*T,(1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*n*T]}
+ function draw(){var w=el.clientWidth||360,h=el.clientHeight||400,c=px(st.lat,st.lon,st.z),x0=c[0]-w/2,y0=c[1]-h/2,n=Math.pow(2,st.z),html='';
+  for(var tx=Math.floor(x0/T);tx<=Math.floor((x0+w)/T);tx++)for(var ty=Math.floor(y0/T);ty<=Math.floor((y0+h)/T);ty++){if(ty<0||ty>=n)continue;var wx=((tx%n)+n)%n;html+='<img alt="" draggable="false" src="https://tile.openstreetmap.org/'+st.z+'/'+wx+'/'+ty+'.png" style="position:absolute;left:'+Math.round(tx*T-x0)+'px;top:'+Math.round(ty*T-y0)+'px;width:'+T+'px;height:'+T+'px;max-width:none">'}
+  lay.innerHTML=html;
+  var a=document.createElement('div');a.style.cssText='position:absolute;right:4px;bottom:2px;font:10px system-ui;color:#444;background:#fffa;padding:0 4px;z-index:2';a.textContent='© OpenStreetMap';lay.appendChild(a)}
+ return {set:function(lat,lon,z){st.lat=lat;st.lon=lon;if(z)st.z=z;draw()},pin:function(on){pin.style.display=on?'block':'none'},redraw:draw}}
+
+function Z(){if(!S.safety)S.safety={on:false,num:'',college:'college',home:'home',hours:3,arr:'',lea:'',out:null,dev:''};return S.safety}
+function E(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function hex(){var a=new Uint8Array(16);crypto.getRandomValues(a);return Array.prototype.map.call(a,function(x){return ('0'+x.toString(16)).slice(-2)}).join('')}
+function digits(){var d=(Z().num||'').replace(/\D/g,'');if(d.length===10)d='91'+d;return d}
+function okNum(){var d=digits();return d.length>=11&&d.length<=15}
+function post(p,b){return fetch(B+p,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(j){j._s=r.status;return j})})}
+function flash(m){var d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:#222;color:#fff;padding:9px 16px;border-radius:20px;z-index:99999;font-size:14px;max-width:80%;text-align:center';document.body.appendChild(d);setTimeout(function(){d.remove()},2600)}
+var map=null,wid=null,wl=null,lastPost=0,lastPos=null,cur=null,inside={};
+function dist(a,b,c,d){var R=6371000,r=Math.PI/180,x=(c-a)*r,y=(d-b)*r*Math.cos((a+c)/2*r);return R*Math.sqrt(x*x+y*y)}
+function paint(){var s=document.getElementById('lvSt');if(!s)return;var z=Z();
+ s.innerHTML=z.live?(cur?'Sharing live · <b>now</b>':'Finding you…'):'Not sharing'}
+function gotFix(p){var la=p.coords.latitude,lo=p.coords.longitude,z=Z(),now=Date.now();cur={lat:la,lon:lo};
+ if(map&&document.getElementById('lvMap')){map.set(la,lo,17);map.pin(true)}paint();
+ var ev='live';
+ ['college','home'].forEach(function(k){var g=z.geo&&z.geo[k];if(!g)return;var inn=dist(la,lo,g.lat,g.lon)<150;if(inside[k]!==undefined&&inside[k]!==inn){ev=inn?'arrive':'leave';cur.nm=k==='college'?(z.college||'college'):(z.home||'home')}inside[k]=inn});
+ var moved=lastPos?dist(la,lo,lastPos.lat,lastPos.lon):1e9;
+ if(ev!=='live'||now-lastPost>60000||(moved>15&&now-lastPost>15000)){lastPost=now;lastPos={lat:la,lon:lo};post('/p',{vk:z.loc.vk,wk:z.loc.wk,lat:la,lon:lo,acc:p.coords.accuracy,ev:ev,nm:cur.nm||''}).catch(function(){})}}
+function watch(){var z=Z();if(!z.live||!z.loc||wid!==null||!navigator.geolocation)return;
+ wid=navigator.geolocation.watchPosition(gotFix,function(e){if(e&&e.code===1){flash('Location is off for this app. Allow it in your phone settings.');}},{enableHighAccuracy:true,maximumAge:5000,timeout:30000});
+ try{if(navigator.wakeLock&&!wl)navigator.wakeLock.request('screen').then(function(l){wl=l;l.addEventListener('release',function(){wl=null})}).catch(function(){})}catch(e){}}
+function unwatch(){if(wid!==null){navigator.geolocation.clearWatch(wid);wid=null}if(wl){try{wl.release()}catch(e){}wl=null}}
+document.addEventListener('visibilitychange',function(){if(document.hidden)return;var z=Z();if(z.live){unwatch();watch()}});
+window.lvStart=function(){var z=Z();var el=document.getElementById('lvNum');if(el){z.num=el.value.trim();save()}
+ if(!okNum()){flash('Add mom\'s number first.');return}
+ if(!navigator.geolocation){flash('This phone cannot share location from here.');return}
+ var go=function(){z.live=true;z.on=true;save();inside={};watch();safView()};
+ if(z.loc){go();return}
+ var n={vk:hex(),wk:hex(),ak:hex()};flash('Starting…');
+ post('/reg',n).then(function(j){if(j.ok){z.loc=n;save();go();setTimeout(function(){lvTell(true)},800)}else flash('Could not start. Try again later.')}).catch(function(){flash('No internet right now.')})};
+window.lvTell=function(first){var z=Z();if(!z.loc||!okNum())return;if(first&&!confirm('Open WhatsApp so mom gets the map? You press send.'))return;
+ location.href='https://wa.me/'+digits()+'?text='+encodeURIComponent('Hi mom, you can watch where I am on this map while I share: '+B+'/m/'+z.loc.vk)};
+window.lvStop=function(){var z=Z();if(!confirm('Stop sharing? Your saved trail is deleted and mom\'s map stops working.'))return;unwatch();var l=z.loc;z.live=false;z.on=false;z.loc=null;cur=null;save();
+ if(l)post('/admin',{vk:l.vk,ak:l.ak,action:'revoke'}).catch(function(){});safView()};
+window.lvPlace=function(k){if(!navigator.geolocation){return}flash('Getting your spot…');navigator.geolocation.getCurrentPosition(function(p){var z=Z();z.geo=z.geo||{};z.geo[k]={lat:p.coords.latitude,lon:p.coords.longitude};save();inside={};flash('Saved as '+(k==='college'?'college':'home'));safView()},function(){flash('Location was not allowed.')},{enableHighAccuracy:true,timeout:15000})};
+window.lvName=function(k,v){var z=Z();z[k]=(v||'').trim()||k;save()};
+window.safView=function(){var v=document.getElementById('view');if(!v)return;var z=Z(),live=!!z.live;
+ var h='<div style="position:relative;margin:-8px -4px 0"><div id="lvMap" style="height:calc(100vh - 330px);min-height:300px;border-radius:0 0 22px 22px"></div>'
+ +'<button class="btn soft" style="position:absolute;left:10px;top:10px;z-index:5;padding:8px 14px" onclick="document.querySelector(\'[data-tab=more]\').click()">‹ More</button></div>'
+ +'<div class="card" style="margin-top:12px"><div class="row"><div style="width:42px;height:42px;border-radius:21px;background:#0A84FF;color:#fff;font:700 20px/42px system-ui;text-align:center;margin-right:12px">A</div><div class="grow"><b style="font-size:18px">Arya</b><div id="lvSt" class="muted small"></div></div>'
+ +(live?'<span style="background:#34C759;color:#fff;border-radius:14px;padding:3px 10px;font-weight:700;font-size:12px">● ON</span>':'')+'</div>';
+ if(!live){
+  h+='<div class="muted small" style="margin:10px 0 4px">Mom\'s mobile number (10 digits for India, or with country code)</div><input id="lvNum" type="tel" value="'+E(z.num)+'" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;font:inherit">'
+  +'<button class="btn" style="display:block;width:100%;padding:16px;font-size:17px;font-weight:700;margin-top:10px" onclick="lvStart()">Start sharing with mom</button>'
+  +'<div class="muted small" style="margin-top:8px;text-align:center">Only you can start it. You can stop it any time.</div>';
+ }else{
+  h+='<button class="btn" style="display:block;width:100%;padding:16px;font-size:17px;font-weight:700;margin-top:10px;background:#FF3B30;color:#fff" onclick="lvStop()">Stop sharing</button>'
+  +'<button class="btn soft" style="display:block;width:100%;padding:12px;margin-top:8px" onclick="lvTell()">Send mom the map on WhatsApp</button>'
+  +'<details style="margin-top:10px"><summary class="muted small">Arrive and leave alerts for mom\'s map</summary><div class="small" style="margin-top:6px">Stand at the place, tap the button, and the map will note when you arrive or leave.</div>'
+  +'<div style="display:flex;gap:8px;margin-top:8px"><button class="btn soft" style="flex:1" onclick="lvPlace(\'college\')">'+(z.geo&&z.geo.college?'✓ ':'')+'Set college here</button><button class="btn soft" style="flex:1" onclick="lvPlace(\'home\')">'+(z.geo&&z.geo.home?'✓ ':'')+'Set home here</button></div></details>'
+  +'<div class="muted small" style="margin-top:8px;text-align:center">Updates while the app is open on screen. iPhone pauses web apps when locked or closed.</div>';
  }
- h+='<div class="card"><button class="btn'+(dev0()==='ios'?' soft':'')+'" style="'+BTN+'" onclick="safOpenWA()">💬 WhatsApp live location</button>'
- +'<div style="display:flex;gap:8px;align-items:stretch;margin:6px 0 8px">'
- +'<div style="flex:1;text-align:center;background:rgba(10,132,255,.1);border-radius:14px;padding:12px 6px"><div style="font-size:30px">➕</div><div class="small"><b>1.</b> Open mom\'s chat. Tap the + (iPhone) or the paperclip (Android)</div></div>'
- +'<div style="flex:1;text-align:center;background:rgba(52,199,89,.12);border-radius:14px;padding:12px 6px"><div style="font-size:30px">📍</div><div class="small"><b>2.</b> Tap Location, then Share live location</div></div></div>'
- +'<div class="small">Choose <b>8 hours</b> (the longest WhatsApp offers) if it asks how long. To stop: open the chat and tap <b>Stop sharing</b>.</div></div>';
- v.innerHTML=h};
+ h+='</div>';v.innerHTML=h;
+ var m=document.getElementById('lvMap');map=TM(m);if(cur){map.set(cur.lat,cur.lon,17);map.pin(true)}else map.set(20.5,78.9,4);paint();if(live)watch()};
+setTimeout(function(){var z=S.safety;if(z&&z.live&&z.loc)watch()},2500);
 })();
 
 // v97.119: dialogue role-play mode (ITEM 7) - the app voices the other side,
