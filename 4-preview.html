@@ -122,7 +122,7 @@ body:has(.chatbar) #view{padding-bottom:280px!important}
 #arSite .arf a{display:block;margin:0 0 9px;cursor:pointer;color:#2b3a4d;font-weight:600;transition:color .2s,transform .2s}
 #arSite .arf a:hover{color:#007AFF;transform:translateX(3px)}
 }
-@media(min-width:1024px){#view:has(.today-head){align-items:start!important}#view:has(.today-head)>.card.arya-today-scene:not(#roopHero){grid-row:span 2}.more-tile.arya-motion-tile{padding:0!important;overflow:hidden;border-radius:22px!important;text-align:left}.more-tile .arya-movie-caption{text-align:left}}
+@media(min-width:1024px){#view:has(.today-head){align-items:start!important}#view:has(.today-head)>.card.arya-today-scene:not(#roopHero){grid-row:span 4}.more-tile.arya-motion-tile{padding:0!important;overflow:hidden;border-radius:22px!important;text-align:left}.more-tile .arya-movie-caption{text-align:left}}
 </style>
 <script id="roop-front-js">(function(){
 function ensureFab(){var app=document.getElementById('app');if(!app||document.getElementById('roopFab'))return;var b=document.createElement('button');b.id='roopFab';b.type='button';b.setAttribute('aria-label','Ask Roop, your teacher-friend');b.innerHTML='<span>\u2728</span>Ask Roop';b.onclick=function(){if(typeof go==='function')go('tutor')};app.appendChild(b)}
@@ -764,7 +764,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.245-20261019-0705';
+var APP_BUILD='v97.246-20261019-0725';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
