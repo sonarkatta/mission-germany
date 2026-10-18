@@ -109,13 +109,26 @@ body:has(.chatbar) #view{padding-bottom:280px!important}
 .arya-movie-photo img.lapimg{object-position:center}
 }
 @media(min-width:1024px){#view .german-entry .arya-movie-caption{margin:0!important;transform:none!important;top:0!important}#view .german-entry .arya-movie-photo{margin-bottom:0!important}}
+@media(min-width:1024px){
+#arStats{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:0}
+#arStats div{background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.8);border-radius:20px;padding:18px 22px;box-shadow:0 8px 24px rgba(45,61,79,.08);transition:transform .25s,box-shadow .25s}
+#arStats div:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(45,61,79,.13)}
+#arStats b{display:block;font-size:34px;line-height:1.1;color:#0a5fd0;letter-spacing:-.5px}
+#arStats span{font-size:14px;color:#5b6572}
+#arSite{text-align:left!important}
+#arSite .arf{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;align-items:start}
+#arSite .arf-brand b{font-size:24px}
+#arSite h4{margin:0 0 12px;font-size:13px;letter-spacing:.8px;text-transform:uppercase;color:#7a8594}
+#arSite .arf a{display:block;margin:0 0 9px;cursor:pointer;color:#2b3a4d;font-weight:600;transition:color .2s,transform .2s}
+#arSite .arf a:hover{color:#007AFF;transform:translateX(3px)}
+}
 </style>
 <script id="roop-front-js">(function(){
 function ensureFab(){var app=document.getElementById('app');if(!app||document.getElementById('roopFab'))return;var b=document.createElement('button');b.id='roopFab';b.type='button';b.setAttribute('aria-label','Ask Roop, your teacher-friend');b.innerHTML='<span>\u2728</span>Ask Roop';b.onclick=function(){if(typeof go==='function')go('tutor')};app.appendChild(b)}
 function ensureHero(){var v=document.getElementById('view');if(!v)return;var h=v.querySelector('.today-head');var ex=document.getElementById('roopHero');if(!h){if(ex)ex.remove();return}if(ex&&ex===v.firstElementChild)return;if(ex)ex.remove();var c=document.createElement('div');c.id='roopHero';c.className='card';c.onclick=function(){if(typeof go==='function')go('tutor')};c.innerHTML='<div class="rh-row"><div class="rh-ic">\u2728</div><div><b>Ask Roop</b><small>Your teacher-friend, any time. CFA, German, studies - ask anything.</small></div><div class="rh-go">\u203A</div></div>';v.insertBefore(c,v.firstChild)}
-function ensureSite(){var n=document.getElementById('tabbar');if(n&&!document.getElementById('roopSide')){var b=document.createElement('button');b.id='roopSide';b.type='button';b.innerHTML='<span>\u2728</span><span>Ask Roop</span>';b.onclick=function(){go('tutor')};n.appendChild(b)}var app=document.getElementById('app');if(app&&!document.getElementById('arSite')){var f=document.createElement('footer');f.id='arSite';f.innerHTML='<b>Arya</b>Your study companion - CFA, German and your BCom books, with Roop by your side.<nav><a data-g="today">Today</a><a data-g="path">Path</a><a data-g="cfa">CFA</a><a data-g="german">German</a><a data-g="tutor">Ask Roop</a></nav>';f.querySelectorAll('a').forEach(function(a){a.onclick=function(){go(a.getAttribute('data-g'));window.scrollTo(0,0)}});app.appendChild(f)}}
+function ensureSite(){var n=document.getElementById('tabbar');if(n&&!document.getElementById('roopSide')){var b=document.createElement('button');b.id='roopSide';b.type='button';b.innerHTML='<span>\u2728</span><span>Ask Roop</span>';b.onclick=function(){go('tutor')};n.appendChild(b)}var app=document.getElementById('app');if(app&&!document.getElementById('arSite')){var f=document.createElement('footer');f.id='arSite';f.innerHTML='<div class="arf"><div class="arf-brand"><b>Arya</b>Your study companion - CFA, German and your BCom books, with Roop by your side.</div><div><h4>Learn</h4><a data-g="today">Today</a><a data-g="path">Path</a><a data-g="cfa">CFA</a><a data-g="german">German</a></div><div><h4>Tools</h4><a data-g="more">More</a><a data-g="tutor">Ask Roop</a></div></div>';f.querySelectorAll('a').forEach(function(a){a.onclick=function(){var g=a.getAttribute('data-g');if(g==='more'){var t=document.querySelectorAll('#tabbar .tab')[4];if(t)t.click()}else go(g);window.scrollTo(0,0)}});app.appendChild(f)}}
 
-var LAPMAP={"Start here":"cfa-start","Level I \u00b7 Foundation":"cfa-l1","Level II \u00b7 Valuation":"cfa-l2","Level III \u00b7 Mastery":"cfa-l3","Study library":"cfa-lib","Practice & revision":"cfa-prac","Start from 0":"de-start","Your German course":"de-course","Speak it":"de-speak","Vocabulary deck":"de-vocab","Grammar basics":"de-gram","German quizzes":"de-quiz"};
+var LAPMAP={"Start here":"cfa-start","Level I \u00b7 Foundation":"cfa-l1","Level II \u00b7 Valuation":"cfa-l2","Level III \u00b7 Mastery":"cfa-l3","Study library":"cfa-lib","Practice & revision":"cfa-prac","Start from 0":"de-start","Your German course":"de-course","Speak it":"de-speak","Vocabulary deck":"de-vocab","Grammar basics":"de-gram","German quizzes":"de-quiz","Your Germany":"m-germany","Customize":"m-custom","Progress":"m-progress","Practice":"m-practice","Mock exams":"m-mock","Germany checklist":"m-check","Exam calendar":"m-cal","Form helper":"m-form","Quick Revision":"m-rev","Motivation":"m-motiv","BCom":"m-bcom","Definition Library":"m-defs","Scholarships":"m-schol","Get ahead":"m-ahead","Safety alerts":"m-safety","Eat and drink":"m-eat"};
 function arFix(){
  var big=window.matchMedia&&matchMedia('(min-width:1024px)').matches;
  var bk=0,l2=0,l3=0,b=window.XB_BOOKS;
@@ -130,8 +143,9 @@ function arFix(){
  });
  if(big)document.querySelectorAll('#view .german-entry').forEach(function(t){var c=t.querySelector('.arya-movie-caption b');var im=t.querySelector('.arya-movie-photo img');if(!c||!im||im.dataset.lap)return;var k=LAPMAP[c.textContent.trim()];if(k){im.dataset.lap=1;im.className='lapimg';im.src='lap/lap-'+k+'.jpg'}});
 }
+function arStats(){var big=window.matchMedia&&matchMedia('(min-width:1024px)').matches;var v=document.getElementById('view');if(!v||!big)return;var hd=v.querySelector('.today-head');var ex=document.getElementById('arStats');if(!hd){if(ex)ex.remove();return}var b=window.XB_BOOKS;if(!b)return;var bk=0,cf=0;b.forEach(function(x){if(/BCom/.test(x.board))bk++;else if(/CFA/.test(x.board))cf++});var h2='<div><b>'+bk+'</b><span>BCom books</span></div><div><b>'+cf+'</b><span>CFA books</span></div><div><b>'+(window.L2_SETS?window.L2_SETS.length:0)+'</b><span>Level II practice sets</span></div><div><b>50</b><span>German units</span></div>';if(ex){if(ex.innerHTML!==h2)ex.innerHTML=h2;return}var s=document.createElement('div');s.id='arStats';s.innerHTML=h2;hd.insertAdjacentElement('afterend',s)}
 var lastY=0;window.addEventListener('scroll',function(){var f=document.getElementById('roopFab');if(!f)return;var y=window.scrollY;if(y>lastY+8&&y>120)f.classList.add('rf-away');else if(y<lastY-8||y<120)f.classList.remove('rf-away');lastY=y},{passive:true});
-function tick(){try{ensureFab();ensureHero();ensureSite();arFix()}catch(e){}}
+function tick(){try{ensureFab();ensureHero();ensureSite();arFix();arStats()}catch(e){}}
 document.addEventListener('DOMContentLoaded',function(){tick();var v=document.getElementById('view');if(v)try{new MutationObserver(tick).observe(v,{childList:true})}catch(e){}});
 setInterval(tick,1200);
 })();</script>
@@ -749,7 +763,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.243-20261019-0635';
+var APP_BUILD='v97.244-20261019-0650';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
