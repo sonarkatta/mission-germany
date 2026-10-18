@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.201-20261018-2205 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.202-20261018-2220 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.201-20261018-2205';
+var APP_BUILD='v97.202-20261018-2220';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1444,7 +1444,7 @@ function wrapAll(){var ok=0;
  if(typeof window.tutor==='function'&&!window.tutor.__w){var _t=window.tutor;window.tutor=function(){var wasCh=back&&back.k==='ch';if(!wasCh)back={k:'nav'};var r=_t.apply(this,arguments);try{history.pushState({tutor:1},'')}catch(e){}window.scrollTo(0,0);return r};window.tutor.__w=1}
  if(typeof window.go==='function'&&!window.go.__w){var _g=window.go;window.go=function(t,a,np){var r=_g.apply(this,arguments);if(!np&&!_pop&&t!=='tutor'){try{history.pushState({g:1},'')}catch(e){}}if(t!=='tutor')back=null;return r};window.go.__w=1}
  return typeof window.xbAsk==='function'&&window.xbAsk.__w&&window.tutor&&window.tutor.__w&&window.go&&window.go.__w}
-try{var _n=0,_iv=setInterval(function(){_n++;var d=false;try{wrapCloud();purge();d=wrapAll()&&window.tutorCloud&&window.tutorCloud.__w}catch(e){window.__fixErr=(window.__fixErr||'')+' w:'+e.message}if(d||_n>200)clearInterval(_iv)},300)}catch(e){}
+try{setInterval(function(){try{wrapCloud();purge();wrapAll()}catch(e){window.__fixErr=(window.__fixErr||'')+' w:'+e.message}},1000)}catch(e){}
 function ensureBar(){var v=document.getElementById('view');if(!v||!document.getElementById('chatIn')||document.getElementById('tutorBackBar'))return;var wasCh=back&&back.k==='ch';var b=document.createElement('div');b.id='tutorBackBar';b.style.cssText='margin:-4px 0 10px';b.innerHTML='<button class="btn soft" onclick="tutorBack()">‹ '+(wasCh?'Back to the lesson':'Back')+'</button>';v.insertBefore(b,v.firstChild)}
 try{new MutationObserver(ensureBar).observe(document.body,{childList:true,subtree:true});}catch(e){window.__fixErr=(window.__fixErr||"")+" m:"+e.message}
 window.tutorBack=function(){var b=back;back=null;if(b&&b.k==='ch'&&typeof xbChapter==='function'){var f=window.xbFind&&xbFind(b.mid);if(f){xbChapter(b.mid);window.scrollTo(0,0);return}}goBack()};
