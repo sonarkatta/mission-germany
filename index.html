@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.139-20261018-1355 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.140-20261018-1430 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.139-20261018-1355';
+var APP_BUILD='v97.140-20261018-1430';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1132,6 +1132,84 @@ var __v97131t=setInterval(function(){
   if(back){back.setAttribute('onclick',"go('cfa')");back.innerHTML='‹ CFA';}
  };
 },300);
+</script>
+<script>
+/* v97.140: L2 vignette item-set practice - engine + first sets (l2-quant 2, l2-fsa 2). Real exam format: case vignette + linked questions, instant feedback with explanations, per-set best scores. */
+var L2_SETS=[{"id": "l2s-quant-1", "book": "l2-quant", "title": "Item Set 1 - Reading a Regression Output", "vig": "Anaya Deshmukh, an equity analyst in Pune, regresses monthly returns of a mid-cap stock on the market index using 60 months of data. Her software reports:\n\nIntercept: 0.004 (standard error 0.002)\nSlope (market return): 1.25 (standard error 0.25)\nR-squared: 0.42\n\nShe must present the model to her investment committee and wants to be precise about what the numbers say - and what they do not.", "qs": [["The t-statistic for the slope coefficient is closest to:", "5.00", "2.50", "0.50", "3.10", "t = coefficient / standard error = 1.25 / 0.25 = 5.00. With 58 degrees of freedom, the critical value is about 2.00, so the slope is clearly significant."], ["A slope of 1.25 means:", "A 1% market move is associated with about a 1.25% move in the stock, on average", "The stock rises 1.25% every month", "1.25% of the stock's risk is market risk", "The stock is 25% overvalued", "The slope is the sensitivity of the dependent variable to the independent one - here, a beta-like 1.25 amplification of market moves."], ["The R-squared of 0.42 tells the committee:", "42% of the variation in the stock's returns is explained by the market's returns", "The model predicts with 42% accuracy", "42% of months had positive returns", "The slope is 42% reliable", "R-squared is the share of dependent-variable variation explained by the model - 58% of this stock's movement is company-specific or noise."], ["If the market returns 2.0% next month, the model's predicted stock return is:", "2.9%", "2.5%", "2.0%", "3.3%", "Prediction = intercept + slope x market = 0.004 + 1.25 x 0.02 = 0.029 = 2.9%."]]}, {"id": "l2s-quant-2", "book": "l2-quant", "title": "Item Set 2 - Time-Series Model Review", "vig": "Rohan Kale models quarterly sales growth for a retailer as an AR(1) process:\n\ngrowth(t) = 0.8 + 0.65 x growth(t-1)\n\nDiagnostics show statistically significant residual autocorrelations at several lags, and a follow-up test finds the residual variance is larger after big moves than after quiet periods. His manager asks him what still needs fixing before the model can be used.", "qs": [["If last quarter's growth was 3.0%, the model's forecast for this quarter is:", "2.75%", "2.30%", "3.65%", "1.95%", "Forecast = 0.8 + 0.65 x 3.0 = 2.75%. The AR(1) pulls the extreme 3.0% back toward the mean."], ["The model's mean-reverting level of growth is approximately:", "2.29%", "0.80%", "1.23%", "3.00%", "Mean-reverting level = b0 / (1 - b1) = 0.8 / (1 - 0.65) = 0.8 / 0.35 = 2.29%."], ["Significant residual autocorrelations mean:", "The standard errors are unreliable, so significance tests on the coefficients cannot be trusted", "The model is correctly specified", "The forecasts are too high", "The R-squared must be zero", "An AR model's residuals should be white noise. Autocorrelated residuals mean a lag is missing and the coefficient standard errors are wrong - inference is invalid until respecified."], ["The pattern of residual variance being larger after big moves indicates:", "ARCH - volatility clustering, best handled with a GARCH-type model", "A unit root", "Perfect model fit", "Seasonality", "Variance that depends on the size of recent errors is ARCH. The mean equation may be fine, but the variance needs its own model (GARCH) - and interval forecasts from the plain AR(1) will be wrong in exactly the volatile periods that matter."]]}, {"id": "l2s-fsa-1", "book": "l2-fsa", "title": "Item Set 1 - FIFO versus LIFO in a Rising Market", "vig": "Two identical distributors, Swaraj Traders and Goda Enterprises, begin the year with no inventory. Both buy the same product three times during the year:\n\nPurchase 1: 100 units at Rs 10\nPurchase 2: 100 units at Rs 12\nPurchase 3: 100 units at Rs 14\n\nEach sells 250 units during the year. Swaraj uses FIFO; Goda uses LIFO (periodic). Their analyst compares the two sets of statements.", "qs": [["Swaraj's (FIFO) ending inventory is:", "Rs 700", "Rs 500", "Rs 2,900", "Rs 3,100", "FIFO sells the oldest costs first: 100@10 + 100@12 + 50@14 = 2,900 COGS. Ending inventory = 50 units @ 14 = Rs 700."], ["Goda's (LIFO, periodic) cost of goods sold is:", "Rs 3,100", "Rs 2,900", "Rs 700", "Rs 3,600", "LIFO sells the newest costs first: 100@14 + 100@12 + 50@10 = 1,400 + 1,200 + 500 = Rs 3,100."], ["With prices rising, which statement is correct?", "Swaraj shows the higher current ratio and the higher gross profit", "Goda shows the higher gross profit", "Both report identical pre-tax income", "Goda shows the higher inventory", "FIFO leaves recent (expensive) costs in inventory and old (cheap) costs in COGS - higher inventory, higher gross profit, higher current ratio when prices rise."], ["The main cash-flow advantage in this comparison belongs to:", "Goda - higher COGS means lower taxable income and lower taxes paid", "Swaraj - higher profit always means more cash", "Neither - inventory method never affects cash", "Both equally", "LIFO's higher COGS reduces taxable income, so less cash leaves the business as tax. Higher reported profit under FIFO is an accounting number; the tax saving under LIFO is real cash."]]}, {"id": "l2s-fsa-2", "book": "l2-fsa", "title": "Item Set 2 - Classifying a Bond Investment", "vig": "Meera Investments buys a 5-year bond at par for Rs 10,00,000 at the start of the year. The bond pays Rs 60,000 annual interest. At year-end, interest rates have fallen and the bond's fair value is Rs 10,80,000. Meera's accountant must present the position under three possible classifications and explain how each hits the financial statements.", "qs": [["If classified as held-to-maturity (amortised cost), the year-end balance sheet shows the bond at:", "Rs 10,00,000", "Rs 10,80,000", "Rs 10,60,000", "Rs 9,20,000", "Amortised-cost classification ignores fair value changes - the bond stays at cost (par here), and the Rs 80,000 gain is never recognised."], ["If classified as available-for-sale, the Rs 80,000 fair value gain is reported:", "In other comprehensive income, within equity", "In the income statement", "Nowhere - it is ignored", "As a reduction of interest income", "Available-for-sale marks to fair value on the balance sheet, but the unrealised gain bypasses the income statement and sits in OCI until sale."], ["If classified as a trading security, the Rs 80,000 gain is reported:", "In the income statement for the year", "In OCI", "Only in the notes", "Split between OCI and income", "Trading securities run fair value changes straight through profit or loss - the most volatile classification for earnings."], ["Under all three classifications, the Rs 60,000 interest received is reported:", "In the year's income statement", "Only when the bond is sold", "In OCI", "As an increase in the bond's carrying value", "Classification changes where the unrealised gain goes - interest income is recognised in profit or loss under amortised cost, available-for-sale, and trading alike."]]}];
+var __v97140t=setInterval(function(){
+ if(typeof xbBook!=="function")return;
+ if(window.__v97140done)return;
+ window.__v97140done=true;clearInterval(__v97140t);
+ var _v97140Book=xbBook;
+ xbBook=function(bid){
+  _v97140Book(bid);
+  if(typeof L2_SETS==="undefined")return;
+  var sets=L2_SETS.filter(function(s){return s.book===bid});
+  if(!sets.length)return;
+  var v=view();if(!v)return;
+  var st=v.querySelector(".section-title");if(!st)return;
+  var tot=sets.reduce(function(a,x){return a+x.qs.length},0);
+  var d=document.createElement("div");
+  d.className="card tappable";
+  d.setAttribute("onclick","l2setsList('"+bid+"')");
+  d.innerHTML='<div class="row"><div class="icon-bubble" style="background:#7c3aed22">🧩</div><div class="grow"><b>Item-set practice</b><div class="muted small">'+sets.length+' case sets · '+tot+' questions · exam vignette style</div></div><span class="chip blue">Start ›</span></div>';
+  st.parentNode.insertBefore(d,st);
+ };
+},300);
+function l2setsList(bid){
+ var b=XB_BOOKS.find(function(x){return x.id===bid});if(!b)return;
+ var sets=L2_SETS.filter(function(s){return s.book===bid});
+ view().innerHTML='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="xbBook(\''+bid+'\')">‹ '+b.name+'</button></div>'
+ +'<div class="hero"><div class="kicker">🧩 '+b.name+'</div><h1>Item-set practice</h1><p>Read the case, answer the linked questions - the real Level II exam format.</p></div>'
+ +sets.map(function(st){var sc=(S.xbsets&&S.xbsets[st.id]);return '<div class="card tappable" onclick="l2setRun(\''+st.id+'\',0)"><div class="row"><div class="grow"><b>'+st.title+'</b><div class="muted small">'+st.qs.length+' questions'+(typeof sc==="number"?' · best '+sc+'/'+st.qs.length:'')+'</div></div><span class="chip '+(typeof sc==="number"?'green':'grey')+'">'+(typeof sc==="number"?'✓':'›')+'</span></div></div>'}).join('');
+ window.scrollTo(0,0)}
+var L2S=null;
+function l2setRun(sid,i){
+ var st=L2_SETS.find(function(x){return x.id===sid});if(!st)return;
+ if(!L2S||L2S.sid!==sid){L2S={sid:sid,score:0,done:{}};}
+ L2S.i=i;
+ var q=st.qs[i];
+ var opts=q.slice(1,5).map(function(t,k){return {t:t,ok:k===0}});
+ for(var k=opts.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1));var tmp=opts[k];opts[k]=opts[j];opts[j]=tmp;}
+ L2S.opts=opts;
+ var b=XB_BOOKS.find(function(x){return x.id===st.book});
+ view().innerHTML='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="l2setsList(\''+st.book+'\')">‹ Item sets</button></div>'
+ +'<div class="hero"><div class="kicker">🧩 '+(b?b.name:'')+' · Question '+(i+1)+' of '+st.qs.length+'</div><h1>'+st.title+'</h1></div>'
+ +'<div class="card"><div class="muted small" style="font-weight:600;margin-bottom:6px">THE CASE</div><p class="small" style="white-space:pre-line">'+st.vig+'</p></div>'
+ +'<div class="card" id="l2sq"><div style="font-weight:600;margin-bottom:8px">'+q[0]+'</div>'
+ +opts.map(function(o,k2){return '<div class="card tappable" style="margin:6px 0" id="l2so'+k2+'" onclick="l2setAnswer('+k2+')"><div class="row"><div class="grow">'+o.t+'</div></div></div>'}).join('')
+ +'</div><div id="l2sfb"></div>';
+ window.scrollTo(0,0)}
+function l2setAnswer(k){
+ if(!L2S||L2S.done[L2S.i])return;
+ L2S.done[L2S.i]=1;
+ var st=L2_SETS.find(function(x){return x.id===L2S.sid});
+ var q=st.qs[L2S.i];
+ var ok=L2S.opts[k].ok;
+ if(ok)L2S.score++;
+ L2S.opts.forEach(function(o,idx){
+  var el=document.getElementById('l2so'+idx);if(!el)return;
+  el.removeAttribute('onclick');
+  if(o.ok){el.style.borderLeft='4px solid #16a34a';}
+  else if(idx===k){el.style.borderLeft='4px solid #dc2626';el.style.opacity='0.75';}
+ });
+ var fb=document.getElementById('l2sfb');
+ var last=L2S.i===st.qs.length-1;
+ fb.innerHTML='<div class="card" style="border-left:4px solid '+(ok?'#16a34a':'#dc2626')+'"><b>'+(ok?'Correct ✓':'Not quite')+'</b><p class="small" style="margin:6px 0 0">'+q[5]+'</p></div>'
+ +'<button class="btn" style="margin-top:10px" onclick="'+(last?'l2setDone()':('l2setRun(\''+st.id+'\','+(L2S.i+1)+')'))+'">'+(last?'See score ›':'Next question ›')+'</button>';
+ window.scrollTo(0,document.body.scrollHeight)}
+function l2setDone(){
+ var st=L2_SETS.find(function(x){return x.id===L2S.sid});
+ S.xbsets=S.xbsets||{};
+ if(L2S.score>(S.xbsets[st.id]||0))S.xbsets[st.id]=L2S.score;
+ if(typeof save==="function")save();
+ var b=XB_BOOKS.find(function(x){return x.id===st.book});
+ view().innerHTML='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="l2setsList(\''+st.book+'\')">‹ Item sets</button></div>'
+ +'<div class="hero"><div class="kicker">🧩 '+(b?b.name:'')+'</div><h1>'+st.title+'</h1><p>You scored '+L2S.score+' of '+st.qs.length+(L2S.score===st.qs.length?' - a perfect set!':(L2S.score>=st.qs.length/2?' - solid. Review the misses.':' - read the chapter and try again.'))+'</p></div>'
+ +'<div class="card tappable" onclick="l2setReset(\''+st.id+'\')"><div class="row"><div class="grow"><b>Try this set again</b></div><span class="chip blue">↻</span></div></div>'
+ +'<div class="card tappable" onclick="l2setsList(\''+st.book+'\')"><div class="row"><div class="grow"><b>All item sets for this book</b></div><span class="chip grey">›</span></div></div>';
+ window.scrollTo(0,0)}
+function l2setReset(sid){L2S=null;l2setRun(sid,0);}
 </script>
 </body>
 </html>
