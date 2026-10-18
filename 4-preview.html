@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.173-20261018-1428 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.174-20261018-1432 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.173-20261018-1428';
+var APP_BUILD='v97.174-20261018-1432';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -751,7 +751,7 @@ function showAuthWall(){
 }
 function awErr(m){var e=document.getElementById('awErr');if(e)e.textContent=m}
 // v97.101: family-only login allow-list (hashes only, no plaintext emails)
-var ALLOWED_H=["c230ff86b09718d5f91bd36a981ab495f098fef0e265c4ba969240c286064d23"];
+var ALLOWED_H=["c230ff86b09718d5f91bd36a981ab495f098fef0e265c4ba969240c286064d23", "e37d245a8f04003b5b8ad19e8f5d100caaa3b2742465e2abbb553ccf4f7b122d"];
 async function _allowHash(em){if(!em)return false;try{var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(em).trim().toLowerCase()));var h=[...new Uint8Array(b)].map(function(x){return x.toString(16).padStart(2,'0')}).join('');return ALLOWED_H.indexOf(h)>=0}catch(e){return false}}
 async function _gateUser(u){if(!u)return false;if(await _allowHash(u.email))return true;try{if(u.metadata&&u.metadata.creationTime===u.metadata.lastSignInTime)await u.delete();else await _fbAuth.signOut()}catch(e){try{await _fbAuth.signOut()}catch(_){}}awErr('This app is private - only family logins work here.');return false}
 function friendlyErr(e){var c=(e&&e.code)||'';var m={'auth/invalid-email':'That email does not look right.','auth/user-not-found':'No account with this email yet - create one below.','auth/wrong-password':'That password is not right. Try again.','auth/invalid-credential':'Email or password is not right. Try again.','auth/email-already-in-use':'This email already has an account - sign in instead.','auth/weak-password':'Password needs at least 6 letters.','auth/popup-closed-by-user':'The Google window was closed. Try again.','auth/network-request-failed':'No internet right now. Try again in a bit.'};return m[c]||'Something went wrong. Try again.'}
