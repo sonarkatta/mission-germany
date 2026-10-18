@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.177-20261018-1451 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.178-20261018-1500 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.177-20261018-1451';
+var APP_BUILD='v97.178-20261018-1500';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1166,7 +1166,7 @@ window.safView=function(){
  var z=Z(),d=dev(),on=z.on;
  var h='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="document.querySelector(\'[data-tab=more]\').click()">‹ More</button></div>'
  +'<div class="hero"><div class="kicker">🛡️ Safety alerts</div><h1>Your safety, your switch</h1><p>This is yours. Nothing here runs unless you turn it on, and you can turn it off any time. Your mom\'s number is saved only on this phone.</p></div>'
- +'<div class="card"><div class="row"><div class="grow"><b>Safety alerts are '+(on?'ON':'OFF')+'</b><div class="muted small">'+(on?'Turn off whenever you like.':'Turn on when you are ready.')+'</div></div>'
+ +'<div class="card"><div class="row" style="flex-wrap:wrap;gap:10px"><div class="grow" style="min-width:60%"><b>Safety alerts are '+(on?'ON':'OFF')+'</b><div class="muted small">'+(on?'Turn off whenever you like.':'Turn on when you are ready.')+'</div></div>'
  +'<button class="btn '+(on?'soft':'')+'" onclick="safOn('+(!on)+')">'+(on?'Turn off':'Turn on')+'</button></div></div>'
  +'<div class="card"><b>1. Your details</b>'
  +'<div class="muted small" style="margin-top:6px">Mom\'s mobile number (10 digits for India, or with country code)</div><input id="safNum" type="tel" value="'+E(z.num)+'" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;font:inherit">'
@@ -1228,6 +1228,47 @@ function chip(){var z=Z();var v=document.getElementById('view');if(!v||typeof ta
  if(!ex){ex=document.createElement('div');ex.id='safChip';ex.className='card';v.insertBefore(ex,v.firstChild)}
  if(ex.getAttribute('data-o')!==String(o)||!ex.innerHTML){ex.setAttribute('data-o',String(o));ex.style.cssText='margin-bottom:10px;font-size:14px;'+(o?'background:rgba(255,59,48,.12)':'background:rgba(52,199,89,.14)');ex.innerHTML=html}}
 setInterval(function(){try{tile();chip()}catch(e){}},1200);
+})();
+
+// v97.178: Eat and drink reminders, set by Arya (shown while the app is open)
+(function(){
+function E(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var MEALS=[['bf','Breakfast','🍳','08:30'],['ln','Lunch','🍛','13:00'],['sn','Snack','🍎','17:00'],['dn','Dinner','🍽️','20:30']];
+function C(){if(!S.care)S.care={on:false,meals:{bf:true,ln:true,sn:true,dn:true},times:{},water:true,every:2,from:'08:00',to:'21:00',log:{}};return S.care}
+function day(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function L(){var c=C();if(!c.log[day()])c.log={};if(!c.log[day()])c.log[day()]={m:{},w:0,wlast:0};return c.log[day()]}
+function mins(t){var p=(t||'0:0').split(':');return (+p[0])*60+(+p[1]||0)}
+function nowm(){var d=new Date();return d.getHours()*60+d.getMinutes()}
+function tOf(k){var c=C();for(var i=0;i<MEALS.length;i++)if(MEALS[i][0]===k)return c.times[k]||MEALS[i][3]}
+window.careSet=function(k,v){var c=C();if(k.indexOf('m:')===0)c.meals[k.slice(2)]=v;else if(k.indexOf('t:')===0)c.times[k.slice(2)]=v;else c[k]=v;save()};
+window.careOn=function(v){C().on=!!v;save();careView();if(v&&window.Notification&&Notification.permission==='default'){try{Notification.requestPermission()}catch(e){}}};
+window.careMeal=function(k){L().m[k]=1;save();careChip();if(document.getElementById('careRoot'))careView()};
+window.careWater=function(){var l=L();l.w++;l.wlast=Date.now();save();careChip();if(document.getElementById('careRoot'))careView()};
+function due(){var c=C();if(!c.on)return[];var l=L(),n=nowm(),out=[];
+ MEALS.forEach(function(m){if(c.meals[m[0]]&&!l.m[m[0]]){var t=mins(tOf(m[0]));if(n>=t&&n<t+150)out.push(['m',m[0],m[2]+' Time for '+m[1].toLowerCase()+'. Have a proper one.'])}});
+ if(c.water&&n>=mins(c.from)&&n<=mins(c.to)){var gap=(c.every||2)*3600000;if(Date.now()-(l.wlast||0)>gap)out.push(['w','w','💧 Have a glass of water.'])}
+ return out}
+window.careView=function(){var c=C(),l=L();
+ var h='<div id="careRoot" style="margin:-4px 0 10px"><button class="btn soft" onclick="document.querySelector(\'[data-tab=more]\').click()">‹ More</button></div>'
+ +'<div class="hero"><div class="kicker">🍎 Eat and drink</div><h1>Look after yourself</h1><p>You choose the times. Reminders show on your Today page while the app is open. Turn them off any time.</p></div>'
+ +'<div class="card"><div class="row"><div class="grow"><b>Reminders are '+(c.on?'ON':'OFF')+'</b></div><button class="btn '+(c.on?'soft':'')+'" onclick="careOn('+(!c.on)+')">'+(c.on?'Turn off':'Turn on')+'</button></div></div>'
+ +'<div class="card"><b>Meals</b>';
+ MEALS.forEach(function(m){h+='<div style="display:flex;align-items:center;gap:10px;margin:10px 0"><input type="checkbox" '+(c.meals[m[0]]?'checked':'')+' onchange="careSet(\'m:'+m[0]+'\',this.checked)"><div style="flex:1">'+m[2]+' '+m[1]+'</div><input type="time" value="'+tOf(m[0])+'" onchange="careSet(\'t:'+m[0]+'\',this.value)" style="padding:6px;border-radius:8px;font:inherit"></div>'+(l.m[m[0]]?'<div class="muted small" style="margin:-4px 0 4px 32px">✅ Done today</div>':'')});
+ h+='</div><div class="card"><div style="display:flex;align-items:center;gap:10px"><input type="checkbox" '+(c.water?'checked':'')+' onchange="careSet(\'water\',this.checked)"><b style="flex:1">💧 Water</b></div>'
+ +'<div class="muted small" style="margin-top:8px">Remind me every (hours)</div><input type="number" min="1" max="6" step="0.5" value="'+c.every+'" onchange="careSet(\'every\',parseFloat(this.value)||2)" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;font:inherit">'
+ +'<div class="muted small" style="margin-top:8px">Between</div><div style="display:flex;gap:8px"><input type="time" value="'+c.from+'" onchange="careSet(\'from\',this.value)" style="flex:1;padding:8px;border-radius:8px;font:inherit"><input type="time" value="'+c.to+'" onchange="careSet(\'to\',this.value)" style="flex:1;padding:8px;border-radius:8px;font:inherit"></div>'
+ +'<div style="margin-top:12px">Glasses today: <b>'+l.w+'</b></div><button class="btn" style="width:100%;margin-top:8px" onclick="careWater()">+ I drank a glass</button></div>'
+ +'<div class="card"><div class="small muted">A web app cannot ring when it is fully closed, so open Arya Mission each morning. For alerts when the app is closed, you can also set alarms in your phone\'s Clock app with these same times.</div></div>';
+ view().innerHTML=h;window.scrollTo(0,0)};
+function careChip(){var v=document.getElementById('view');if(!v||typeof tab==='undefined'||tab!=='today')return;var ex=document.getElementById('careChip'),d=due();
+ if(!d.length){if(ex)ex.remove();return}
+ var html=d.map(function(x){return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0"><div style="flex:1">'+x[2]+'</div><button class="btn soft" onclick="'+(x[0]==='m'?'careMeal(\''+x[1]+'\')':'careWater()')+'">'+(x[0]==='m'?'Done':'Drank')+'</button></div>'}).join('');
+ if(!ex){ex=document.createElement('div');ex.id='careChip';ex.className='card';ex.style.cssText='margin-bottom:10px;font-size:14px;background:rgba(10,132,255,.10)';v.insertBefore(ex,v.firstChild)}
+ if(ex.getAttribute('data-k')!==html){ex.setAttribute('data-k',html);ex.innerHTML=html}}
+function tile(){var g=document.querySelector('.more-grid');if(!g||document.getElementById('careTile'))return;
+ var sc=(typeof ARYA_THEMED_SCENES==="object"&&ARYA_THEMED_SCENES&&ARYA_THEMED_SCENES["today-inspiration"])||"";
+ g.insertAdjacentHTML('beforeend','<button class="more-tile arya-motion-tile" id="careTile" data-movie-ready="1" data-scene="today-inspiration" onclick="careView()">'+(sc?'<div class="arya-movie-photo"><img alt="" src="'+sc+'"></div>':'')+'<div class="arya-movie-caption"><div class="emoji">🍎</div><b>Eat and drink</b><span>Meals and water reminders</span></div></button>')}
+setInterval(function(){try{tile();careChip()}catch(e){}},1500);
 })();
 
 // v97.119: dialogue role-play mode (ITEM 7) - the app voices the other side,
