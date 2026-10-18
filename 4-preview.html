@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.200-20261018-2150 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.201-20261018-2205 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.200-20261018-2150';
+var APP_BUILD='v97.201-20261018-2205';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1429,12 +1429,22 @@ function kb(){var v=vv();if(!v)return;var off=Math.max(0,window.innerHeight-v.he
 if(vv()){vv().addEventListener('resize',kb);vv().addEventListener('scroll',kb)}
 document.addEventListener('focusin',function(){setTimeout(kb,300)});document.addEventListener('focusout',function(){setTimeout(function(){document.body.classList.remove('kb')},200)});
 
+
+var HIN=/\b(beta|beti|acha|accha|achha|chalo|dhanyavad|shukriya|namaste|namaskar|tumhala|tumhara|tumhare|tumhe|kya|hai|hain|nahi|nahin|bhai|yaar|samajh|bilkul|theek|thik|aap|mera|meri|tum|kaise|kyun|kyu|abhi|bahut|bohot|haan|hindi|marathi|hinglish|devanagari)\b/i;
+var RULE="Reply rules for Roop: write in plain English only. Never use Hindi, Marathi or Hinglish words (no beta, accha, chalo, dhanyavad, kya, hai). Use German only to teach a German word or phrase, and always explain it in English. Answer the question that was asked, directly and warmly, and never give yourself any name other than Roop.";
+function clean(t){var ss=String(t).split(/(?<=[.!?])\s+/).filter(function(x){return !HIN.test(x)});return ss.join(' ').trim()}
+function wrapCloud(){if(typeof window.tutorCloud==='function'&&!window.tutorCloud.__w){var _c=window.tutorCloud;window.tutorCloud=async function(messages){var m=Array.isArray(messages)?messages.slice():messages;if(Array.isArray(m)){m.unshift({role:'user',content:RULE});m.unshift({role:'assistant',content:'Understood. I will reply in plain English only.'});m=[m[1],m[0]].concat(m.slice(2))}
+ var r=await _c.call(this,m);
+ if(r&&r.reply&&HIN.test(r.reply)){var c2=Array.isArray(m)?m.concat([{role:'user',content:'Please answer again in plain English only, with no Hindi or Hinglish words at all.'}]):m;try{var r2=await _c.call(this,c2);if(r2&&r2.reply&&!HIN.test(r2.reply))return r2}catch(e){}
+  var cl=clean(r.reply);return {reply:cl.length>20?cl:'Let me say that again simply. Could you ask me once more, and I will answer in plain English?'}}
+ return r};window.tutorCloud.__w=1;return true}return false}
+function purge(){try{if(typeof S==='undefined'||!Array.isArray(S.chat))return false;var a=S.chat,o=[],ch=false;for(var i=0;i<a.length;i++){var m=a[i];if(m&&m.r==='a'&&HIN.test(String(m.t))){if(o.length&&o[o.length-1].r==='u')o.pop();ch=true;continue}o.push(m)}if(ch){S.chat=o;save()}return true}catch(e){return false}}
 function wrapAll(){var ok=0;
  if(typeof window.xbAsk==='function'&&!window.xbAsk.__w){var _x=window.xbAsk;window.xbAsk=function(mid){back={k:'ch',mid:mid};return _x.apply(this,arguments)};window.xbAsk.__w=1}
  if(typeof window.tutor==='function'&&!window.tutor.__w){var _t=window.tutor;window.tutor=function(){var wasCh=back&&back.k==='ch';if(!wasCh)back={k:'nav'};var r=_t.apply(this,arguments);try{history.pushState({tutor:1},'')}catch(e){}window.scrollTo(0,0);return r};window.tutor.__w=1}
  if(typeof window.go==='function'&&!window.go.__w){var _g=window.go;window.go=function(t,a,np){var r=_g.apply(this,arguments);if(!np&&!_pop&&t!=='tutor'){try{history.pushState({g:1},'')}catch(e){}}if(t!=='tutor')back=null;return r};window.go.__w=1}
  return typeof window.xbAsk==='function'&&window.xbAsk.__w&&window.tutor&&window.tutor.__w&&window.go&&window.go.__w}
-try{var _n=0,_iv=setInterval(function(){_n++;var d=false;try{d=wrapAll()}catch(e){window.__fixErr=(window.__fixErr||'')+' w:'+e.message}if(d||_n>200)clearInterval(_iv)},300)}catch(e){}
+try{var _n=0,_iv=setInterval(function(){_n++;var d=false;try{wrapCloud();purge();d=wrapAll()&&window.tutorCloud&&window.tutorCloud.__w}catch(e){window.__fixErr=(window.__fixErr||'')+' w:'+e.message}if(d||_n>200)clearInterval(_iv)},300)}catch(e){}
 function ensureBar(){var v=document.getElementById('view');if(!v||!document.getElementById('chatIn')||document.getElementById('tutorBackBar'))return;var wasCh=back&&back.k==='ch';var b=document.createElement('div');b.id='tutorBackBar';b.style.cssText='margin:-4px 0 10px';b.innerHTML='<button class="btn soft" onclick="tutorBack()">‹ '+(wasCh?'Back to the lesson':'Back')+'</button>';v.insertBefore(b,v.firstChild)}
 try{new MutationObserver(ensureBar).observe(document.body,{childList:true,subtree:true});}catch(e){window.__fixErr=(window.__fixErr||"")+" m:"+e.message}
 window.tutorBack=function(){var b=back;back=null;if(b&&b.k==='ch'&&typeof xbChapter==='function'){var f=window.xbFind&&xbFind(b.mid);if(f){xbChapter(b.mid);window.scrollTo(0,0);return}}goBack()};
