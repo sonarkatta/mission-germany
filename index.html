@@ -90,7 +90,7 @@ body:has(.chatbar) #roopFab{display:none}
 .arya-movie-photo{height:170px!important;border-radius:22px 22px 0 0!important;overflow:hidden}
 .arya-movie-caption{margin:0!important;left:0!important;right:0!important;inset-inline:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(255,255,255,.94)!important;border:0!important;border-radius:0 0 22px 22px!important;box-shadow:none!important;width:100%!important;min-height:92px;padding:16px 22px!important;box-sizing:border-box;text-align:left}
 .arya-movie-caption::before,.arya-movie-caption::after,.arya-movie-photo::after{display:none!important}
-.german-entry.arya-motion-tile{height:auto!important;padding:0!important;border-radius:22px!important;overflow:hidden;box-shadow:0 8px 26px rgba(45,61,79,.1)!important;border:1px solid rgba(255,255,255,.7)!important}
+.german-entry.arya-motion-tile,.more-tile.arya-motion-tile{height:auto!important;padding:0!important;border-radius:22px!important;overflow:hidden;box-shadow:0 8px 26px rgba(45,61,79,.1)!important;border:1px solid rgba(255,255,255,.7)!important}
 .card.tappable,.arya-motion-tile{transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s}
 .card.tappable:hover,.arya-motion-tile:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(45,61,79,.16)}
 .chatbar{left:0!important;right:0!important;max-width:760px!important;bottom:24px!important}
@@ -108,7 +108,7 @@ body:has(.chatbar) #view{padding-bottom:280px!important}
 #tutorBackBar .btn,.backbar .btn{width:auto!important;min-width:0!important;padding:10px 22px!important}
 .arya-movie-photo img.lapimg{object-position:center}
 }
-@media(min-width:1024px){#view .german-entry .arya-movie-caption{margin:0!important;transform:none!important;top:0!important}#view .german-entry .arya-movie-photo{margin-bottom:0!important}}
+@media(min-width:1024px){#view .arya-movie-caption{margin:0!important;transform:none!important;top:0!important}#view .arya-movie-photo{margin-bottom:0!important}}
 @media(min-width:1024px){
 #arStats{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:0}
 #arStats div{background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.8);border-radius:20px;padding:18px 22px;box-shadow:0 8px 24px rgba(45,61,79,.08);transition:transform .25s,box-shadow .25s}
@@ -122,6 +122,7 @@ body:has(.chatbar) #view{padding-bottom:280px!important}
 #arSite .arf a{display:block;margin:0 0 9px;cursor:pointer;color:#2b3a4d;font-weight:600;transition:color .2s,transform .2s}
 #arSite .arf a:hover{color:#007AFF;transform:translateX(3px)}
 }
+@media(min-width:1024px){#view:has(.today-head){align-items:start!important}#view:has(.today-head)>.card.arya-today-scene:not(#roopHero){grid-row:span 2}.more-tile.arya-motion-tile{padding:0!important;overflow:hidden;border-radius:22px!important;text-align:left}.more-tile .arya-movie-caption{text-align:left}}
 </style>
 <script id="roop-front-js">(function(){
 function ensureFab(){var app=document.getElementById('app');if(!app||document.getElementById('roopFab'))return;var b=document.createElement('button');b.id='roopFab';b.type='button';b.setAttribute('aria-label','Ask Roop, your teacher-friend');b.innerHTML='<span>\u2728</span>Ask Roop';b.onclick=function(){if(typeof go==='function')go('tutor')};app.appendChild(b)}
@@ -141,7 +142,7 @@ function arFix(){
   else if(l3&&/^5 original chapters ready/.test(t))e.textContent=l3+' study books and practice sets';
   else if(/Start from0/.test(t))e.textContent=t.replace('Start from0','Start from 0');
  });
- if(big)document.querySelectorAll('#view .german-entry').forEach(function(t){var c=t.querySelector('.arya-movie-caption b');var im=t.querySelector('.arya-movie-photo img');if(!c||!im||im.dataset.lap)return;var k=LAPMAP[c.textContent.trim()];if(k){im.dataset.lap=1;im.className='lapimg';im.src='lap/lap-'+k+'.jpg'}});
+ if(big)document.querySelectorAll('#view .arya-motion-tile').forEach(function(t){var c=t.querySelector('.arya-movie-caption b');var im=t.querySelector('.arya-movie-photo img');if(!c||!im||im.dataset.lap)return;var k=LAPMAP[c.textContent.trim()];if(k){im.dataset.lap=1;im.className='lapimg';im.src='lap/lap-'+k+'.jpg'}});
 }
 function arStats(){var big=window.matchMedia&&matchMedia('(min-width:1024px)').matches;var v=document.getElementById('view');if(!v||!big)return;var hd=v.querySelector('.today-head');var ex=document.getElementById('arStats');if(!hd){if(ex)ex.remove();return}var b=window.XB_BOOKS;if(!b)return;var bk=0,cf=0;b.forEach(function(x){if(/BCom/.test(x.board))bk++;else if(/CFA/.test(x.board))cf++});var h2='<div><b>'+bk+'</b><span>BCom books</span></div><div><b>'+cf+'</b><span>CFA books</span></div><div><b>'+(window.L2_SETS?window.L2_SETS.length:0)+'</b><span>Level II practice sets</span></div><div><b>50</b><span>German units</span></div>';if(ex){if(ex.innerHTML!==h2)ex.innerHTML=h2;return}var s=document.createElement('div');s.id='arStats';s.innerHTML=h2;hd.insertAdjacentElement('afterend',s)}
 var lastY=0;window.addEventListener('scroll',function(){var f=document.getElementById('roopFab');if(!f)return;var y=window.scrollY;if(y>lastY+8&&y>120)f.classList.add('rf-away');else if(y<lastY-8||y<120)f.classList.remove('rf-away');lastY=y},{passive:true});
@@ -763,7 +764,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.244-20261019-0650';
+var APP_BUILD='v97.245-20261019-0705';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
