@@ -87,6 +87,10 @@ body:has(.chatbar) #roopFab{display:none}
 #roopHero .rh-ic{width:64px!important;height:64px!important}
 .arya-today-photo{height:150px!important;overflow:hidden}
 .arya-today-photo img,.arya-movie-photo img{width:100%!important;height:100%!important;object-fit:cover!important;transform:none!important}
+.arya-movie-photo{height:170px!important;border-radius:22px 22px 0 0!important;overflow:hidden}
+.arya-movie-caption{margin:0!important;left:0!important;right:0!important;inset-inline:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(255,255,255,.94)!important;border:0!important;border-radius:0 0 22px 22px!important;box-shadow:none!important;width:100%!important;min-height:92px;padding:16px 22px!important;box-sizing:border-box;text-align:left}
+.arya-movie-caption::before,.arya-movie-caption::after,.arya-movie-photo::after{display:none!important}
+.german-entry.arya-motion-tile{height:auto!important;padding:0!important;border-radius:22px!important;overflow:hidden;box-shadow:0 8px 26px rgba(45,61,79,.1)!important;border:1px solid rgba(255,255,255,.7)!important}
 .card.tappable,.arya-motion-tile{transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s}
 .card.tappable:hover,.arya-motion-tile:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(45,61,79,.16)}
 .chatbar{left:0!important;right:0!important;max-width:760px!important;bottom:24px!important}
@@ -716,7 +720,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.240-20261019-0550';
+var APP_BUILD='v97.241-20261019-0605';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
