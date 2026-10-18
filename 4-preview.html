@@ -591,7 +591,7 @@ var _xbRevTmr=setInterval(function(){
 })();
 </script>
 <style id="v9731-hl">
-/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.169-20261018-1420 */
+/* v97.62: auto-update machinery - version.json marker + in-app check + gold update bar + More "Update app now"; build v97.170-20261018-1432 */
 /* v97.61: Def Library fixes - inline SVG book icon (iOS black-box fix), tappable definitions with clip-first + device-TTS fallback speak (def-<book>-<ch>-<i> clip keys reserved for rendered audio) */
 /* v97.60: v97.59 wiring fix - L2 wraps moved to setInterval waiter (encrypted bundle clobbers load-time wraps) */
 /* v97.59: CFA L2 build 1/10 - Quantitative Methods book (6 deep lessons, 12q practice) on XB shelf "CFA Level II"; L2 level page gains Open Level II lessons button */
@@ -654,7 +654,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.169-20261018-1420';
+var APP_BUILD='v97.170-20261018-1432';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1115,6 +1115,12 @@ var t=setInterval(function(){
   var pp=v.querySelector('.hero p');if(pp&&/key terms\.$/.test(pp.textContent))pp.textContent=pp.textContent+' Tap a term to hear it.';
  };
 },400);
+})();
+</script>
+<script>
+(function(){
+ var D={"l2-fsa": {"l2-fsa-1": [["Equity method", "Used for a stake of 20 to 50%: the investor adds its share of profit and subtracts dividends received."], ["Consolidation", "Combining a controlled subsidiary's statements line by line, for stakes above 50%."], ["Fair value stake", "A stake under 20% held at market value, with changes recognised as set by the standard."], ["Step acquisition", "Buying control in stages; the old stake is remeasured to fair value through profit."], ["Hidden leverage", "The equity method shows one net line, so a partner's revenue and debt stay out of view."]], "l2-fsa-2": [["Defined contribution plan", "The expense equals the contribution; the employee carries the investment risk."], ["Defined benefit plan", "The company promises a payout and carries all the risk."], ["Projected benefit obligation", "Opening amount plus service cost plus interest, less benefits paid, plus or minus actuarial changes."], ["Remeasurement", "Actuarial gains and losses; under IFRS they go to other comprehensive income and never back through profit."], ["Share-based pay expense", "Grant-date fair value spread over the vesting period; the cost is not cash."]], "l2-fsa-3": [["Functional currency", "The currency of the subsidiary's main economic environment; it decides the translation method."], ["Current rate method", "Used when the local currency is functional; the adjustment goes to other comprehensive income."], ["Temporal method", "Used when the parent's currency is functional; the gain or loss goes to profit."], ["Net monetary exposure", "Cash, receivables and debt in the foreign currency; a rise in its value gives a gain on a net asset position."], ["Margin distortion", "The temporal method mixes exchange rates inside margins, so cross-border comparisons mislead."]], "l2-fsa-4": [["Net interest margin", "Interest income less interest expense, divided by average earning assets."], ["Asset quality", "How likely loans are to be repaid, shown by nonperforming loans and the loan loss allowance."], ["Coverage ratio", "Loan loss allowance divided by nonperforming loans; read it together with margin."], ["Combined ratio", "Insurance claims and costs divided by premiums; under 100% means underwriting made a profit."], ["Float", "Premiums an insurer holds before paying claims; it is the policyholders' money in use."]], "l2-fsa-5": [["Earnings quality", "Profit that is backed by cash, repeatable and prepared conservatively."], ["Accruals ratio", "Net income less operating cash flow, divided by assets; a rising ratio is a warning."], ["Channel stuffing", "Pushing sales to distributors so receivables grow faster than revenue."], ["Aggressive capitalisation", "Treating costs as assets so expenses are pushed into later years."], ["Profit up, cash down", "The classic sign that reported earnings may not be real."]], "l2-fsa-6": [["Purpose-first analysis", "State the question first; it chooses the ratios."], ["Normalisation", "Adjusting for one-off items and accounting policy differences before comparing or valuing."], ["Quality finding", "Must change an input, widen a range or end the idea."], ["Adjusted numbers", "The figures you defend are the adjusted ones, not the reported ones."]]}};
+ for(var k in D){if(typeof XB_DEFS!=='undefined'&&!XB_DEFS[k])XB_DEFS[k]=D[k]}
 })();
 </script>
 <script>
