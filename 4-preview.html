@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.250-20261019-0825';
+var APP_BUILD='v97.251-20261019-0835';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2173,7 +2173,23 @@ Object.assign(L1_DEFS,{"deriv": {"deriv-1": [["Derivative", "A contract whose va
   c.body.push("<b>"+x.h+".</b> "+x.p);c.kp.push(x.k);})});
 },300)})();
 </script>
-<script id="lap3js">(function(){
+<style id="glasscss">@media(min-width:1024px){
+html body{background-image:radial-gradient(60vw 50vh at 8% 12%,rgba(0,122,255,.26),transparent 70%),radial-gradient(55vw 55vh at 92% 18%,rgba(175,82,222,.22),transparent 70%),radial-gradient(60vw 50vh at 70% 92%,rgba(52,199,180,.2),transparent 70%),radial-gradient(50vw 45vh at 12% 85%,rgba(255,159,67,.16),transparent 70%)!important;background-attachment:fixed!important}
+#arStats div,#arFeat .af,#view:has(.today-head)>.today-head,#view:has(.today-head)>.quote-card,#view:has(.today-head)>.card.arya-motion-tile:not(.arya-today-scene),#view:has(.today-head)>.btn.soft,.ag-clocks,#ag-clocks,.ag-example,#ag-example,.ag-credits,#ag-credits,#view .card.tappable,#view .more-tile,#view .german-menu>*,#view>.quote-card,#view>.card,#arSite .arf{
+position:relative;background:linear-gradient(135deg,rgba(255,255,255,.62),rgba(255,255,255,.28))!important;-webkit-backdrop-filter:blur(26px) saturate(1.8);backdrop-filter:blur(26px) saturate(1.8);border:1px solid rgba(255,255,255,.7)!important;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35),inset 0 0 22px rgba(255,255,255,.28),0 18px 44px rgba(31,50,90,.16),0 2px 6px rgba(31,50,90,.06)!important}
+#arStats div::after,#arFeat .af::after,#view:has(.today-head)>.today-head::after,#view .card.tappable::after,#view .more-tile::after,#view .german-menu>*::after,#view>.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 38%,rgba(255,255,255,0) 70%,rgba(255,255,255,.22) 100%);mix-blend-mode:soft-light}
+#tabbar{background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.3))!important;-webkit-backdrop-filter:blur(30px) saturate(1.9);backdrop-filter:blur(30px) saturate(1.9);border:1px solid rgba(255,255,255,.75)!important;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 0 18px rgba(255,255,255,.3),0 14px 40px rgba(31,50,90,.18)!important}
+#arHero .ah-s{background:linear-gradient(135deg,rgba(255,255,255,.7),rgba(255,255,255,.35))!important;-webkit-backdrop-filter:blur(20px) saturate(1.8);backdrop-filter:blur(20px) saturate(1.8);border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),0 10px 26px rgba(31,50,90,.16)!important}
+#arHero .ah-p{box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -10px 18px rgba(255,255,255,.08),0 12px 30px rgba(0,122,255,.35)!important}
+#arSite{background:none!important;box-shadow:none!important;border:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#arSite .arf{border-radius:32px!important}
+#xbBoardsToday{background:none!important;box-shadow:none!important;border:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#arFeat .af>div,#arFeat .af-t{background:transparent!important}
+.ag-credits,#ag-credits{border-radius:20px!important;padding:14px 20px!important}
+.ag-example,#ag-example{border-radius:18px!important;padding:10px 18px!important}
+#arSite .arf{padding:40px 44px!important;box-sizing:border-box}
+}
+</style><script id="lap3js">(function(){
 function big(){return window.matchMedia&&matchMedia('(min-width:1024px)').matches}
 function tab(i){var t=document.querySelectorAll('#tabbar .tab')[i];if(t)t.click();window.scrollTo(0,0)}
 function arHome(){
