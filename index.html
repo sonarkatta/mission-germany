@@ -151,7 +151,70 @@ document.addEventListener('DOMContentLoaded',function(){tick();var v=document.ge
 setInterval(tick,1200);
 })();</script>
 
-</head>
+<style id="lap3css">@media(min-width:1024px){
+:root{--aw:clamp(940px,calc(100vw - 120px),1560px)}
+#view{max-width:var(--aw)!important}
+#tabbar{width:min(var(--aw),calc(100vw - 48px))!important}
+#arSite{max-width:var(--aw)!important}
+#arSite .arf{grid-template-columns:2.2fr 1fr 1fr 1fr!important;gap:56px!important}
+#view .hero h1,#view>.hero .title,#view .hero h2{letter-spacing:-.8px}
+#view>.hero h1{font-size:clamp(40px,3.6vw,58px)!important;line-height:1.05!important}
+.german-menu{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:28px!important}
+.german-menu:has(>:nth-child(13)){grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.arya-movie-photo{height:clamp(170px,13vw,230px)!important}
+#view:has(.today-head){grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:32px 32px!important}
+#view:has(.today-head)>*{grid-column:1/-1;order:20}
+#arHero{order:0!important;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:56px;align-items:center;padding:18px 0 28px}
+#arHero .ah-eyebrow{font-size:13px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#007AFF;margin-bottom:18px}
+#arHero h1{font-size:clamp(46px,4.6vw,76px)!important;line-height:1.02!important;letter-spacing:-1.6px!important;margin:0 0 20px!important;font-weight:800}
+#arHero p{font-size:clamp(18px,1.4vw,22px);line-height:1.5;color:#4b5666;margin:0 0 32px;max-width:520px}
+#arHero .ah-btns{display:flex;gap:14px;flex-wrap:wrap}
+#arHero .ah-btns button{font-family:inherit;font-size:16px;font-weight:700;border:0;border-radius:999px;padding:16px 28px;cursor:pointer;transition:transform .22s,box-shadow .22s}
+#arHero .ah-p{background:linear-gradient(135deg,#007AFF,#AF52DE);color:#fff;box-shadow:0 10px 26px rgba(0,122,255,.3)}
+#arHero .ah-s{background:rgba(255,255,255,.85);color:#1d2b3d;box-shadow:0 6px 18px rgba(45,61,79,.12)}
+#arHero .ah-btns button:hover{transform:translateY(-3px)}
+#arHero .ah-img{position:relative;border-radius:32px;overflow:hidden;box-shadow:0 30px 70px rgba(45,61,79,.22);aspect-ratio:5/4;max-height:560px}
+#arHero .ah-img img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.02);transition:transform 1.2s}
+#arHero:hover .ah-img img{transform:scale(1.07)}
+#view:has(.today-head)>.today-head .date{display:none}
+#view:has(.today-head)>.today-head{order:1!important;display:flex;align-items:center;gap:26px;flex-wrap:wrap;padding:20px 30px;background:rgba(255,255,255,.7);border-radius:26px;border:1px solid rgba(255,255,255,.8)}
+#view:has(.today-head)>.today-head h1{font-size:34px!important;margin:0!important}
+#view:has(.today-head)>.today-head>*{margin:0!important}
+#arStats{order:2!important;grid-column:1/-1}
+#arStats div{padding:26px 28px!important}
+#arStats b{font-size:44px!important}
+#arFeat{order:3!important;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+#arFeat .af{background:rgba(255,255,255,.9);border-radius:28px;overflow:hidden;cursor:pointer;box-shadow:0 10px 34px rgba(45,61,79,.1);transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s;border:1px solid rgba(255,255,255,.85)}
+#arFeat .af:hover{transform:translateY(-6px);box-shadow:0 26px 56px rgba(45,61,79,.18)}
+#arFeat .af img{width:100%;height:clamp(200px,16vw,280px);object-fit:cover;display:block;transition:transform .8s}
+#arFeat .af:hover img{transform:scale(1.05)}
+#arFeat .af div{overflow:hidden}
+#arFeat .af-t{padding:24px 28px 28px}
+#arFeat .af-t small{display:block;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#007AFF;margin-bottom:8px}
+#arFeat .af-t b{display:block;font-size:24px;letter-spacing:-.3px;margin-bottom:8px;color:#16222f}
+#arFeat .af-t span{display:block;font-size:15px;line-height:1.5;color:#5b6572;margin-bottom:14px}
+#arFeat .af-t em{font-style:normal;font-weight:700;color:#007AFF;font-size:15px}
+#roopHero{order:4!important}
+.arya-germany-hero,#arya-germany-hero{order:5!important;grid-column:1/8!important}
+.ag-clocks,#ag-clocks{order:6!important;grid-column:8/13!important}
+.ag-example,#ag-example{order:7!important;grid-column:1/8!important}
+.arya-today-scene:not(#roopHero){order:8!important;grid-column:1/7!important;grid-row:span 4}
+#xbBoardsToday,#view:has(.today-head)>.quote-card,#view:has(.today-head)>.card.arya-motion-tile:not(.arya-today-scene),#view:has(.today-head)>.btn.soft{grid-column:7/13!important;order:9!important}
+#view:has(.today-head)>.quote-card{order:10!important}
+#view:has(.today-head)>.card.arya-motion-tile:not(.arya-today-scene){order:11!important}
+#view:has(.today-head)>.btn.soft{order:12!important}
+.ag-credits,#ag-credits{order:13!important;grid-column:1/-1!important}
+#arHero ~ #roopHero .arya-today-photo{display:none!important}
+.more-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:28px!important}
+.arya-movie-caption b{font-size:19px!important}
+.arya-movie-caption small,.arya-movie-caption span:not(.emoji){font-size:14.5px!important;line-height:1.45!important}
+.arya-movie-caption .emoji{font-size:26px!important}
+#view:has(>.hero+.card.tappable+.card.tappable+.card.tappable+.card.tappable+.quote-card){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:28px!important}
+#view:has(>.hero+.card.tappable+.card.tappable+.card.tappable+.card.tappable+.quote-card)>*{margin:0!important}
+#view:has(>.hero+.card.tappable+.card.tappable+.card.tappable+.card.tappable+.quote-card)>.hero,#view:has(>.hero+.card.tappable+.card.tappable+.card.tappable+.card.tappable+.quote-card)>.quote-card{grid-column:1/-1}
+#view:has(>.hero+.card.tappable+.card.tappable+.card.tappable+.card.tappable+.quote-card)>.card.tappable{padding:12px 10px}
+}
+</style></head>
 <body>
 
 <!-- PASSWORD GATE -->
@@ -764,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.249-20261019-0850';
+var APP_BUILD='v97.250-20261019-0825';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2110,5 +2173,30 @@ Object.assign(L1_DEFS,{"deriv": {"deriv-1": [["Derivative", "A contract whose va
   c.body.push("<b>"+x.h+".</b> "+x.p);c.kp.push(x.k);})});
 },300)})();
 </script>
-</body>
+<script id="lap3js">(function(){
+function big(){return window.matchMedia&&matchMedia('(min-width:1024px)').matches}
+function tab(i){var t=document.querySelectorAll('#tabbar .tab')[i];if(t)t.click();window.scrollTo(0,0)}
+function arHome(){
+ var v=document.getElementById('view');if(!v)return;
+ var th=v.querySelector('.today-head');var h=document.getElementById('arHero'),f=document.getElementById('arFeat');
+ if(!big()||!th){if(h)h.remove();if(f)f.remove();return}
+ if(!h){
+  var d=th.querySelector('.date');var dt=d?d.textContent:'';
+  h=document.createElement('section');h.id='arHero';
+  h.innerHTML='<div class="ah-t"><div class="ah-eyebrow">'+dt+'</div><h1>A little closer to Germany</h1><p>Small steps here. A bigger life ahead. Your CFA, German and BCom books, with Roop to explain anything.</p><div class="ah-btns"><button type="button" class="ah-p">\u2728 Ask Roop</button><button type="button" class="ah-s">See today\u2019s plan</button></div></div><div class="ah-img"><img alt="" src="lap/lap-m-germany.jpg"></div>';
+  h.querySelector('.ah-p').onclick=function(){go('tutor');window.scrollTo(0,0)};
+  h.querySelector('.ah-s').onclick=function(){var p=v.querySelector('.arya-today-scene:not(#roopHero)');if(p)p.scrollIntoView({behavior:'smooth',block:'center'})};
+  v.insertBefore(h,v.firstChild);
+ }
+ if(!f){
+  var bk=0;(window.XB_BOOKS||[]).forEach(function(x){if(/BCom/.test(x.board))bk++});
+  f=document.createElement('section');f.id='arFeat';
+  var items=[['CFA','Your CFA journey','Start with the introduction, then enter your level. Lessons, books and practice stay separate.','cfa-l2',function(){tab(2)}],['German','Your German','New to German? Start from 0. Then follow the course and use the practice sections.','de-start',function(){tab(3)}],['BCom','Your college','All 3 years, '+(bk||87)+' books - read, listen, revise.','m-bcom',function(){if(window.xbShelf)xbShelf('Pune University BCom')}]];
+  items.forEach(function(it){var a=document.createElement('div');a.className='af';a.innerHTML='<img alt="" src="lap/lap-'+it[3]+'.jpg"><div class="af-t"><small>'+it[0]+'</small><b>'+it[1]+'</b><span>'+it[2]+'</span><em>Open \u203a</em></div>';a.onclick=it[4];f.appendChild(a)});
+  var st=document.getElementById('arStats');if(st)st.insertAdjacentElement('afterend',f);else v.appendChild(f);
+ }
+}
+setInterval(function(){try{arHome()}catch(e){}},700);
+})();
+</script></body>
 </html>
