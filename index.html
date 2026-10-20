@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.268-20261020-1415';
+var APP_BUILD='v97.269-20261020-1425';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2399,6 +2399,8 @@ window.__rpCloud=function(){var s=null;try{s=localStorage.getItem(KEY)}catch(e){
 var SIL="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
 function unlock(){try{au.src=SIL;var p=au.play();if(p&&p.catch)p.catch(function(){})}catch(e){}["touchend","click"].forEach(function(n){document.removeEventListener(n,unlock,true)})}
 ["touchend","click"].forEach(function(n){document.addEventListener(n,unlock,true)});
+var IDXP=null;function sidx(){if(!IDXP)IDXP=fetch('audio/idx.json?h='+Math.floor(Date.now()/600000),{cache:'no-cache'}).then(function(r){return r.ok?r.json():{}}).catch(function(){return {}});return IDXP}
+async function shash(t){var d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("T|"+t));return Array.from(new Uint8Array(d)).map(function(x){return x.toString(16).padStart(2,"0")}).join("").slice(0,16)}
 function split(t){t=String(t||"").replace(/\s+/g," ").trim();var out=[],s=t.match(/[^.!?]+[.!?]*\s*/g)||[t],b="";
  s.forEach(function(x){if((b+x).length>320&&b){out.push(b.trim());b=x}else b+=x;while(b.length>600){out.push(b.slice(0,600));b=b.slice(600)}});if(b.trim())out.push(b.trim());return out}
 async function hash(t){var d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("S|"+t));return Array.from(new Uint8Array(d)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")}
@@ -2408,8 +2410,8 @@ async function getBlob(t){var h=await hash(t),rq=new Request("https://mgv.local/
  var r=await fetch(URL_,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:t}),signal:ctl.signal});clearTimeout(to);
  if(!r.ok)throw new Error("tts "+r.status);var b=await r.blob();try{if(c)await c.put(rq,new Response(b.slice(0),{headers:{"Content-Type":"audio/wav"}}))}catch(e){}return b}
 function run(){if(cur||!q.length)return;var u=q.shift();cur=u;var my=++tok;active=true;
- var parts=split(u.text),pf=[],i=0;
- function pre(n){for(var k=0;k<n;k++){var j=i+k;if(j<parts.length&&!pf[j]){(function(jj){pf[jj]=getBlob(parts[jj]);pf[jj].catch(function(){})})(j)}}}
+ var parts=split(u.text),pf=[],i=0,isS=false;
+ function pre(n){for(var k=0;k<n;k++){var j=i+k;if(j<parts.length&&!pf[j]){(function(jj){pf[jj]=isS?fetch(parts[jj]).then(function(r){if(!r.ok)throw new Error('s');return r.blob()}):getBlob(parts[jj]);pf[jj].catch(function(){})})(j)}}}
  function fin(ok){if(my!==tok)return;cur=null;active=false;try{if(ok&&u.onend)u.onend({type:"end"})}catch(e){}run()}
  function toast(t){var e=document.getElementById("mgvT");if(!e){e=document.createElement("div");e.id="mgvT";e.style.cssText="position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#173252;color:#fff;padding:10px 16px;border-radius:14px;font:14px system-ui;z-index:125000;box-shadow:0 4px 24px #0003;max-width:86%;text-align:center";document.body.appendChild(e)}e.textContent=t;clearTimeout(e._t);e._t=setTimeout(function(){e.remove()},3500)}
  var tr=0;
@@ -2417,7 +2419,7 @@ function run(){if(cur||!q.length)return;var u=q.shift();cur=u;var my=++tok;activ
  D('start');try{u.onstart&&u.onstart({type:"start"})}catch(e){}
  function next(){if(my!==tok)return;if(i>=parts.length)return fin(true);pre(1);
   pf[i].then(function(b){if(my!==tok)return;var url=URL.createObjectURL(b);au.onended=function(){URL.revokeObjectURL(url);tr=0;i++;next()};au.onerror=function(){fallback()};try{au.pause()}catch(e){}au.src=url;au.volume=u.volume>0?Math.min(1,u.volume):1;var p=au.play();D('play');if(p&&p.catch)p.catch(function(e){D('rej '+e.name);if(e.name==='AbortError'&&my===tok){setTimeout(function(){if(my!==tok)return;var p2=au.play();if(p2&&p2.catch)p2.catch(function(e2){D('rej2 '+e2.name);fallback()})},200)}else fallback()});var w=i;setTimeout(function(){if(my===tok&&i===w&&au.currentTime<=0.05&&!au.ended){D('stall');fallback()}},9000)}).catch(function(){fallback()})}
- next()}
+ (async function(){try{var ix=await sidx();var h=await shash(String(u.text).replace(/\s+/g," ").trim());if(ix&&ix[h]){parts=[ix[h]];isS=true;D('static')}}catch(e){}if(my===tok)next()})()}
 P.speak=function(u){try{if(!/^de/i.test(u.lang||"")&&cloudOn()&&u.text&&u.text.trim()){q.push(u);run();return}}catch(e){}return prev.call(this,u)};
 P.cancel=function(){tok++;q=[];cur=null;active=false;try{au.onended=null;au.onerror=null;au.pause()}catch(e){}return pcancel.call(this)};
 try{var sd=Object.getOwnPropertyDescriptor(P,"speaking");if(sd&&sd.get){Object.defineProperty(P,"speaking",{configurable:true,get:function(){return active||sd.get.call(this)}})}}catch(e){}
