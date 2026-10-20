@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.272-20261020-2210';
+var APP_BUILD='v97.273-20261020-2225';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2491,6 +2491,15 @@ function deco(){var k=cur();if(!k){pushedFor=null;return}
  if(pushedFor!==k){pushedFor=k;try{history.pushState({mgx:1},"")}catch(e){}}}
 setInterval(deco,400);
 window.addEventListener("popstate",function(){var k=cur();if(!k)return;try{history.pushState({mgx:1},"")}catch(e){}if(document.getElementById("mgxM"))close();else open(k)});
+})();
+</script><script id="boot273">(function(){
+function vis(e){if(!e||!(e.offsetHeight>0))return false;var c=getComputedStyle(e);return c.display!=="none"&&c.visibility!=="hidden"&&parseFloat(c.opacity)!==0}
+function usable(){var w=document.getElementById("authWall"),v=document.getElementById("view");return !!(vis(w)||(vis(v)&&v.innerText&&v.innerText.trim().length>0))}
+function card(){return document.getElementById("boot273")}
+function show(){if(card()||!document.body)return;var d=document.createElement("div");d.id="boot273";d.style.cssText="position:fixed;inset:0;z-index:2147483000;background:#fff;color:#1c2a44;display:flex;flex-direction:column;align-items:center;justify-content:center;font:16px system-ui;text-align:center;padding:24px";d.innerHTML='<div style="font-size:20px;font-weight:600;margin-bottom:8px">Arya is taking a moment</div><div style="color:#5b6475;margin-bottom:18px">Your saved progress stays on this device.</div><button type="button" style="border:none;border-radius:999px;padding:14px 28px;font-size:16px;font-weight:600;background:#2f6bff;color:#fff">Open again</button>';d.querySelector("button").onclick=function(){location.reload()};document.body.appendChild(d)}
+var bad=0;function check(){if(usable()){bad=0;var c=card();if(c)c.remove();return}bad++;if(bad>=2)show()}
+function arm(){var D=window.__bootGuardMs||15000;setTimeout(function(){check();setInterval(check,2000)},D)}
+if(document.readyState==="complete")arm();else addEventListener("load",arm,{once:true});
 })();
 </script></body>
 </html>
