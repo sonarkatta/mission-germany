@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.271-20261020-2150';
+var APP_BUILD='v97.272-20261020-2210';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2436,7 +2436,7 @@ setInterval(addRow,500);
 </script><script id="follow271">(function(){
 if(!window.SpeechSynthesis||!window.__rpAu)return;
 var au=window.__rpAu,P=window.SpeechSynthesis.prototype,prev=P.speak,pc=P.cancel,st=null,lastUser=0;
-var css=document.createElement("style");css.textContent=".mgFollow{background:rgba(47,107,255,.12)!important;border-radius:10px;box-shadow:0 0 0 6px rgba(47,107,255,.12);transition:background .2s,box-shadow .2s}";document.head.appendChild(css);
+var css=document.createElement("style");css.textContent=".mgFollow::before{content:'Following along (approximate)';display:block;font:600 11px system-ui;color:#2f6bff;margin:0 0 4px}.mgFollow{background:rgba(47,107,255,.12)!important;border-radius:10px;box-shadow:0 0 0 6px rgba(47,107,255,.12);transition:background .2s,box-shadow .2s}";document.head.appendChild(css);
 ["touchstart","touchmove","wheel","mousedown"].forEach(function(n){addEventListener(n,function(){lastUser=Date.now()},{passive:true,capture:true})});
 function norm(s){return String(s||"").replace(/\s+/g," ").trim()}
 function clear(){document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow")})}
