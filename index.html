@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.264-20261020-1310';
+var APP_BUILD='v97.265-20261020-1330';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -876,7 +876,7 @@ document.addEventListener('visibilitychange',function(){if(document.visibilitySt
 (function(){
 "use strict";
 var BUILD63='v97.63';
-var CFG={apiKey:"AIzaSyDXP3S61JMpG0q-gDxE2ldadASZJkYideU",authDomain:"mission-germany-f9c2d.firebaseapp.com",projectId:"mission-germany-f9c2d",storageBucket:"mission-germany-f9c2d.firebasestorage.app",messagingSenderId:"22933924383",appId:"1:22933924383:web:8f20f89705e9291b27432a"};
+var CFG={apiKey:"AIzaSyDXP3S61JMpG0q-gDxE2ldadASZJkYideU",authDomain:"auth-arya.taarv.com",projectId:"mission-germany-f9c2d",storageBucket:"mission-germany-f9c2d.firebasestorage.app",messagingSenderId:"22933924383",appId:"1:22933924383:web:8f20f89705e9291b27432a"};
 var FBV='10.12.2';
 function loadJs(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=function(){res()};s.onerror=function(){rej(new Error('load '+src))};document.head.appendChild(s)})}
 var _ready=null;
@@ -935,7 +935,7 @@ async function doGoogle(){
   var p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});
   try{await _fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)}catch(_){}
   awErr('');
-  try{await _fbAuth.signInWithPopup(p)}
+  try{if(/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)||window.navigator.standalone){await _fbAuth.signInWithRedirect(p);return}await _fbAuth.signInWithPopup(p)}
   catch(e){
    var c=(e&&e.code)||'';
    if(c==='auth/popup-blocked'||c==='auth/operation-not-supported-in-this-environment'||c==='auth/web-storage-unsupported'){await _fbAuth.signInWithRedirect(p)}
