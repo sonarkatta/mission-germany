@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.267-20261020-1420';
+var APP_BUILD='v97.268-20261020-1415';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2411,11 +2411,12 @@ function run(){if(cur||!q.length)return;var u=q.shift();cur=u;var my=++tok;activ
  var parts=split(u.text),pf=[],i=0;
  function pre(n){for(var k=0;k<n;k++){var j=i+k;if(j<parts.length&&!pf[j]){(function(jj){pf[jj]=getBlob(parts[jj]);pf[jj].catch(function(){})})(j)}}}
  function fin(ok){if(my!==tok)return;cur=null;active=false;try{if(ok&&u.onend)u.onend({type:"end"})}catch(e){}run()}
- function fallback(){if(my!==tok)return;down=Date.now()+600000;var rest=parts.slice(i).join(" ");cur=null;active=false;if(!rest){try{u.onend&&u.onend({type:"end"})}catch(e){}return run()}
-  var n=new SpeechSynthesisUtterance(rest);n.lang=u.lang;n.rate=u.rate;n.pitch=u.pitch;n.volume=u.volume;n.onend=u.onend;n.onerror=u.onerror;prev.call(speechSynthesis,n)}
+ function toast(t){var e=document.getElementById("mgvT");if(!e){e=document.createElement("div");e.id="mgvT";e.style.cssText="position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#173252;color:#fff;padding:10px 16px;border-radius:14px;font:14px system-ui;z-index:125000;box-shadow:0 4px 24px #0003;max-width:86%;text-align:center";document.body.appendChild(e)}e.textContent=t;clearTimeout(e._t);e._t=setTimeout(function(){e.remove()},3500)}
+ var tr=0;
+ function fallback(){if(my!==tok)return;tr++;if(tr<=3){toast("Roop's voice is loading...");pf[i]=null;setTimeout(function(){if(my!==tok)return;next()},tr*4000);return}toast("Roop's voice is busy right now. Try again in a minute.");tr=0;cur=null;active=false;try{u.onend&&u.onend({type:"end"})}catch(e){}run()}
  D('start');try{u.onstart&&u.onstart({type:"start"})}catch(e){}
- function next(){if(my!==tok)return;if(i>=parts.length)return fin(true);pre(3);
-  pf[i].then(function(b){if(my!==tok)return;var url=URL.createObjectURL(b);au.onended=function(){URL.revokeObjectURL(url);i++;next()};au.onerror=function(){fallback()};try{au.pause()}catch(e){}au.src=url;au.volume=u.volume>0?Math.min(1,u.volume):1;var p=au.play();D('play');if(p&&p.catch)p.catch(function(e){D('rej '+e.name);if(e.name==='AbortError'&&my===tok){setTimeout(function(){if(my!==tok)return;var p2=au.play();if(p2&&p2.catch)p2.catch(function(e2){D('rej2 '+e2.name);fallback()})},200)}else fallback()});var w=i;setTimeout(function(){if(my===tok&&i===w&&au.currentTime<=0.05&&!au.ended){D('stall');fallback()}},9000)}).catch(function(){fallback()})}
+ function next(){if(my!==tok)return;if(i>=parts.length)return fin(true);pre(1);
+  pf[i].then(function(b){if(my!==tok)return;var url=URL.createObjectURL(b);au.onended=function(){URL.revokeObjectURL(url);tr=0;i++;next()};au.onerror=function(){fallback()};try{au.pause()}catch(e){}au.src=url;au.volume=u.volume>0?Math.min(1,u.volume):1;var p=au.play();D('play');if(p&&p.catch)p.catch(function(e){D('rej '+e.name);if(e.name==='AbortError'&&my===tok){setTimeout(function(){if(my!==tok)return;var p2=au.play();if(p2&&p2.catch)p2.catch(function(e2){D('rej2 '+e2.name);fallback()})},200)}else fallback()});var w=i;setTimeout(function(){if(my===tok&&i===w&&au.currentTime<=0.05&&!au.ended){D('stall');fallback()}},9000)}).catch(function(){fallback()})}
  next()}
 P.speak=function(u){try{if(!/^de/i.test(u.lang||"")&&cloudOn()&&u.text&&u.text.trim()){q.push(u);run();return}}catch(e){}return prev.call(this,u)};
 P.cancel=function(){tok++;q=[];cur=null;active=false;try{au.onended=null;au.onerror=null;au.pause()}catch(e){}return pcancel.call(this)};
@@ -2429,6 +2430,31 @@ function addRow(){var s=document.getElementById("vpSheet");if(!s||!s.classList.c
  d.querySelector(".vpu").onclick=function(){try{localStorage.setItem(KEY,"sulafat")}catch(e){}down=0;try{s.querySelector(".vpsul").remove()}catch(e){}addRow2()}}
 function addRow2(){var s=document.getElementById("vpSheet");if(s){s.querySelectorAll(".vpsul").forEach(function(x){x.remove()});addRow()}}
 setInterval(addRow,500);
+})();
+</script><script id="exit268">(function(){
+var CSS='#mgxM{position:fixed;inset:0;z-index:130000;background:rgba(20,24,40,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px;box-sizing:border-box;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}#mgxM .c{width:100%;max-width:420px;background:#fff;border-radius:24px;padding:20px 18px 14px;box-shadow:0 18px 50px rgba(0,0,0,.25);text-align:center;font-family:inherit}#mgxM h3{margin:0 0 6px;font-size:19px}#mgxM p{margin:0 0 14px;font-size:14px;color:#5b6475;line-height:1.45}#mgxM button{display:block;width:100%;margin:8px 0 0;padding:14px;border-radius:999px;border:none;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}#mgxM .p{background:#2f6bff;color:#fff}#mgxM .s{background:#eef1f7;color:#1c2a44}#mgxM .d{background:transparent;color:#c0392b;font-size:14px}.mgxB{border:none;background:#eef1f7;color:#1c2a44;border-radius:999px;padding:10px 16px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}';
+var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
+var kind=null;
+function cur(){if(document.getElementById("bcxBar"))return"bcx";if(document.querySelector("#view .exam-top"))return"cfa";return null}
+function close(){var m=document.getElementById("mgxM");if(m)m.remove()}
+function open(k){if(document.getElementById("mgxM"))return;kind=k;
+ var m=document.createElement("div");m.id="mgxM";
+ m.innerHTML='<div class="c"><h3>Leave this exam?</h3><p>'+(k==="bcx"?"Save and exit keeps your answers. The clock keeps running, and you can resume from Real Exam.":"Save and exit keeps your place and answers so you can resume this mock later.")+'</p><button class="p" type="button" id="mgxS">Save and exit</button><button class="s" type="button" id="mgxK">Keep going</button><button class="d" type="button" id="mgxD">Discard attempt</button></div>';
+ document.body.appendChild(m);
+ m.onclick=function(e){if(e.target===m)close()};
+ document.getElementById("mgxK").onclick=close;
+ document.getElementById("mgxS").onclick=function(){close();try{if(k==="bcx"){window.bcx()}else{try{examPersist()}catch(e){}try{examStop()}catch(e){}window.mock()}}catch(e){}};
+ document.getElementById("mgxD").onclick=function(){close();try{if(k==="bcx"){S.bcx=null;save();window.bcx()}else{try{examStop()}catch(e){}EX=null;S.exam=null;save();window.mock()}}catch(e){}}}
+window.mgExit=function(){open(cur()||kind||"bcx")};
+var pushedFor=null;
+function deco(){var k=cur();if(!k){pushedFor=null;return}
+ if(k==="bcx"){var bar=document.getElementById("bcxBar");var row=bar&&bar.querySelector(".row");
+  if(row&&!document.getElementById("mgxBtn")){var b=document.createElement("button");b.id="mgxBtn";b.type="button";b.className="mgxB";b.textContent="Exit";b.style.marginRight="8px";b.onclick=function(){open("bcx")};var sub=row.querySelector("button");row.insertBefore(b,sub)}}
+ else{var top=document.querySelector("#view .exam-top");
+  if(top&&!document.getElementById("mgxBtn")){var b2=document.createElement("button");b2.id="mgxBtn";b2.type="button";b2.className="mgxB";b2.textContent="Exit";b2.onclick=function(){open("cfa")};top.appendChild(b2)}}
+ if(pushedFor!==k){pushedFor=k;try{history.pushState({mgx:1},"")}catch(e){}}}
+setInterval(deco,400);
+window.addEventListener("popstate",function(){var k=cur();if(!k)return;try{history.pushState({mgx:1},"")}catch(e){}if(document.getElementById("mgxM"))close();else open(k)});
 })();
 </script></body>
 </html>
