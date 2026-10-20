@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.269-20261020-1425';
+var APP_BUILD='v97.270-20261020-1855';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2420,7 +2420,7 @@ function run(){if(cur||!q.length)return;var u=q.shift();cur=u;var my=++tok;activ
  function next(){if(my!==tok)return;if(i>=parts.length)return fin(true);pre(1);
   pf[i].then(function(b){if(my!==tok)return;var url=URL.createObjectURL(b);au.onended=function(){URL.revokeObjectURL(url);tr=0;i++;next()};au.onerror=function(){fallback()};try{au.pause()}catch(e){}au.src=url;au.volume=u.volume>0?Math.min(1,u.volume):1;var p=au.play();D('play');if(p&&p.catch)p.catch(function(e){D('rej '+e.name);if(e.name==='AbortError'&&my===tok){setTimeout(function(){if(my!==tok)return;var p2=au.play();if(p2&&p2.catch)p2.catch(function(e2){D('rej2 '+e2.name);fallback()})},200)}else fallback()});var w=i;setTimeout(function(){if(my===tok&&i===w&&au.currentTime<=0.05&&!au.ended){D('stall');fallback()}},9000)}).catch(function(){fallback()})}
  (async function(){try{var ix=await sidx();var h=await shash(String(u.text).replace(/\s+/g," ").trim());if(ix&&ix[h]){parts=[ix[h]];isS=true;D('static')}}catch(e){}if(my===tok)next()})()}
-P.speak=function(u){try{if(!/^de/i.test(u.lang||"")&&cloudOn()&&u.text&&u.text.trim()){q.push(u);run();return}}catch(e){}return prev.call(this,u)};
+P.speak=function(u){try{if(u&&/^That recording is still on its way/i.test(String(u.text||"").trim())){return}}catch(e){}try{if(!/^de/i.test(u.lang||"")&&cloudOn()&&u.text&&u.text.trim()){q.push(u);run();return}}catch(e){}return prev.call(this,u)};
 P.cancel=function(){tok++;q=[];cur=null;active=false;try{au.onended=null;au.onerror=null;au.pause()}catch(e){}return pcancel.call(this)};
 try{var sd=Object.getOwnPropertyDescriptor(P,"speaking");if(sd&&sd.get){Object.defineProperty(P,"speaking",{configurable:true,get:function(){return active||sd.get.call(this)}})}}catch(e){}
 /* picker row */
