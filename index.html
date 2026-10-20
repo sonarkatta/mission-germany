@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.254-20261020-1000';
+var APP_BUILD='v97.255-20261020-1010';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2174,8 +2174,6 @@ Object.assign(L1_DEFS,{"deriv": {"deriv-1": [["Derivative", "A contract whose va
 },300)})();
 </script>
 <style id="fix252">@media(min-width:1024px){
-#player{left:auto!important;right:20px!important;bottom:20px!important;width:320px!important;max-width:320px!important;margin:0!important;transform:none!important;z-index:60}
-body:has(#player) .chatbar{left:20px!important;right:360px!important;margin:0!important;max-width:none!important;width:auto!important}
 .chatbar{background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.72))!important;-webkit-backdrop-filter:blur(30px) saturate(1.8)!important;backdrop-filter:blur(30px) saturate(1.8)!important}
 #view:has(.chatbar){padding-bottom:300px!important}
 }
@@ -2228,5 +2226,19 @@ setInterval(function(){try{arHome()}catch(e){}},700);
   c.body.push("<b>"+x.h+".</b> "+x.p);c.kp.push(x.k);})});
 },300)})();
 </script>
-</body>
+<style id="fix255">
+html body #player.inl{position:static!important;left:auto!important;right:auto!important;bottom:auto!important;top:auto!important;transform:none!important;width:100%!important;max-width:100%!important;margin:10px 0 2px!important;z-index:auto!important;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:8px 10px!important;border-radius:18px!important}
+html body #player.inl.hidden{display:none!important}
+html body #player.inl .p-grow{flex:1;min-width:0}
+html body #player.inl #pTitle{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body #player.inl #pBar{height:4px!important;border-radius:4px}
+html body #player.inl button{min-width:34px;height:34px}
+</style><script id="js255">(function(){var anchor=null;
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("button,.spk,a,[onclick]");if(!b||b.closest("#player"))return;var t=(b.textContent||"")+(b.getAttribute("onclick")||"");if(/Listen|listen|speak|play|🔊/.test(t))anchor=b},true);
+function place(){var p=document.getElementById("player");if(!p)return;p.classList.add("inl");
+var host=null;if(anchor&&document.body.contains(anchor)){host=anchor.closest(".bubble,.msg,.card,.chat-msg,.xb-chap,.sheet")||anchor.parentElement}
+if(host){if(p.parentNode!==host||host.lastElementChild!==p)host.appendChild(p)}
+else{var v=document.getElementById("view");if(v&&p.parentNode!==v)v.insertBefore(p,v.firstChild)}}
+var iv=setInterval(function(){if(typeof PLAYER!=="undefined"&&!PLAYER.__w255){PLAYER.__w255=1;var o=PLAYER.show;PLAYER.show=function(t){o.call(PLAYER,t);place()};clearInterval(iv)}},400);
+})();</script></body>
 </html>
