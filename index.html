@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.258-20261020-1135';
+var APP_BUILD='v97.259-20261020-1140';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2240,5 +2240,5 @@ var host=null;if(anchor&&document.body.contains(anchor)){host=anchor.closest(".b
 if(host){if(p.parentNode!==host||host.lastElementChild!==p)host.appendChild(p)}
 else{var v=document.getElementById("view");if(v&&p.parentNode!==v)v.insertBefore(p,v.firstChild)}}
 var iv=setInterval(function(){if(typeof PLAYER!=="undefined"&&!PLAYER.__w255){PLAYER.__w255=1;var o=PLAYER.show;PLAYER.show=function(t){o.call(PLAYER,t);if(/^Hello/.test(String(t||""))&&!(window.__lastClick&&Date.now()-window.__lastClick<4000)){var p=document.getElementById("player");if(p){p.classList.add("hidden");p.style.display="none"}return}var q=document.getElementById("player");if(q)q.style.display="";place()};clearInterval(iv)}},400);
-})();</script></body>
+})();</script><script id="welcome259">(function(){function f(){var w=document.getElementById("authWall");if(!w)return;var h=w.querySelector(".aw-card h2"),p=w.querySelector(".aw-card .sub");if(h&&h.textContent!=="Welcome, Arya \uD83D\uDC99"){h.textContent="Welcome, Arya \uD83D\uDC99"}if(p&&p.dataset.w!=="1"){p.dataset.w="1";p.textContent="This is your space. Your lessons, your pace, and Roop right beside you. Sign in once and it remembers you."}}setInterval(f,200)})();</script></body>
 </html>
