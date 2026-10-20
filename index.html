@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.262-20261020-1300';
+var APP_BUILD='v97.263-20261020-1305';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2380,7 +2380,7 @@ setInterval(ui,700);
 if(!window.speechSynthesis||!window.SpeechSynthesis||!window.Audio)return;
 var URL_="https://arya-voice.sonarkatta.workers.dev/tts",KEY="mg_voice_en",CN="mgv1";
 var P=window.SpeechSynthesis.prototype,prev=P.speak,pcancel=P.cancel;
-var q=[],cur=null,down=0,tok=0,active=false,au=new Audio();au.preload="auto";
+var DB=window.__rpDbg=[];function D(x){DB.push(x)}var q=[],cur=null,down=0,tok=0,active=false,au=new Audio();au.preload="auto";
 function cloudOn(){if(window.__rpForce)return true;var s=null;try{s=localStorage.getItem(KEY)}catch(e){}return(!s||s==="sulafat")&&Date.now()>down}
 window.__rpCloud=function(){var s=null;try{s=localStorage.getItem(KEY)}catch(e){}return !s||s==="sulafat"};
 /* unlock audio on first touch (iOS) */
@@ -2401,9 +2401,9 @@ function run(){if(cur||!q.length)return;var u=q.shift();cur=u;var my=++tok;activ
  function fin(ok){if(my!==tok)return;cur=null;active=false;try{if(ok&&u.onend)u.onend({type:"end"})}catch(e){}run()}
  function fallback(){if(my!==tok)return;down=Date.now()+600000;var rest=parts.slice(i).join(" ");cur=null;active=false;if(!rest){try{u.onend&&u.onend({type:"end"})}catch(e){}return run()}
   var n=new SpeechSynthesisUtterance(rest);n.lang=u.lang;n.rate=u.rate;n.pitch=u.pitch;n.volume=u.volume;n.onend=u.onend;n.onerror=u.onerror;prev.call(speechSynthesis,n)}
- try{u.onstart&&u.onstart({type:"start"})}catch(e){}
+ D('start');try{u.onstart&&u.onstart({type:"start"})}catch(e){}
  function next(){if(my!==tok)return;if(i>=parts.length)return fin(true);pre(3);
-  pf[i].then(function(b){if(my!==tok)return;var url=URL.createObjectURL(b);au.onended=function(){URL.revokeObjectURL(url);i++;next()};au.onerror=function(){fallback()};au.src=url;au.volume=u.volume>0?Math.min(1,u.volume):1;var p=au.play();if(p&&p.catch)p.catch(function(){fallback()})}).catch(function(){fallback()})}
+  pf[i].then(function(b){if(my!==tok)return;var url=URL.createObjectURL(b);au.onended=function(){URL.revokeObjectURL(url);i++;next()};au.onerror=function(){fallback()};au.src=url;au.volume=u.volume>0?Math.min(1,u.volume):1;var p=au.play();D('play');if(p&&p.catch)p.catch(function(e){D('rej '+e.name);fallback()});var w=i;setTimeout(function(){if(my===tok&&i===w&&au.currentTime<=0.05&&!au.ended){D('stall');fallback()}},9000)}).catch(function(){fallback()})}
  next()}
 P.speak=function(u){try{if(!/^de/i.test(u.lang||"")&&cloudOn()&&u.text&&u.text.trim()){q.push(u);run();return}}catch(e){}return prev.call(this,u)};
 P.cancel=function(){tok++;q=[];cur=null;active=false;try{au.onended=null;au.onerror=null;au.pause()}catch(e){}return pcancel.call(this)};
