@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.266-20261020-1400';
+var APP_BUILD='v97.267-20261020-1420';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -846,17 +846,24 @@ window.applyUpdate=function(build){
  try{if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations)navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})})}catch(e){}
  setTimeout(function(){location.replace(location.pathname+'?v='+encodeURIComponent(build||Date.now()))},250);
 };
+function busy(){var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA)$/.test(a.tagName)&&a.type!=='button'&&a.type!=='checkbox')return true;try{if(window.speechSynthesis&&speechSynthesis.speaking)return true}catch(e){}return false}
+var _openAt=Date.now();
+function autoApply(b){var n=0;try{if(sessionStorage.getItem('mg_au_b')===b)n=parseInt(sessionStorage.getItem('mg_au_n')||'0',10)}catch(e){}
+ if(n>=2){showBar(b);return}
+ if(busy()&&Date.now()-_openAt>8000){setTimeout(function(){autoApply(b)},15000);return}
+ try{sessionStorage.setItem('mg_au_b',b);sessionStorage.setItem('mg_au_n',String(n+1))}catch(e){}
+ applyUpdate(b)}
 window.updateCheck=function(manual){
  _lastCheck=Date.now();
  return ver().then(function(res){
-  if(res&&res.build&&res.build!==APP_BUILD){showBar(res.build);return res.build}
+  if(res&&res.build&&res.build!==APP_BUILD){if(manual)showBar(res.build);else autoApply(res.build);return res.build}
   if(manual){var n=document.createElement('div');n.style.cssText='position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:#173252;color:#fff;padding:12px 18px;border-radius:14px;font:14px system-ui;z-index:120000;box-shadow:0 4px 24px #0003';n.textContent='You are on the latest build ('+APP_BUILD+')';document.body.appendChild(n);setTimeout(function(){n.remove()},3200)}
   return null;
  });
 };
-setTimeout(function(){updateCheck(false)},4000);
-setInterval(function(){if(document.visibilityState==='visible'&&Date.now()-_lastCheck>CHECK_MS)updateCheck(false)},60000);
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&Date.now()-_lastCheck>CHECK_MS)updateCheck(false)});
+setTimeout(function(){updateCheck(false)},700);
+setInterval(function(){if(document.visibilityState==='visible'&&Date.now()-_lastCheck>3*60*1000)updateCheck(false)},60000);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&Date.now()-_lastCheck>10000)updateCheck(false)});window.addEventListener('pageshow',function(e){if(e.persisted)updateCheck(false)});
 (function _updTile(){
  if(typeof more!=='function'){setTimeout(_updTile,300);return}
  var _m=more;window.more=function(){_m();try{
