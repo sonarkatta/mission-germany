@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.257-20261020-1125';
+var APP_BUILD='v97.258-20261020-1135';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2234,11 +2234,11 @@ html body #player.inl #pTitle{font-size:12px;white-space:nowrap;overflow:hidden;
 html body #player.inl #pBar{height:4px!important;border-radius:4px}
 html body #player.inl button{min-width:34px;height:34px}
 </style><script id="js255">(function(){var anchor=null;
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("button,.spk,a,[onclick]");if(!b||b.closest("#player"))return;var t=(b.textContent||"")+(b.getAttribute("onclick")||"");if(/Listen|listen|speak|play|🔊/.test(t))anchor=b},true);
+document.addEventListener("click",function(e){window.__lastClick=Date.now();var b=e.target.closest&&e.target.closest("button,.spk,a,[onclick]");if(!b||b.closest("#player"))return;var t=(b.textContent||"")+(b.getAttribute("onclick")||"");if(/Listen|listen|speak|play|🔊/.test(t))anchor=b},true);
 function place(){var p=document.getElementById("player");if(!p)return;p.classList.add("inl");
 var host=null;if(anchor&&document.body.contains(anchor)){host=anchor.closest(".bubble,.msg,.card,.chat-msg,.xb-chap,.sheet")||anchor.parentElement}
 if(host){if(p.parentNode!==host||host.lastElementChild!==p)host.appendChild(p)}
 else{var v=document.getElementById("view");if(v&&p.parentNode!==v)v.insertBefore(p,v.firstChild)}}
-var iv=setInterval(function(){if(typeof PLAYER!=="undefined"&&!PLAYER.__w255){PLAYER.__w255=1;var o=PLAYER.show;PLAYER.show=function(t){o.call(PLAYER,t);place()};clearInterval(iv)}},400);
+var iv=setInterval(function(){if(typeof PLAYER!=="undefined"&&!PLAYER.__w255){PLAYER.__w255=1;var o=PLAYER.show;PLAYER.show=function(t){o.call(PLAYER,t);if(/^Hello/.test(String(t||""))&&!(window.__lastClick&&Date.now()-window.__lastClick<4000)){var p=document.getElementById("player");if(p){p.classList.add("hidden");p.style.display="none"}return}var q=document.getElementById("player");if(q)q.style.display="";place()};clearInterval(iv)}},400);
 })();</script></body>
 </html>
