@@ -1,7 +1,7 @@
 {
-  "name": "Mission Germany",
-  "short_name": "Mission",
-  "description": "Arya's prep companion - CFA, German, and the road to Germany.",
+  "name": "Arya",
+  "short_name": "Arya",
+  "description": "Arya's prep companion.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
