@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.256-20261020-1125';
+var APP_BUILD='v97.257-20261020-1125';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2240,17 +2240,5 @@ var host=null;if(anchor&&document.body.contains(anchor)){host=anchor.closest(".b
 if(host){if(p.parentNode!==host||host.lastElementChild!==p)host.appendChild(p)}
 else{var v=document.getElementById("view");if(v&&p.parentNode!==v)v.insertBefore(p,v.firstChild)}}
 var iv=setInterval(function(){if(typeof PLAYER!=="undefined"&&!PLAYER.__w255){PLAYER.__w255=1;var o=PLAYER.show;PLAYER.show=function(t){o.call(PLAYER,t);place()};clearInterval(iv)}},400);
-})();</script><style id="legal255">
-#legalLink{display:block;margin:22px auto 8px;text-align:center;font-size:13px;color:var(--ink,#334);opacity:.75;background:none;border:0;text-decoration:underline;cursor:pointer}
-#legalSheet{position:fixed;inset:0;z-index:200;display:none;overflow:auto;background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(240,244,255,.94));-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
-#legalSheet.on{display:block}
-#legalSheet .lg{max-width:720px;margin:0 auto;padding:28px 22px 80px;color:#1c2333;line-height:1.6;font-size:15px}
-#legalSheet h2{font-size:24px;margin:0 0 4px}#legalSheet h3{font-size:18px;margin:26px 0 8px}#legalSheet p{margin:0 0 10px}
-#legalSheet .lgb{border:0;border-radius:999px;padding:9px 16px;background:rgba(255,255,255,.8);box-shadow:0 2px 10px rgba(60,80,140,.18);font-size:14px;cursor:pointer;margin-bottom:14px}
-</style><script id="legaljs255">(function(){
-var HTML="<h3>Privacy</h3><p>Arya is a private study app. It is built for one learner and one person who looks after the app, and only those two people hold the login. It is not a public service, and nobody else is given access.</p><p>What stays on your device: your progress, streaks, bookmarks, settings and notes are saved in this browser on your own device. You can look at them in Progress and clear them there.</p><p>What we do not do: we do not sell or share your study data, we do not show adverts, and we do not build a profile of you for anyone else.</p><p>Location and safety features are off by default. They run only if Arya switches them on herself, and she can switch them off at any time.</p><p>Sign-in: access is limited to the two approved sign-ins. If you sign in with Google, only the sign-in itself is used to let you in.</p><p>Voice and audio: reading aloud and the voice tutor use sound clips and your browser's speech tools. You choose when audio plays.</p><p>Your choices: you can sign out, clear saved progress, or turn optional features off whenever you like.</p><h3>Terms of use</h3><p>Use of Arya is limited to the two people who hold its login. Please do not share the login or pass the app to anyone else.</p><p>Arya is a study helper. Explanations, worked examples and practice papers are written for learning and revision. They are not official syllabus text or exam papers, and they do not replace your textbooks, your college or your teachers.</p><p>Legal, tax and finance topics are taught for exam understanding only. They are not professional advice for a real situation.</p><p>Exam dates, document lists and application steps change. Always confirm them on the official website before you act.</p><p>The app is provided as it is. Content is checked with care, but mistakes can still happen. If you spot one, tell the person who looks after the app so it can be fixed.</p><p>These terms and the privacy notice may be updated as the app grows. The latest version is always in this page.</p>";
-function sheet(){var s=document.getElementById("legalSheet");if(!s){s=document.createElement("div");s.id="legalSheet";s.innerHTML='<div class="lg"><button class="lgb" type="button">&larr; Back</button><h2>Privacy and Terms</h2>'+HTML+'</div>';document.body.appendChild(s);s.querySelector(".lgb").onclick=function(){s.classList.remove("on")}}return s}
-window.openLegal=function(){var s=sheet();s.classList.add("on");s.scrollTop=0};
-function add(){var v=document.getElementById("view");if(!v||document.getElementById("legalLink"))return;if(!v.querySelector(".more-grid"))return;var b=document.createElement("button");b.id="legalLink";b.type="button";b.textContent="Privacy and Terms";b.onclick=window.openLegal;v.appendChild(b)}
-setInterval(add,700);})();</script></body>
+})();</script></body>
 </html>
