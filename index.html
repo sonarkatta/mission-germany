@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.261-20261020-1245';
+var APP_BUILD='v97.262-20261020-1300';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2375,6 +2375,48 @@ function ui(){var v=document.getElementById("view");if(!v)return;
  var chips=v.querySelectorAll(".chip");chips.forEach(function(c){if(/Ask by voice/.test(c.textContent)&&!document.getElementById("vpChip")){var b=document.createElement("button");b.id="vpChip";b.className="chip";b.type="button";b.style.border="none";b.textContent="\uD83C\uDF99 Roop\u2019s voice";b.onclick=sheet;c.parentNode.appendChild(b)}});
  if(v.querySelector(".more-grid")&&!document.getElementById("vpLink")){var a=document.createElement("button");a.id="vpLink";a.type="button";a.textContent="Roop\u2019s voice";a.onclick=sheet;v.appendChild(a)}}
 setInterval(ui,700);
+})();
+</script><script id="voicejs262">(function(){
+if(!window.speechSynthesis||!window.SpeechSynthesis||!window.Audio)return;
+var URL_="https://arya-voice.sonarkatta.workers.dev/tts",KEY="mg_voice_en",CN="mgv1";
+var P=window.SpeechSynthesis.prototype,prev=P.speak,pcancel=P.cancel;
+var q=[],cur=null,down=0,tok=0,active=false,au=new Audio();au.preload="auto";
+function cloudOn(){if(window.__rpForce)return true;var s=null;try{s=localStorage.getItem(KEY)}catch(e){}return(!s||s==="sulafat")&&Date.now()>down}
+window.__rpCloud=function(){var s=null;try{s=localStorage.getItem(KEY)}catch(e){}return !s||s==="sulafat"};
+/* unlock audio on first touch (iOS) */
+var SIL="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+function unlock(){try{au.src=SIL;var p=au.play();if(p&&p.catch)p.catch(function(){})}catch(e){}["touchend","click"].forEach(function(n){document.removeEventListener(n,unlock,true)})}
+["touchend","click"].forEach(function(n){document.addEventListener(n,unlock,true)});
+function split(t){t=String(t||"").replace(/\s+/g," ").trim();var out=[],s=t.match(/[^.!?]+[.!?]*\s*/g)||[t],b="";
+ s.forEach(function(x){if((b+x).length>320&&b){out.push(b.trim());b=x}else b+=x;while(b.length>600){out.push(b.slice(0,600));b=b.slice(600)}});if(b.trim())out.push(b.trim());return out}
+async function hash(t){var d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("S|"+t));return Array.from(new Uint8Array(d)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")}
+async function getBlob(t){var h=await hash(t),rq=new Request("https://mgv.local/"+h),c=null;
+ try{c=await caches.open(CN);var m=await c.match(rq);if(m)return await m.blob()}catch(e){}
+ var ctl=new AbortController(),to=setTimeout(function(){ctl.abort()},45000);
+ var r=await fetch(URL_,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:t}),signal:ctl.signal});clearTimeout(to);
+ if(!r.ok)throw new Error("tts "+r.status);var b=await r.blob();try{if(c)await c.put(rq,new Response(b.slice(0),{headers:{"Content-Type":"audio/wav"}}))}catch(e){}return b}
+function run(){if(cur||!q.length)return;var u=q.shift();cur=u;var my=++tok;active=true;
+ var parts=split(u.text),pf=[],i=0;
+ function pre(n){for(var k=0;k<n;k++){var j=i+k;if(j<parts.length&&!pf[j]){(function(jj){pf[jj]=getBlob(parts[jj]);pf[jj].catch(function(){})})(j)}}}
+ function fin(ok){if(my!==tok)return;cur=null;active=false;try{if(ok&&u.onend)u.onend({type:"end"})}catch(e){}run()}
+ function fallback(){if(my!==tok)return;down=Date.now()+600000;var rest=parts.slice(i).join(" ");cur=null;active=false;if(!rest){try{u.onend&&u.onend({type:"end"})}catch(e){}return run()}
+  var n=new SpeechSynthesisUtterance(rest);n.lang=u.lang;n.rate=u.rate;n.pitch=u.pitch;n.volume=u.volume;n.onend=u.onend;n.onerror=u.onerror;prev.call(speechSynthesis,n)}
+ try{u.onstart&&u.onstart({type:"start"})}catch(e){}
+ function next(){if(my!==tok)return;if(i>=parts.length)return fin(true);pre(3);
+  pf[i].then(function(b){if(my!==tok)return;var url=URL.createObjectURL(b);au.onended=function(){URL.revokeObjectURL(url);i++;next()};au.onerror=function(){fallback()};au.src=url;au.volume=u.volume>0?Math.min(1,u.volume):1;var p=au.play();if(p&&p.catch)p.catch(function(){fallback()})}).catch(function(){fallback()})}
+ next()}
+P.speak=function(u){try{if(!/^de/i.test(u.lang||"")&&cloudOn()&&u.text&&u.text.trim()){q.push(u);run();return}}catch(e){}return prev.call(this,u)};
+P.cancel=function(){tok++;q=[];cur=null;active=false;try{au.onended=null;au.onerror=null;au.pause()}catch(e){}return pcancel.call(this)};
+try{var sd=Object.getOwnPropertyDescriptor(P,"speaking");if(sd&&sd.get){Object.defineProperty(P,"speaking",{configurable:true,get:function(){return active||sd.get.call(this)}})}}catch(e){}
+/* picker row */
+function addRow(){var s=document.getElementById("vpSheet");if(!s||!s.classList.contains("on")||s.querySelector(".vpsul"))return;var c=s.querySelector(".vpc");if(!c)return;
+ var on=window.__rpCloud();s.querySelectorAll(".vpr").forEach(function(r){if(on){r.classList.remove("on");var sp=r.querySelector(".vpn span");if(sp)sp.textContent=sp.textContent.replace(" \u00b7 In use","");var b=r.querySelector(".vpu");if(b)b.textContent="Use"}});
+ var d=document.createElement("div");d.className="vpr vpsul"+(on?" on":"");d.innerHTML='<div class="vpn"><b>Roop (lady voice)</b><span>Natural \u00b7 needs internet'+(on?" \u00b7 In use":"")+'</span></div><button class="vpp" type="button">Preview</button><button class="vpu" type="button">'+(on?"Selected":"Use")+'</button>';
+ var h=c.querySelector(".vph");(h&&h.nextSibling)?c.insertBefore(d,h.nextSibling):c.appendChild(d);
+ d.querySelector(".vpp").onclick=function(){try{speechSynthesis.cancel()}catch(e){}down=0;var t=new SpeechSynthesisUtterance("Hi Arya, I'm Roop. This is how I will sound when I explain your lessons.");t.lang="en-US";window.__rpForce=true;speechSynthesis.speak(t);window.__rpForce=false};
+ d.querySelector(".vpu").onclick=function(){try{localStorage.setItem(KEY,"sulafat")}catch(e){}down=0;try{s.querySelector(".vpsul").remove()}catch(e){}addRow2()}}
+function addRow2(){var s=document.getElementById("vpSheet");if(s){s.querySelectorAll(".vpsul").forEach(function(x){x.remove()});addRow()}}
+setInterval(addRow,500);
 })();
 </script></body>
 </html>
