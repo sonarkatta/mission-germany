@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.273-20261020-2225';
+var APP_BUILD='v97.274-20261021-0600';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2492,7 +2492,20 @@ function deco(){var k=cur();if(!k){pushedFor=null;return}
 setInterval(deco,400);
 window.addEventListener("popstate",function(){var k=cur();if(!k)return;try{history.pushState({mgx:1},"")}catch(e){}if(document.getElementById("mgxM"))close();else open(k)});
 })();
-</script><script id="boot273">(function(){
+</script><script id="exitfix274">(function(){
+if(window.__mgxFix)return;
+var gb=window.goBack;if(typeof gb!=="function"||typeof window.mgExit!=="function")return;window.__mgxFix=1;
+function inEx(){return !!(document.getElementById("bcxBar")||document.querySelector("#view .exam-top"))}
+window.addEventListener("popstate",function(e){
+ if(!inEx())return;
+ e.stopImmediatePropagation();
+ try{history.pushState({mgx:1},"")}catch(x){}
+ if(!document.getElementById("mgxM"))try{window.mgExit()}catch(x){}
+},true);
+window.goBack=function(){
+ if(inEx()){var m=document.getElementById("mgxM");if(!m)try{window.mgExit()}catch(x){}return}
+ return gb.apply(this,arguments)};
+})();</script><script id="boot273">(function(){
 function vis(e){if(!e||!(e.offsetHeight>0))return false;var c=getComputedStyle(e);return c.display!=="none"&&c.visibility!=="hidden"&&parseFloat(c.opacity)!==0}
 function usable(){var w=document.getElementById("authWall"),v=document.getElementById("view");return !!(vis(w)||(vis(v)&&v.innerText&&v.innerText.trim().length>0))}
 function card(){return document.getElementById("boot273")}
