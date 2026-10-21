@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.280-20261021-2316';
+var APP_BUILD='v97.281-20261021-2330';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2518,27 +2518,64 @@ var bad=0;function check(){if(usable()){bad=0;var c=card();if(c)c.remove();retur
 function arm(){var D=window.__bootGuardMs||15000;setTimeout(function(){check();setInterval(check,2000)},D)}
 if(document.readyState==="complete")arm();else addEventListener("load",arm,{once:true});
 })();
-</script><script id="voicejs279">(function(){
-function note(t){var e=document.getElementById("mgvT");if(!e){e=document.createElement("div");e.id="mgvT";e.style.cssText="position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#173252;color:#fff;padding:12px 18px;border-radius:14px;font:14px system-ui;z-index:125000;box-shadow:0 4px 24px #0003;max-width:86%;text-align:center";document.body.appendChild(e)}e.textContent=t;clearTimeout(e._t);e._t=setTimeout(function(){e.remove()},4500)}
+</script><script id="voicejs281">(function(){
+function note(t){var e=document.getElementById("mgvT");if(!e){e=document.createElement("div");e.id="mgvT";e.style.cssText="position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#173252;color:#fff;padding:10px 16px;border-radius:14px;font:14px system-ui;z-index:125000;box-shadow:0 4px 24px #0003;max-width:86%;text-align:center";document.body.appendChild(e)}e.textContent=t;clearTimeout(e._t);e._t=setTimeout(function(){e.remove()},4500)}
 var HOLD={"bba-vec-5":1,"bba-acc2-1":1,"bba-tax-15":1,"l2-econ-1":1};
 var MODMSG="This module's recording is not available. The full notes are here, and Roop can explain anything in chat.";
-function arm(){var a=false,b=false;
- if(typeof xbListen==="function"&&!xbListen.__v276){var ox=xbListen;xbListen=function(mid){if(HOLD[mid]){note("This chapter's recording is not available. The full chapter is here to read, and Roop can explain it in chat.");return}return ox.apply(this,arguments)};xbListen.__v276=1;a=true}else if(typeof xbListen==="function")a=true;
- var PILOT_OK={"ethics-2":1};
-if(typeof listenModule==="function"&&!listenModule.__v279){listenModule=function(mid,tid){var k="cfa-"+mid;
-   if(!PILOT_OK[mid]){note(MODMSG);return}
-   var f=(typeof AUDIO_MANIFEST!=="undefined"&&AUDIO_MANIFEST[k])?AUDIO_MANIFEST[k]:(k+".mp3");
-   var p=(typeof PACK_OF!=="undefined")?PACK_OF[f]:null;
-   if(f&&p&&typeof PLAYER!=="undefined"&&PLAYER&&typeof PLAYER.start==="function"){
-     var go279=function(){if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){try{if(window.MG_WEB_AUDIO)MG_WEB_AUDIO.unlock()}catch(e){}PLAYER.start("cfamod-"+mid,[f],(typeof _autoTitle==="function"?_autoTitle([f]):"CFA Level I"),function(){note(MODMSG)})}else note(MODMSG)};
-     if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){go279()}
-     else if(typeof loadPack==="function"){try{Promise.all([loadPack(p)]).then(go279,function(){note(MODMSG)})}catch(e){note(MODMSG)}}
-     else{note(MODMSG)}}
-   else{note(MODMSG)}};listenModule.__v279=1;listenModule.__v278=1;b=true}else if(typeof listenModule==="function")b=true;
- return a&&b}
+var CHAPMSG="This chapter's recording is not available. The full chapter is here to read, and Roop can explain it in chat.";
+var GERMSG="This German recording is not available yet. The text is here to read, and Roop can explain it in chat.";
+var PILOT_OK={"ethics-2":1,"ethics-3":1,"ethics-4":1,"ethics-5":1};
+/* read-along: same machinery as the chapter reader - paragraph granularity, char-share of the narration, approximate */
+function norm(s){return String(s||"").replace(/\s+/g," ").trim()}
+function css281(){if(document.getElementById("mgFollowCss"))return;var css=document.createElement("style");css.id="mgFollowCss";css.textContent=".mgFollow::before{content:'Following along (approximate)';display:block;font:600 11px system-ui;color:#2f6bff;margin:0 0 4px}.mgFollow{background:rgba(47,107,255,.12)!important;border-radius:10px;box-shadow:0 0 0 6px rgba(47,107,255,.12);transition:background .2s,box-shadow .2s}";document.head.appendChild(css)}
+var FOL=null;
+function stopFollow(){if(FOL&&FOL.t)clearInterval(FOL.t);FOL=null;try{document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow")})}catch(e){}}
+function startFollow(mid){stopFollow();css281();
+ var box=document.querySelector("#m-"+mid+" .module-body");if(!box)return;
+ var ps=[].slice.call(box.querySelectorAll("p"));if(!ps.length)return;
+ var kp=box.querySelector(".keypoint");
+ var items=ps.map(function(p){return{el:p,t:norm(p.textContent)}});
+ if(kp)items.push({el:kp,t:norm(kp.textContent).replace(/^\uD83D\uDCA1\s*/,"")});
+ /* narration layout: title + ". " + paragraphs joined by space + " Key point. " + key */
+ var headEl=document.querySelector("#m-"+mid+" .mh")||document.querySelector("#m-"+mid+" h3")||document.querySelector("#m-"+mid+" .module-head");
+ var head=headEl?norm(headEl.textContent).length+2:60;
+ var total=head;items.forEach(function(it){total+=it.t.length+1});
+ var cum=[],a=head;
+ items.forEach(function(it){cum.push([a/total,(a+it.t.length)/total]);a+=it.t.length+1});
+ var st={idx:-1};
+ FOL={t:setInterval(function(){
+   var a2=(typeof PLAYER!=="undefined"&&PLAYER)?PLAYER.a:null;
+   if(!a2||a2.ended||!document.contains(items[0].el)){stopFollow();return}
+   if(a2.paused||!isFinite(a2.duration)||a2.duration<=0)return;
+   var f=a2.currentTime/a2.duration,idx=-1;
+   for(var i=0;i<cum.length;i++){if(f>=cum[i][0]&&f<cum[i][1]){idx=i;break}}
+   if(idx<0&&f>=cum[cum.length-1][1])idx=cum.length-1;
+   if(idx===st.idx)return;st.idx=idx;
+   document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow")});
+   if(idx<0)return;items[idx].el.classList.add("mgFollow");
+ },300)}}
+function playModule(mid){var k="cfa-"+mid;
+ var f=(typeof AUDIO_MANIFEST!=="undefined"&&AUDIO_MANIFEST[k])?AUDIO_MANIFEST[k]:(k+".mp3");
+ var p=(typeof PACK_OF!=="undefined")?PACK_OF[f]:null;
+ if(!f||!p||typeof PLAYER==="undefined"||!PLAYER||typeof PLAYER.start!=="function"){note(MODMSG);return}
+ var go=function(){if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){
+   try{if(window.MG_WEB_AUDIO)MG_WEB_AUDIO.unlock()}catch(e){}
+   PLAYER.start("cfamod-"+mid,[f],"CFA Level I - Ethics",function(){note(MODMSG);stopFollow()});
+   startFollow(mid);
+  }else{note(MODMSG)}};
+ if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){go()}
+ else if(typeof loadPack==="function"){try{Promise.all([loadPack(p)]).then(go,function(){note(MODMSG)})}catch(e){note(MODMSG)}}
+ else{note(MODMSG)}}
+function arm(){var a=false,b=false,c=false,d=false;
+ if(typeof xbListen==="function"&&!xbListen.__v276){var ox=xbListen;xbListen=function(mid){if(HOLD[mid]){note(CHAPMSG);return}return ox.apply(this,arguments)};xbListen.__v276=1;a=true}else if(typeof xbListen==="function")a=true;
+ if(typeof listenModule==="function"&&!listenModule.__v281){listenModule=function(mid,tid){if(!PILOT_OK[mid]){note(MODMSG);return}playModule(mid)};listenModule.__v281=1;listenModule.__v279=1;listenModule.__v278=1;b=true}else if(typeof listenModule==="function")b=true;
+ if(typeof listenModuleTTS==="function"&&!listenModuleTTS.__v281){listenModuleTTS=function(mid,tid,idx){if(!PILOT_OK[mid]){note(MODMSG);return}playModule(mid)};listenModuleTTS.__v281=1;c=true}else if(typeof listenModuleTTS==="function")c=true;
+ if(typeof SpeechSynthesis!=="undefined"&&!SpeechSynthesis.prototype.speak.__v281){var osp=SpeechSynthesis.prototype.speak;SpeechSynthesis.prototype.speak=function(u){try{if(u&&/^de/i.test(u.lang||"")){note(GERMSG);return}}catch(e){}return osp.apply(this,arguments)};SpeechSynthesis.prototype.speak.__v281=1;d=true}else if(typeof SpeechSynthesis!=="undefined")d=true;
+ return a&&b&&c&&d}
 setInterval(arm,400);arm();
 })();
 </script>
+
 
 
 </body>
