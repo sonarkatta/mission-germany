@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.285-20261022-0013';
+var APP_BUILD='v97.286-20261022-0018';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2524,7 +2524,7 @@ var HOLD={"bba-vec-5":1,"bba-acc2-1":1,"bba-tax-15":1,"l2-econ-1":1};
 var MODMSG="This module's recording is not available. The full notes are here, and Roop can explain anything in chat.";
 var CHAPMSG="This chapter's recording is not available. The full chapter is here to read, and Roop can explain it in chat.";
 var GERMSG="This German recording is not available yet. The text is here to read, and Roop can explain it in chat.";
-var PILOT_OK={"ethics-2":1,"ethics-3":1,"ethics-4":1,"ethics-5":1,"ethics-6":1,"ethics-7":1,"ethics-8":1,"ethics-9":1,"ethics-10":1,"quant-1":1,"quant-2":1,"quant-3":1,"quant-4":1,"quant-5":1,"quant-6":1,"quant-7":1,"quant-8":1,"quant-9":1,"quant-10":1,"quant-11":1,"econ-1":1};
+var PILOT_OK={"ethics-2":1,"ethics-3":1,"ethics-4":1,"ethics-5":1,"ethics-6":1,"ethics-7":1,"ethics-8":1,"ethics-9":1,"ethics-10":1,"quant-1":1,"quant-2":1,"quant-3":1,"quant-4":1,"quant-5":1,"quant-6":1,"quant-7":1,"quant-8":1,"quant-9":1,"quant-10":1,"quant-11":1,"econ-1":1,"econ-2":1,"econ-3":1};
 var _lastUserScroll=0;try{["pointerdown","touchstart","wheel"].forEach(function(ev){document.addEventListener(ev,function(){_lastUserScroll=Date.now()},{passive:true,capture:true})})}catch(e){}
 /* read-along: same machinery as the chapter reader - paragraph granularity, char-share of the narration, approximate */
 function norm(s){return String(s||"").replace(/\s+/g," ").trim()}
