@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.278-20261021-2210';
+var APP_BUILD='v97.280-20261021-2316';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2518,20 +2518,28 @@ var bad=0;function check(){if(usable()){bad=0;var c=card();if(c)c.remove();retur
 function arm(){var D=window.__bootGuardMs||15000;setTimeout(function(){check();setInterval(check,2000)},D)}
 if(document.readyState==="complete")arm();else addEventListener("load",arm,{once:true});
 })();
-</script><script id="voicejs278">(function(){
+</script><script id="voicejs279">(function(){
 function note(t){var e=document.getElementById("mgvT");if(!e){e=document.createElement("div");e.id="mgvT";e.style.cssText="position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#173252;color:#fff;padding:12px 18px;border-radius:14px;font:14px system-ui;z-index:125000;box-shadow:0 4px 24px #0003;max-width:86%;text-align:center";document.body.appendChild(e)}e.textContent=t;clearTimeout(e._t);e._t=setTimeout(function(){e.remove()},4500)}
 var HOLD={"bba-vec-5":1,"bba-acc2-1":1,"bba-tax-15":1,"l2-econ-1":1};
-var MODCLIPS={"cfa-ethics-1":"cfa-ethics-1.mp3","cfa-ethics-2":"cfa-ethics-2.mp3","cfa-ethics-3":"cfa-ethics-3.mp3","cfa-ethics-4":"cfa-ethics-4.mp3","cfa-ethics-5":"cfa-ethics-5.mp3","cfa-ethics-6":"cfa-ethics-6.mp3","cfa-ethics-7":"cfa-ethics-7.mp3","cfa-ethics-8":"cfa-ethics-8.mp3","cfa-ethics-9":"cfa-ethics-9.mp3","cfa-ethics-10":"cfa-ethics-10.mp3","cfa-quant-1":"cfa-quant-1.mp3","cfa-quant-2":"cfa-quant-2.mp3","cfa-quant-3":"cfa-quant-3.mp3","cfa-quant-4":"cfa-quant-4.mp3","cfa-quant-5":"cfa-quant-5.mp3","cfa-quant-6":"cfa-quant-6.mp3","cfa-quant-7":"cfa-quant-7.mp3","cfa-quant-8":"cfa-quant-8.mp3","cfa-quant-9":"cfa-quant-9.mp3","cfa-quant-10":"cfa-quant-10.mp3","cfa-quant-11":"cfa-quant-11.mp3","cfa-econ-1":"cfa-econ-1.mp3","cfa-econ-2":"cfa-econ-2.mp3","cfa-econ-3":"cfa-econ-3.mp3","cfa-econ-4":"cfa-econ-4.mp3","cfa-econ-5":"cfa-econ-5.mp3","cfa-econ-6":"cfa-econ-6.mp3","cfa-econ-7":"cfa-econ-7.mp3","cfa-econ-8":"cfa-econ-8.mp3","cfa-fsa-1":"cfa-fsa-1.mp3","cfa-fsa-2":"cfa-fsa-2.mp3","cfa-fsa-3":"cfa-fsa-3.mp3","cfa-fsa-4":"cfa-fsa-4.mp3","cfa-fsa-5":"cfa-fsa-5.mp3","cfa-fsa-6":"cfa-fsa-6.mp3","cfa-fsa-7":"cfa-fsa-7.mp3","cfa-fsa-8":"cfa-fsa-8.mp3","cfa-fsa-9":"cfa-fsa-9.mp3","cfa-fsa-10":"cfa-fsa-10.mp3","cfa-fsa-11":"cfa-fsa-11.mp3","cfa-fsa-12":"cfa-fsa-12.mp3","cfa-corp-1":"cfa-corp-1.mp3","cfa-corp-2":"cfa-corp-2.mp3","cfa-corp-3":"cfa-corp-3.mp3","cfa-corp-4":"cfa-corp-4.mp3","cfa-corp-5":"cfa-corp-5.mp3","cfa-corp-6":"cfa-corp-6.mp3","cfa-corp-7":"cfa-corp-7.mp3","cfa-equity-1":"cfa-equity-1.mp3","cfa-equity-2":"cfa-equity-2.mp3","cfa-equity-3":"cfa-equity-3.mp3","cfa-equity-4":"cfa-equity-4.mp3","cfa-equity-5":"cfa-equity-5.mp3","cfa-equity-6":"cfa-equity-6.mp3","cfa-equity-7":"cfa-equity-7.mp3","cfa-equity-8":"cfa-equity-8.mp3","cfa-equity-9":"cfa-equity-9.mp3","cfa-equity-10":"cfa-equity-10.mp3","cfa-equity-11":"cfa-equity-11.mp3","cfa-equity-12":"cfa-equity-12.mp3","cfa-pm-1":"cfa-pm-1.mp3","cfa-pm-2":"cfa-pm-2.mp3","cfa-pm-3":"cfa-pm-3.mp3","cfa-pm-4":"cfa-pm-4.mp3","cfa-pm-5":"cfa-pm-5.mp3","cfa-pm-6":"cfa-pm-6.mp3"};
 var MODMSG="This module's recording is not available. The full notes are here, and Roop can explain anything in chat.";
 function arm(){var a=false,b=false;
  if(typeof xbListen==="function"&&!xbListen.__v276){var ox=xbListen;xbListen=function(mid){if(HOLD[mid]){note("This chapter's recording is not available. The full chapter is here to read, and Roop can explain it in chat.");return}return ox.apply(this,arguments)};xbListen.__v276=1;a=true}else if(typeof xbListen==="function")a=true;
- if(window.AUDIO_MANIFEST){for(var k in MODCLIPS){if(!AUDIO_MANIFEST[k])AUDIO_MANIFEST[k]=MODCLIPS[k]}}
- if(typeof listenModule==="function"&&!listenModule.__v278){listenModule=function(mid,tid){var k="cfa-"+mid;
-   if(window.AUDIO_MANIFEST&&AUDIO_MANIFEST[k]&&window.PACK_OF&&PACK_OF[AUDIO_MANIFEST[k]]&&typeof playClips==="function"){playClips([k],function(){note(MODMSG)})}
-   else{note(MODMSG)}};listenModule.__v278=1;b=true}else if(typeof listenModule==="function")b=true;
+ var PILOT_OK={"ethics-2":1};
+if(typeof listenModule==="function"&&!listenModule.__v279){listenModule=function(mid,tid){var k="cfa-"+mid;
+   if(!PILOT_OK[mid]){note(MODMSG);return}
+   var f=(typeof AUDIO_MANIFEST!=="undefined"&&AUDIO_MANIFEST[k])?AUDIO_MANIFEST[k]:(k+".mp3");
+   var p=(typeof PACK_OF!=="undefined")?PACK_OF[f]:null;
+   if(f&&p&&typeof PLAYER!=="undefined"&&PLAYER&&typeof PLAYER.start==="function"){
+     var go279=function(){if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){try{if(window.MG_WEB_AUDIO)MG_WEB_AUDIO.unlock()}catch(e){}PLAYER.start("cfamod-"+mid,[f],(typeof _autoTitle==="function"?_autoTitle([f]):"CFA Level I"),function(){note(MODMSG)})}else note(MODMSG)};
+     if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){go279()}
+     else if(typeof loadPack==="function"){try{Promise.all([loadPack(p)]).then(go279,function(){note(MODMSG)})}catch(e){note(MODMSG)}}
+     else{note(MODMSG)}}
+   else{note(MODMSG)}};listenModule.__v279=1;listenModule.__v278=1;b=true}else if(typeof listenModule==="function")b=true;
  return a&&b}
 setInterval(arm,400);arm();
 })();
 </script>
+
+
 </body>
 </html>
