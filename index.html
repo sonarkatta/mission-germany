@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.275-20261021-0615';
+var APP_BUILD='v97.276-20261021-2115';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2518,5 +2518,15 @@ var bad=0;function check(){if(usable()){bad=0;var c=card();if(c)c.remove();retur
 function arm(){var D=window.__bootGuardMs||15000;setTimeout(function(){check();setInterval(check,2000)},D)}
 if(document.readyState==="complete")arm();else addEventListener("load",arm,{once:true});
 })();
-</script></body>
+</script><script id="voicejs276">(function(){
+function note(t){var e=document.getElementById("mgvT");if(!e){e=document.createElement("div");e.id="mgvT";e.style.cssText="position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#173252;color:#fff;padding:12px 18px;border-radius:14px;font:14px system-ui;z-index:125000;box-shadow:0 4px 24px #0003;max-width:86%;text-align:center";document.body.appendChild(e)}e.textContent=t;clearTimeout(e._t);e._t=setTimeout(function(){e.remove()},4500)}
+var HOLD={"bba-vec-5":1,"bba-acc2-1":1,"bba-tax-15":1,"l2-econ-1":1};
+function arm(){var a=false,b=false;
+ if(typeof xbListen==="function"&&!xbListen.__v276){var ox=xbListen;xbListen=function(mid){if(HOLD[mid]){note("This chapter's recording is not available. The full chapter is here to read, and Roop can explain it in chat.");return}return ox.apply(this,arguments)};xbListen.__v276=1;a=true}else if(typeof xbListen==="function")a=true;
+ if(typeof listenModule==="function"&&!listenModule.__v276){listenModule=function(mid,tid){note("This module's recording is not available yet. The full notes are here, and Roop can explain anything in chat.")};listenModule.__v276=1;b=true}else if(typeof listenModule==="function")b=true;
+ return a&&b}
+var iv=setInterval(function(){if(arm())clearInterval(iv)},400);setTimeout(function(){clearInterval(iv)},30000);arm();
+})();
+</script>
+</body>
 </html>
