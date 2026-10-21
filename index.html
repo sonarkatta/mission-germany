@@ -827,7 +827,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.290-20261022-0052';
+var APP_BUILD='v97.291-20261022-0055';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2367,8 +2367,8 @@ P.speak=function(u){try{var de=/^de/i.test(u.lang||"");var v=de?pick("de",KEYD):
 /* stop old clips for Roop, tutor and CFA listen: speak live with the chosen voice instead */
 var RE=/^(qa-|tut-|roop|greet-|welcome-|fare-|cfa-)/;
 function wrap(){var ok=true;
- if(typeof playClips==="function"&&!playClips.__w261){var o=playClips;playClips=function(keys,fb){if(keys&&keys.length&&keys.every(function(k){return RE.test(k)})){if(typeof fb==="function")fb();return}return o.apply(this,arguments)};playClips.__w261=1}else if(typeof playClips!=="function")ok=false;
- if(typeof PLAYER!=="undefined"&&PLAYER&&!PLAYER.__s261){var s=PLAYER.start;PLAYER.start=function(key,keys,title,fb){if(RE.test(String(key||""))){if(typeof fb==="function")fb();return}return s.apply(this,arguments)};PLAYER.__s261=1}else if(typeof PLAYER==="undefined")ok=false;
+ if(typeof playClips==="function"&&!playClips.__w261){var o=playClips;playClips=function(keys,fb){if(keys&&keys.length&&keys.every(function(k){return window.__mgBlockOld?window.__mgBlockOld(k):RE.test(k)})){if(typeof fb==="function")fb();return}return o.apply(this,arguments)};playClips.__w261=1}else if(typeof playClips!=="function")ok=false;
+ if(typeof PLAYER!=="undefined"&&PLAYER&&!PLAYER.__s261){var s=PLAYER.start;PLAYER.start=function(key,keys,title,fb){if(window.__mgBlockOld?window.__mgBlockOld(String(key||"")):RE.test(String(key||""))){if(typeof fb==="function")fb();return}return s.apply(this,arguments)};PLAYER.__s261=1}else if(typeof PLAYER==="undefined")ok=false;
  return ok}
 var iv=setInterval(function(){if(wrap())clearInterval(iv)},400);
 /* picker */
@@ -2525,6 +2525,7 @@ var MODMSG="This module's recording is not available. The full notes are here, a
 var CHAPMSG="This chapter's recording is not available. The full chapter is here to read, and Roop can explain it in chat.";
 var GERMSG="This German recording is not available yet. The text is here to read, and Roop can explain it in chat.";
 var MG_READY={"a1u1-ls1.mp3":1,"a1u1-ls2.mp3":1,"a1u1-ls3.mp3":1,"a1u1-ls4.mp3":1,"a1u1-ls5.mp3":1,"a1u1-ls6.mp3":1,"a1u1-ls7.mp3":1,"a1u1-v01.mp3":1,"a1u1-v02.mp3":1,"a1u1-v03.mp3":1,"a1u1-v04.mp3":1,"a1u1-v05.mp3":1,"a1u1-v06.mp3":1,"a1u1-v07.mp3":1,"a1u1-v08.mp3":1,"a1u1-v09.mp3":1,"a1u1-v10.mp3":1,"a1u1-v11.mp3":1,"a1u1-v12.mp3":1,"a1u1-x01.mp3":1,"a1u1-x02.mp3":1,"a1u1-x03.mp3":1,"a1u1-x04.mp3":1,"a1u1-x05.mp3":1,"a1u1-x06.mp3":1,"a1u1-x07.mp3":1,"a1u1-x08.mp3":1,"a1u1-x10.mp3":1,"a1u1-x11.mp3":1,"de-a1-basics-1.mp3":1,"de-a1-basics-2-ex.mp3":1,"de-a1-basics-2.mp3":1,"de-a1-basics-3.mp3":1,"de-a1-basics-4.mp3":1,"de-a1-basics-5-ex.mp3":1,"de-a1-basics-5.mp3":1,"de-a1-basics-6.mp3":1,"fare-day.mp3":1,"fare-night.mp3":1,"greet-afternoon-de.mp3":1,"greet-afternoon-en.mp3":1,"greet-evening-de.mp3":1,"greet-evening-en.mp3":1,"greet-morning-de.mp3":1,"greet-morning-en.mp3":1,"greet-night-de.mp3":1,"greet-night-en.mp3":1,"tut-chip-1.mp3":1,"tut-chip-2.mp3":1,"tut-chip-3.mp3":1,"tut-limit.mp3":1,"tut-offline.mp3":1,"welcome-de.mp3":1,"welcome-en.mp3":1};
+window.__mgBlockOld=function(k){try{var f=(window.AUDIO_MANIFEST&&AUDIO_MANIFEST[k])||(k+".mp3");return !MG_READY[f]}catch(e){return true}};
 var MG_GERRE=/^(a1u|a2u|b1u|b2u|c1u|dlg-|gq-|de-|alphabet-|greet-\w+-de|welcome-de|fare-)/;
 var MG_TUTRE=/^(tut-offline|tut-limit|tut-chip-|tut-greet|greet-\w+-en|welcome-en)/;
 var GENMSG="This voice message is being re-recorded with the new voice. It will be back soon.";
