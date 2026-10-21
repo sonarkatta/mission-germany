@@ -2523,7 +2523,7 @@ function note(t){var e=document.getElementById("mgvT");if(!e){e=document.createE
 var HOLD={"bba-vec-5":1,"bba-acc2-1":1,"bba-tax-15":1,"l2-econ-1":1};
 function arm(){var a=false,b=false;
  if(typeof xbListen==="function"&&!xbListen.__v276){var ox=xbListen;xbListen=function(mid){if(HOLD[mid]){note("This chapter's recording is not available. The full chapter is here to read, and Roop can explain it in chat.");return}return ox.apply(this,arguments)};xbListen.__v276=1;a=true}else if(typeof xbListen==="function")a=true;
- if(typeof listenModule==="function"&&!listenModule.__v276){listenModule=function(mid,tid){note("This module's recording is not available yet. The full notes are here, and Roop can explain anything in chat.")};listenModule.__v276=1;b=true}else if(typeof listenModule==="function")b=true;
+ if(typeof listenModule==="function"&&!listenModule.__v276){listenModule=function(mid,tid){note("This module's recording is not available. The full notes are here, and Roop can explain anything in chat.")};listenModule.__v276=1;b=true}else if(typeof listenModule==="function")b=true;
  return a&&b}
 var iv=setInterval(function(){if(arm())clearInterval(iv)},400);setTimeout(function(){clearInterval(iv)},30000);arm();
 })();
