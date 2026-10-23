@@ -541,10 +541,22 @@ var __v9715t=setInterval(function(){
    _tw.__roop=true;tutorCloud=_tw;
   }
  }
+ window.__applyV9723=applyV9723;
  var _settled=function(){return typeof tutorCloud==="function"&&typeof speakEn==="function"&&(""+speakEn).indexOf("audioRetry")>-1};
  var _cap=setTimeout(function(){clearInterval(_iv);applyV9723()},4000);
  var _iv=setInterval(function(){if(_settled()){clearInterval(_iv);clearTimeout(_cap);applyV9723()}},200);
  setTimeout(function(){if((typeof speakEn==="function"&&(""+speakEn).indexOf("audioRetry")>-1)||(typeof tutorCloud==="function"&&!tutorCloud.__roop))applyV9723()},9000);
+})();
+</script><script id="voicejs263">(function(){
+/* v97.23 restores TTS at boot, but the core pack evaluates at UNLOCK and re-stomps speakEn +
+   speechSynthesis.speak with legacy audioRetry stubs, killing Roop's voice route (race).
+   Re-apply after unlock; finite backstop. Idempotent: acts only on the stale stub signature. */
+function stale(){try{return (typeof speakEn==="function"&&(""+speakEn).indexOf("audioRetry")>-1)||("speechSynthesis"in window&&Object.prototype.hasOwnProperty.call(speechSynthesis,"speak")&&(""+speechSynthesis.speak).indexOf("audioRetry")>-1)}catch(e){return false}}
+function fix(){if(!stale())return;
+ try{if("speechSynthesis"in window&&Object.prototype.hasOwnProperty.call(speechSynthesis,"speak")&&(""+speechSynthesis.speak).indexOf("audioRetry")>-1)delete speechSynthesis.speak}catch(e){}
+ try{if(typeof speakEn==="function"&&(""+speakEn).indexOf("audioRetry")>-1&&typeof window.__applyV9723==="function")window.__applyV9723()}catch(e){}}
+if(typeof window.unlock==="function"&&!window.unlock.__v263){var _u=window.unlock;window.unlock=async function(){var r=await _u.apply(this,arguments);fix();setTimeout(fix,1200);setTimeout(fix,4000);setTimeout(fix,9000);return r};window.unlock.__v263=1}
+var _n=0;var _iv=setInterval(function(){if(++_n>30){clearInterval(_iv);return}var g=document.getElementById("gate");if(g&&getComputedStyle(g).display!=="none")return;if(!stale()&&_n>2){clearInterval(_iv);return}fix()},2000);
 })();
 </script>
 
