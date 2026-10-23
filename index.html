@@ -2638,7 +2638,7 @@ var FOL=null;
 function stopFollow(){if(FOL&&FOL.t)clearInterval(FOL.t);FOL=null;try{document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow")})}catch(e){}}
 function startFollow(mid){stopFollow();css281();
  var box=document.querySelector("#m-"+mid+" .module-body");if(!box)return;
- var ps=[].slice.call(box.querySelectorAll("p"));if(!ps.length)return;
+ var ps=[].slice.call(box.querySelectorAll({"ethics-3":1,"corp-1":1,"corp-2":1,"corp-3":1,"corp-6":1,"deriv-1":1,"econ-3":1}[mid]?":scope>p":"p"));if(!ps.length)return;
  var kp=box.querySelector(".keypoint");
  var items=ps.map(function(p){return{el:p,t:norm(p.textContent)}});
  if(kp)items.push({el:kp,t:norm(kp.textContent).replace(/^\uD83D\uDCA1\s*/,"")});
