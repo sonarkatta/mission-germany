@@ -2403,6 +2403,79 @@ var IDXP=null;function sidx(){if(!IDXP)IDXP=fetch('audio/idx.json?h='+Math.floor
 async function shash(t){var d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("T|"+t));return Array.from(new Uint8Array(d)).map(function(x){return x.toString(16).padStart(2,"0")}).join("").slice(0,16)}
 function split(t){t=String(t||"").replace(/\s+/g," ").trim();var out=[],s=t.match(/[^.!?]+[.!?]*\s*/g)||[t],b="";
  s.forEach(function(x){if((b+x).length>320&&b){out.push(b.trim());b=x}else b+=x;while(b.length>600){out.push(b.slice(0,600));b=b.slice(600)}});if(b.trim())out.push(b.trim());return out}
+var OPENER_MIN = 12;   // avoid tiny first parts from abbreviations/one-word openers
+var OPENER_MAX = 120;  // keep the opener genuinely short
+var PACK_CAP = 320, HARD_CAP = 600;
+var ABBREV = {
+  "dr":1,"mr":1,"mrs":1,"ms":1,"st":1,"prof":1,"sr":1,"jr":1,"capt":1,"lt":1,"col":1,"gen":1,
+  "vs":1,"etc":1,"no":1,"nos":1,"fig":1,"approx":1,"cf":1,"viz":1,"dept":1,"est":1,"inc":1,"ltd":1,
+  "jan":1,"feb":1,"mar":1,"apr":1,"jun":1,"jul":1,"aug":1,"sep":1,"sept":1,"oct":1,"nov":1,"dec":1
+};
+function isDotAbbrev(t, dotIdx){
+  var s=dotIdx;
+  while(s>0 && /[A-Za-z.]/.test(t[s-1])) s--;
+  var w=t.slice(s,dotIdx).toLowerCase();
+  if(w==="e.g"||w==="i.e"||w==="a.m"||w==="p.m") return true;
+  if(/^[a-z]+$/.test(w) && ABBREV[w]) return true;
+  if(/^[A-Z]$/.test(t.slice(s,dotIdx))) return true;           // single capital initial: "A. P. J."
+  if(/^[a-zA-Z]$/.test(t.slice(s,dotIdx)) && s>0 && /[A-Z]\. $/.test(t.slice(Math.max(0,s-3),s+1))) return true;
+  return false;
+}
+function sentenceSpans(t){
+  var bounds=[0], i=0, n=t.length;
+  while(i<n){
+    var ch=t[i];
+    if(ch==="."||ch==="!"||ch==="?"){
+      var j=i;
+      while(j<n && (t[j]==="."||t[j]==="!"||t[j]==="?")) j++;      // punct run (..., !?, etc.)
+      var k=j;
+      while(k<n && /["'”’)\]]/.test(t[k])) k++;                    // closing quotes/parens attach
+      if(k>=n){ i=n; break; }                                      // end of text: final boundary implicit
+      if(t[k]!==" "){ i=j; continue; }                             // no space after -> not a boundary
+      var after=t[k+1];
+      if(after && /[a-z]/.test(after)){ i=j; continue; }           // sentence continues lowercase ("Wait... what")
+      if(ch==="." && j===i+1){                                     // single period: check exceptions
+        var prev=t[i-1], next=after;
+        if(prev && /[0-9]/.test(prev) && next && /[0-9]/.test(next)){ i=j; continue; }  // decimal 3.5
+        if(isDotAbbrev(t,i) && next && /[A-Z0-9"'“‘(]/.test(next)){ i=j; continue; }    // abbreviation/initial
+      }
+      bounds.push(k+1);                                            // consume the single following space
+      i=k+1;
+    } else i++;
+  }
+  var spans=[], p=0;
+  for(var b=1;b<bounds.length;b++){ spans.push([p,bounds[b]]); p=bounds[b]; }
+  if(p<n) spans.push([p,n]);
+  return spans;
+}
+function nonSpace(t,a,b){ return t.slice(a,b).replace(/\s/g,"").length; }
+function splitCandidate(t){
+  t=String(t||"").replace(/\s+/g," ").trim();
+  if(!t) return [];
+  var spans=sentenceSpans(t);
+  var oe=spans.length? spans[0][1] : t.length, si=0;
+  while(oe<t.length && nonSpace(t,0,oe)<OPENER_MIN){ si++; oe=spans[si]? spans[si][1]:t.length; }
+  while(spans[si+1] && nonSpace(t,0,oe)+nonSpace(t,spans[si+1][0],spans[si+1][1])<=OPENER_MAX){ si++; oe=spans[si][1]; }
+  var first=t.slice(0,oe), parts=[];
+  while(first.length>HARD_CAP){ parts.push(first.slice(0,HARD_CAP)); first=first.slice(HARD_CAP); }
+  if(first.trim()) parts.push(first);
+  var rest=t.slice(oe), b="", rs=sentenceSpans(rest);
+  rs.forEach(function(sp){
+    var x=rest.slice(sp[0],sp[1]);
+    if((b+x).length>PACK_CAP && b){ parts.push(b); b=x; } else { b+=x; }
+    while(b.length>HARD_CAP){ parts.push(b.slice(0,HARD_CAP)); b=b.slice(HARD_CAP); }
+  });
+  if(b) parts.push(b);
+  return parts;
+}
+async function cachePeekWhole(t, hashFn, cachesObj){
+  var h=await hashFn(t);
+  try{
+    var c=await cachesObj.open("mgv1");
+    var m=await c.match(new Request("https://mgv.local/"+h));
+    return m? await m.blob() : null;
+  }catch(e){ return null; }
+}
 async function hash(t){var d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("S|"+t));return Array.from(new Uint8Array(d)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")}
 async function getBlob(t){var h=await hash(t),rq=new Request("https://mgv.local/"+h),c=null;
  try{c=await caches.open(CN);var m=await c.match(rq);if(m)return await m.blob()}catch(e){}
@@ -2410,12 +2483,12 @@ async function getBlob(t){var h=await hash(t),rq=new Request("https://mgv.local/
  var r=await fetch(URL_,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:t}),signal:ctl.signal});clearTimeout(to);
  if(!r.ok)throw new Error("tts "+r.status);var b=await r.blob();try{if(c)await c.put(rq,new Response(b.slice(0),{headers:{"Content-Type":"audio/wav"}}))}catch(e){}return b}
 function run(){if(cur||!q.length)return;var u=q.shift();var _ot=document.getElementById("mgvT");if(_ot&&_ot._ag!==undefined&&_ot._ag!==u.__ag)try{_ot.remove()}catch(_e){}cur=u;var my=++tok;active=true;var finished=false;
- var parts=split(u.text),pf=[],i=0,isS=false;
- function pre(n){for(var k=0;k<n;k++){var j=i+k;if(j<parts.length&&!pf[j]){(function(jj){pf[jj]=isS?fetch(parts[jj]).then(function(r){if(!r.ok)throw new Error('s');return r.blob()}):getBlob(parts[jj]);pf[jj].catch(function(){})})(j)}}}
+ var parts=split(u.text),pf=[],i=0,isS=false,isB=false;
+ function pre(n){for(var k=0;k<n;k++){var j=i+k;if(j<parts.length&&!pf[j]){(function(jj){pf[jj]=isB?Promise.resolve(parts[jj]):isS?fetch(parts[jj]).then(function(r){if(!r.ok)throw new Error('s');return r.blob()}):getBlob(parts[jj]);pf[jj].catch(function(){})})(j)}}}
  function fin(ok){if(finished||my!==tok)return;finished=true;cur=null;active=false;try{if(ok&&u.onend)u.onend({type:"end"})}catch(e){}run()}
  function toast(t,onTap){var e=document.getElementById("mgvT");if(!e){e=document.createElement("div");e.id="mgvT";e.style.cssText="position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#173252;color:#fff;padding:10px 16px;border-radius:14px;font:14px system-ui;z-index:125000;box-shadow:0 4px 24px #0003;max-width:86%;text-align:center";document.body.appendChild(e)}e.textContent=t;e.onclick=onTap||null;e.style.cursor=onTap?"pointer":"";e._ag=(typeof u!=="undefined"&&u)?u.__ag:ansGen;clearTimeout(e._t);if(!onTap)e._t=setTimeout(function(){e.remove()},3500)}
  var tr=0;
- function fallback(){if(finished||my!==tok)return;tr++;if(tr<=3){toast("Roop's voice is loading...");pf[i]=null;setTimeout(function(){if(my!==tok||finished)return;next()},tr*4000);return}finished=true;tr=0;var played=i,total=parts.length,rest=isS?u.text:parts.slice(i).join(" ");cur=null;active=false;var myTok=my,tapped0=false;
+ function fallback(){if(finished||my!==tok)return;tr++;if(tr<=3){toast("Roop's voice is loading...");pf[i]=null;setTimeout(function(){if(my!==tok||finished)return;next()},tr*4000);return}finished=true;tr=0;var played=i,total=parts.length,rest=(isS||isB)?u.text:parts.slice(i).join("");cur=null;active=false;var myTok=my,tapped0=false;
  var _segs=[{text:rest,lang:u.lang,volume:u.volume,rate:u.rate,pitch:u.pitch,onstart:u.onstart,onend:u.onend}];
  for(var _k=0;_k<q.length;_k++){if(q[_k].__ag===u.__ag){var _d=q.splice(_k,1)[0];_k--;_segs.push({text:_d.text,lang:_d.lang,volume:_d.volume,rate:_d.rate,pitch:_d.pitch,onstart:_d.onstart,onend:_d.onend})}}
  if(window.__rpFailed&&window.__rpFailed.ag===u.__ag)_segs=window.__rpFailed.segs.concat(_segs);
@@ -2424,7 +2497,7 @@ function run(){if(cur||!q.length)return;var u=q.shift();var _ot=document.getElem
  D('start');try{u.onstart&&u.onstart({type:"start"})}catch(e){}
  function next(){if(my!==tok||finished)return;if(i>=parts.length)return fin(true);pre(1);var attemptFailed=false,wd=null;function failOnce(){if(attemptFailed||finished||my!==tok)return;attemptFailed=true;if(wd){clearTimeout(wd);wd=null}fallback()}
   pf[i].then(function(b){if(my!==tok||finished)return;var url=URL.createObjectURL(b);au.onended=function(){if(wd){clearTimeout(wd);wd=null}URL.revokeObjectURL(url);tr=0;i++;next()};au.onerror=function(){failOnce()};try{au.pause()}catch(e){}au.src=url;au.volume=u.volume>0?Math.min(1,u.volume):1;var p=au.play();D('play');if(p&&p.catch)p.catch(function(e){D('rej '+e.name);if(e.name==='AbortError'&&my===tok&&!attemptFailed){setTimeout(function(){if(my!==tok||finished||attemptFailed)return;var p2=au.play();if(p2&&p2.catch)p2.catch(function(e2){D('rej2 '+e2.name);failOnce()})},200)}else failOnce()});var w=i;wd=setTimeout(function(){if(my===tok&&!finished&&i===w&&au.currentTime<=0.05&&!au.ended){D('stall');failOnce()}},9000)}).catch(function(){failOnce()})}
- (async function(){try{var ix=await sidx();var h=await shash(String(u.text).replace(/\s+/g," ").trim());if(ix&&ix[h]){parts=[ix[h]];isS=true;D('static')}}catch(e){}if(my===tok)next()})()}
+ (async function(){try{var _nt=String(u.text).replace(/\s+/g," ").trim();var _whole=null;try{_whole=await cachePeekWhole(_nt,hash,caches)}catch(_e){_whole=null}if(_whole){parts=[_whole];isB=true;D('wholehit')}else{parts=splitCandidate(_nt)}var ix=await sidx();var h=await shash(String(u.text).replace(/\s+/g," ").trim());if(ix&&ix[h]){parts=[ix[h]];isS=true;isB=false;D('static')}}catch(e){}if(my===tok)next()})()}
 P.speak=function(u){try{if(u&&/^That recording is still on its way/i.test(String(u.text||"").trim())){return}}catch(e){}try{if(!/^de/i.test(u.lang||"")&&cloudOn()&&u.text&&u.text.trim()){
  if(!cur&&!q.length){ansGen++;if(window.__rpFailed&&window.__rpFailed.ag!==ansGen){window.__rpFailed=null;var _st=document.getElementById("mgvT");if(_st)try{_st.remove()}catch(_e){}}}
  u.__ag=ansGen;
