@@ -324,7 +324,7 @@ async function unlock(pw,silent){
   try{
     const st=document.getElementById("gateStatus");if(st)st.textContent="Downloading your app - first time takes a minute...";
     const appearanceRequest=appAsset("18-56-appearance-v97.enc?v=97").then(r=>r.json());appearanceRequest.catch(()=>{});
-    const advancedRequest=appAsset("46-advanced-v92.enc?v=92").then(r=>r.json());advancedRequest.catch(()=>{});
+    const advancedRequest=appAsset("47-advanced-v93.enc?v=93").then(r=>r.json());advancedRequest.catch(()=>{});
     const o=await (await appAsset("1-core-fixed.enc?v=88e")).json();
     if(st)st.textContent="Unlocking - one moment";
     const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
