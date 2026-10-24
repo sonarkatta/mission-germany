@@ -842,7 +842,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.374-20261024-1838';
+var APP_BUILD='v97.375-20261024-1942';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -983,8 +983,9 @@ async function doEmail(){
 fbReady().then(function(){return _fbAuth.getRedirectResult()}).catch(function(e){try{awErr(friendlyErr(e))}catch(_){}});
 // ---- sync ----
 var _pushT=null,_pushing=false;
-function schedulePush(){if(_pushT)clearTimeout(_pushT);_pushT=setTimeout(pushNow,2500)}
+function schedulePush(){return; /* Sync pause: preserve local state; no legacy Firebase push. */ if(_pushT)clearTimeout(_pushT);_pushT=setTimeout(pushNow,2500)}
 async function pushNow(){
+ return; /* Sync pause also covers this legacy Firebase transport. */
  if(_pushing||!window._fbAuth||!_fbAuth.currentUser)return;_pushing=true;
  try{var u=_fbAuth.currentUser;var json=localStorage.getItem('mg_state_v1')||'{}';
   await _fbDb.collection('users').doc(u.uid).collection('data').doc('state').set({json:json,clientTs:Date.now(),build:BUILD63});
@@ -992,6 +993,7 @@ async function pushNow(){
  }catch(e){console.warn('sync push',e)}_pushing=false;
 }
 async function pullOnLogin(u){
+ return; /* Sync pause: never replace this device state on login. */
  try{var doc=await _fbDb.collection('users').doc(u.uid).collection('data').doc('state').get();
   if(doc.exists){var d=doc.data();var meta={};try{meta=JSON.parse(localStorage.getItem('mg_sync_meta')||'{}')}catch(_){}
    if((d.clientTs||0)>(meta.pushed||0)+1000){localStorage.setItem('mg_state_v1',d.json);localStorage.setItem('mg_sync_meta',JSON.stringify({pushed:d.clientTs}));location.reload();return}}
@@ -1087,6 +1089,7 @@ function stateCards(s){
 }
 async function sha256hex(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function linkWithEmail(email){
+ return {err:'Sync is paused. Existing local progress is kept on this device; new parent links are unavailable.'};
  email=(email||'').trim().toLowerCase();
  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return {err:'Enter the email she signed in with.'};
  try{
@@ -1151,6 +1154,7 @@ var boot64=setInterval(function(){
  clearInterval(boot64);
  _fbAuth.onAuthStateChanged(async function(u){
   if(!u||!u.email)return;
+  return; /* Sync pause: no legacy Firebase email index write. */
   try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(u.email.trim().toLowerCase()));const h=[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');await _fbDb.collection('emailIndex').doc(h).set({uid:u.uid})}catch(e){}
  });
  window.addEventListener('hashchange',function(){setTimeout(route,60)});
