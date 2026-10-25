@@ -2724,5 +2724,16 @@ if(new URLSearchParams(location.search).get('heartCheck')==='1'){
  installHeartCapability({document,getOwner:()=>window.firebase?.auth?.().currentUser?.uid,allowed:()=>!!window.firebase?.auth?.().currentUser&&!!document.getElementById('app')&&!document.getElementById('app').classList.contains('hidden')&&!document.getElementById('authWall'),subscribeOwner:cb=>window.firebase.auth().onAuthStateChanged(cb)});
 }
 </script>
+<script type="module">
+// PRIVATE publication candidate only. Route does not fetch model until explicit Start.
+if(new URLSearchParams(location.search).get('heartTrial')==='1'){
+ for(let n=0;n<300&&(!window.firebase?.auth||!document.getElementById('app'));n++)await new Promise(r=>setTimeout(r,100));
+ if(window.firebase?.auth&&document.getElementById('app')){
+ const {prepareHeartTrial}=await import('/heart-client/explicit-trial.mjs');
+ const allowed=()=>!!window.firebase.auth().currentUser&&!!document.getElementById('app')&&!document.getElementById('app').classList.contains('hidden')&&!document.getElementById('authWall');
+ let current=null;const click=e=>{const b=e.target.closest('button'),m=b?.closest('.module');if(window.__activeHeartMount)return;if(!allowed()||!m?.id?.startsWith('m-')||b!==m.querySelector('.module-body button'))return;e.preventDefault();e.stopImmediatePropagation();if(!current||!document.querySelector('[data-heart-trial]'))current=prepareHeartTrial({document,moduleId:m.id.slice(2),getOwner:()=>window.firebase.auth().currentUser?.uid,allowed,subscribeOwner:cb=>window.firebase.auth().onAuthStateChanged(cb),getTopics:()=>CFA_TOPICS})};window.addEventListener('click',click,true);
+ }
+}
+</script>
 </body>
 </html>
