@@ -861,7 +861,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.393-20261025-1219';
+var APP_BUILD='v97.394-20261025-1238';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2650,7 +2650,7 @@ var MG_GERRE=/^(a1u|a2u|b1u|b2u|c1u|dlg-|gq-|de-|alphabet-|greet-\w+-de|welcome-
 var MG_TUTRE=/^(tut-offline|tut-limit|tut-chip-|tut-greet|greet-\w+-en|welcome-en)/;
 var GENMSG="This voice message is being re-recorded with the new voice. It will be back soon.";
 var MG_DEFRE=/^def-/;
-function mgGerBlocked(files){for(var i=0;i<files.length;i++){var f=files[i];if(f&&(MG_GERRE.test(f)||MG_TUTRE.test(f)||MG_DEFRE.test(f))&&!MG_READY[f])return MG_GERRE.test(f)?"de":"gen"}return false}
+function mgGerBlocked(files){for(var i=0;i<files.length;i++){var f=files[i];if(f==="b1u21-v35.mp3")return "de";if(f&&(MG_GERRE.test(f)||MG_TUTRE.test(f)||MG_DEFRE.test(f))&&!MG_READY[f])return MG_GERRE.test(f)?"de":"gen"}return false}
 
 var PILOT_OK={"deriv-1":1,"corp-6":1,"equity-1":1,"equity-2":1,"corp-3":1,"corp-1":1,"corp-2":1,"fsa-8":1,"fsa-9":1,"ethics-3":1,"ethics-4":1,"ethics-6":1,"ethics-7":1,"ethics-8":1,"ethics-10":1,"quant-1":1,"quant-2":1,"quant-3":1,"quant-4":1,"quant-5":1,"quant-6":1,"quant-7":1,"quant-8":1,"quant-9":1,"quant-10":1,"quant-11":1,"econ-1":1,"econ-2":1,"econ-3":1,"econ-4":1,"econ-5":1,"econ-6":1,"econ-7":1,"econ-8":1,"fsa-1":1,"fsa-2":1,"fsa-4":1,"fsa-5":1,"fsa-7":1};
 var _lastUserScroll=0;try{["pointerdown","touchstart","wheel"].forEach(function(ev){document.addEventListener(ev,function(){_lastUserScroll=Date.now()},{passive:true,capture:true})})}catch(e){}
@@ -2698,6 +2698,8 @@ function playModule(mid){var k="cfa-"+mid;
  else if(typeof loadPack==="function"){try{Promise.all([loadPack(p)]).then(go,function(){note(MODMSG)})}catch(e){note(MODMSG)}}
  else{note(MODMSG)}}
 function arm(){var a=false,b=false,c=false,d=false;
+ if(typeof GERMAN_COURSE!=="undefined"){var b1fix=GERMAN_COURSE.find(function(u){return u.id==="b1-u1"});if(b1fix&&b1fix.n===21&&b1fix.vocab[34]&&b1fix.vocab[34].de==="anziehen (nachdem...)"&&b1fix.vocab[34].en==="nachdem + past-before-past"){b1fix.vocab[34]=Object.assign({},b1fix.vocab[34],{de:"nachdem ich mich angemeldet hatte",en:"after I had registered (past-before-past)"})}}
+
  if(typeof speakTutor==="function"&&!speakTutor.__sourceQA507){var sourceTutor507=speakTutor;speakTutor=function(t,k){if(k==="qa-ethics-5-07"||k==="qa-ethics-9-02"||k==="qa-ethics-9-07"){note(MODMSG);return}return sourceTutor507.apply(this,arguments)};speakTutor.__sourceQA507=1}
 
  if(typeof playClips==="function"&&!playClips.__v288){var opc288=playClips;playClips=function(keys,fallback){var fs288;try{fs288=(typeof AUDIO_MANIFEST!=="undefined")?keys.map(function(k){return AUDIO_MANIFEST[k]}):keys;var gb288=mgGerBlocked(fs288);if(gb288){note(gb288==="de"?GERMSG:GENMSG);return}}catch(e){}return opc288.apply(this,arguments)};playClips.__v288=1}
