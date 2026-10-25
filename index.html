@@ -843,7 +843,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.388-20261025-1116';
+var APP_BUILD='v97.389-20261025-1119';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2696,5 +2696,5 @@ setInterval(arm,400);arm();
 
 
 
-</body>
+<script id="arya-afs-scope-notes-20261025">(function(){var notes={"bba-afs-3": "Scope note (text only): the gross operating cycle runs from inventory to collection. Subtracting supplier-credit days gives the cash conversion cycle, also called the net operating cycle. The 40 + 50 - 30 = 60 day funding gap below is the net cycle.", "bba-afs-10": "Scope note (text only): 76 + 36.5 = 112.5 days is the gross operating cycle. Subtracting 61 supplier-credit days gives the 51.5 day cash conversion cycle (net operating cycle) used below.", "bba-afs-12": "Scope note (text only): this worked example is for a non-financial enterprise under AS 3. Its interest paid is financing; if included in profit, it is added back in the indirect operating cash-flow reconciliation. For a financial enterprise, interest paid and interest and dividends received are operating cash flows.", "bba-afs-13": "Scope note (text only): the formula below subtracts creditor days, so it measures the cash conversion cycle (net operating cycle), not the gross inventory-to-collection operating cycle.", "bba-afs-16": "Scope note (text only): the 51.5 day figure below is the cash conversion cycle (net operating cycle): 76 + 36.5 - 61. The gross operating cycle before supplier credit is 112.5 days."};var render=xbChapter;xbChapter=function(mid,hl){var r=render.apply(this,arguments),note=notes[mid],v=view();if(!note||!v)return r;var old=v.querySelector('.arya-afs-scope-note');if(old)old.remove();var n=document.createElement('div');n.className='card arya-afs-scope-note';n.setAttribute('role','note');n.textContent=note;var target=v.querySelector('.module');if(target)target.before(n);return r;};})();</script></body>
 </html>
