@@ -861,7 +861,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.397-20261026-0645';
+var APP_BUILD='v97.398-20261026-0655';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2640,7 +2640,7 @@ if(document.readyState==="complete")arm();else addEventListener("load",arm,{once
 })();
 </script><script id="voicejs282">(function(){
 function note(t){var e=document.getElementById("mgvT");if(!e){e=document.createElement("div");e.id="mgvT";e.style.cssText="position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#173252;color:#fff;padding:10px 16px;border-radius:14px;font:14px system-ui;z-index:125000;box-shadow:0 4px 24px #0003;max-width:86%;text-align:center";document.body.appendChild(e)}e.textContent=t;clearTimeout(e._t);e._t=setTimeout(function(){e.remove()},4500)}
-var HOLD={"bba-sda-5":1,"bba-sda-7":1};
+var HOLD={};
 var MODMSG="This module's recording is not available. The full notes are here, and Roop can explain anything in chat.";
 var CHAPMSG="This chapter's recording is not available. The full chapter is here to read, and Roop can explain it in chat.";
 var GERMSG="This German recording is not available yet. The text is here to read, and Roop can explain it in chat.";
