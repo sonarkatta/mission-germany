@@ -918,7 +918,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.460-20261027-2310';
+var APP_BUILD='v97.461-20261027-2343';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2913,5 +2913,6 @@ if(!more.__legacy460){var om=more;more=function(){var r=om.apply(this,arguments)
 return true}var iv=setInterval(function(){if(arm())clearInterval(iv)},400);arm();
 })();
 </script>
+<script id="arya-grammar-source-controls-461">(function(){var examples={"g3": ["Lernst du Deutsch?", "Wo wohnst du?", "Ich will in Deutschland studieren.", "Ich hätte gern einen Kaffee"], "g6": ["Ich bleibe zu Hause, weil ich krank BIN.", "Ich lerne Deutsch, um in Deutschland zu studieren", "Die Universität, DIE in Frankfurt liegt, ist bekannt."], "b2-u6-g1": ["manchmal ungeduldig, aber ich arbeite daran."], "c1-u1-g2": ["Abschließend: Übung macht den Meister."], "c1-u7-g1": ["Minister tritt zurück", "Brücke gesperrt", "Streit um Haushalt", "Angst vor Inflation"], "c1-u9-g1": ["die Figur GEHT"]};var donors={"Wo wohnst du?":"a1u2-x04"};function arm(){if(typeof grammar!=="function"||typeof GERMAN_GRAMMAR==="undefined")return false;if(grammar.__sourceControls461)return true;var old=grammar;grammar=function(){old.apply(this,arguments);var cards=Array.from(document.querySelectorAll("#view .card"));GERMAN_GRAMMAR.forEach(function(g,i){var card=cards[i];if(!card)return;Array.from(card.querySelectorAll("button[onclick]" )).forEach(function(b){if(/^sp\('/.test(b.getAttribute("onclick")||""))b.remove()});var texts=examples[g.id]||[];if(!texts.length)return;var row=document.createElement("div");row.style.marginTop="8px";texts.forEach(function(text){var key=donors[text],file=key&&typeof AUDIO_MANIFEST!=="undefined"&&AUDIO_MANIFEST[key],usable=!!(file&&typeof PACK_OF!=="undefined"&&PACK_OF[file]);var b=document.createElement("button");b.className="chip "+(usable?"blue":"grey");b.style.cssText="border:none;margin:3px 4px 3px 0;white-space:normal;text-align:left";b.textContent=(usable?"🔊 ":"")+text;b.dataset.grammarText=text;b.disabled=!usable;if(usable){b.dataset.audioKey=key;b.onclick=function(){playClips([key])}}else{b.title="No verified recording is connected to this example yet.";b.setAttribute("aria-label",text+". Recording unavailable.")}row.appendChild(b)});card.appendChild(row)});};grammar.__original461=old;grammar.__sourceControls461=true;return true}var timer=setInterval(function(){if(arm())clearInterval(timer)},250);arm()})();</script>
 </body>
 </html>
