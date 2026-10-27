@@ -901,7 +901,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.451-20261027-1050';
+var APP_BUILD='v97.452-20261027-1400';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2767,18 +2767,24 @@ function startFollow(mid){stopFollow();css281();if(startTimedCorp4(mid))return;
     if((r.top<70||r.bottom>vh-120)&&(Date.now()-_lastUserScroll>4000)){el.scrollIntoView({behavior:"smooth",block:"center"})}}catch(e){}
  },300)}}
 function playModule(mid){var k="cfa-"+mid;
+ var topic=typeof CFA_TOPICS!=="undefined"?CFA_TOPICS.find(function(t){return t.modules&&t.modules.some(function(m){return m.id===mid})}):null;
+ var module=topic&&topic.modules.find(function(m){return m.id===mid});
+ if(!topic||!module||!PILOT_OK[mid]){note(MODMSG);return}
+ var title="CFA Level I - "+topic.name+" - "+module.title;
  var f=(typeof AUDIO_MANIFEST!=="undefined"&&AUDIO_MANIFEST[k])?AUDIO_MANIFEST[k]:(k+".mp3");
  var p=(typeof PACK_OF!=="undefined")?PACK_OF[f]:null;
  if(!f||!p||typeof PLAYER==="undefined"||!PLAYER||typeof PLAYER.start!=="function"){note(MODMSG);return}
  var go=function(){if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){
    try{if(window.MG_WEB_AUDIO)MG_WEB_AUDIO.unlock()}catch(e){}
-   PLAYER.start("cfamod-"+mid,[k],"CFA Level I - Ethics",function(){note(MODMSG);stopFollow()});
+   PLAYER.start("cfamod-"+mid,[k],title,function(){note(MODMSG);stopFollow()});
    startFollow(mid);
   }else{note(MODMSG)}};
  if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){go()}
  else if(typeof loadPack==="function"){try{Promise.all([loadPack(p)]).then(go,function(){note(MODMSG)})}catch(e){note(MODMSG)}}
  else{note(MODMSG)}}
 function arm(){var a=false,b=false,c=false,d=false;
+ if(typeof coverageStrip==="function"&&!coverageStrip.__audio452){var originalCoverage452=coverageStrip;coverageStrip=function(mid){var html=originalCoverage452.apply(this,arguments),file=typeof AUDIO_MANIFEST!=="undefined"?AUDIO_MANIFEST["cfa-"+mid]:null,ready=!!(PILOT_OK[mid]&&file&&typeof PACK_OF!=="undefined"&&PACK_OF[file]);return html.replace(/<span class="chip (?:green|grey)" style="font-size:11px">(?:✓|…) Audio<\/span>/,'<span class="chip '+(ready?'green':'grey')+'" style="font-size:11px">'+(ready?'✓':'…')+' Audio</span>')};coverageStrip.__audio452=1}
+
  if(typeof GERMAN_COURSE!=="undefined"){var b1fix=GERMAN_COURSE.find(function(u){return u.id==="b1-u1"});if(b1fix&&b1fix.n===21&&b1fix.vocab[34]&&b1fix.vocab[34].de==="anziehen (nachdem...)"&&b1fix.vocab[34].en==="nachdem + past-before-past"){b1fix.vocab[34]=Object.assign({},b1fix.vocab[34],{de:"nachdem ich mich angemeldet hatte",en:"after I had registered (past-before-past)"})}}
 
  if(typeof speakTutor==="function"&&!speakTutor.__sourceQA507){var sourceTutor507=speakTutor;speakTutor=function(t,k){if(k==="qa-ethics-5-07"||k==="qa-ethics-9-02"||k==="qa-ethics-9-07"){note(MODMSG);return}return sourceTutor507.apply(this,arguments)};speakTutor.__sourceQA507=1}
