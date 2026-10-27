@@ -902,7 +902,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.455-20261027-1425';
+var APP_BUILD='v97.456-20261027-1435';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -1816,7 +1816,12 @@ var OVR={'bba-pom:0':['taylor'],'bba-pt:0':['npr','permutation'],'bba-sda:3':['c
 var STOP='which where their there these those about after before because between other should would could being through while under again within without during against every first second third'.split(' ');
 function norm(s){return String(s).toLowerCase().replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim()}
 function esc2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function P(bid){return XB_PAPERS[bid]}
+function P(bid){var p=XB_PAPERS[bid];if(!p||['bba-rmm','bba-becg','bba-ban2'].indexOf(bid)<0)return p;
+ // Existing saved attempts keep original composite question identity and answer text.
+ if(S.bcx&&S.bcx.bid===bid&&S.bcx.paperVersion!==2)return p;
+ var secs=p.sections.map(function(sec){if(sec.qs.length!==1||sec.qs[0].n!==10)return sec;var q=sec.qs[0];if(q.q.indexOf('Write short notes on ANY TWO of:')!==0)return sec;
+ var prompts=q.q.split(/\([a-d]\) /).slice(1),answers=q.a.split(/(?:^|\n)\([a-d]\) /).filter(function(x){return x});if(prompts.length!==4||answers.length!==4)return sec;
+ return Object.assign({},sec,{desc:'Items 10-13 · 5 marks each · attempt ANY TWO',qs:prompts.map(function(t,i){return Object.assign({},q,{n:10+i,q:'Write a short note on '+t.replace(/;\s*$/,'').trim(),a:answers[i]})})});});return Object.assign({},p,{sections:secs});}
 function B(bid){return XB_BOOKS.find(function(b){return b.id===bid})}
 function mins(p){var m=/(\d+)\s*hour/.exec(p.time);return (m?+m[1]:3)*60}
 function isFill(sec){return /1 mark each/.test(sec.desc)}
@@ -1849,7 +1854,7 @@ function hist(){S.bcxh=S.bcxh||[];return S.bcxh}
 function stop(){if(window.__bcxT){clearInterval(window.__bcxT);window.__bcxT=null}}
 function fmt(l){var h=Math.floor(l/3600000),m=Math.floor(l%3600000/60000),s=Math.floor(l%60000/1000);return h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
 window.bcx=function(){stop();var h='<div style="margin:-4px 0 10px"><button class="btn soft" onclick="more()">‹ More</button></div><div class="hero"><div class="kicker">Real exam</div><h1>BCom Real Exam</h1><p>SPPU paper format with a running clock. Fill-ins are marked exactly. Written answers get an estimated mark. Your result shows marks by section and the units to revise.</p></div>';
- var r=S.bcx;if(r&&r.end>Date.now())h+='<div class="card tappable" onclick="bcxRender()"><div class="topic-card"><div class="icon-bubble" style="background:#FF9F0A22">▶️</div><div class="grow"><h3>Resume your exam</h3><div class="muted small">'+esc2((B(r.bid)||{}).name||'')+' · the clock kept running</div></div></div></div>';
+ var r=S.bcx;if(r&&r.paperVersion!==2&&['bba-rmm','bba-becg','bba-ban2'].indexOf(r.bid)>=0)h+='<div class="card"><p class="muted small">Your saved attempt keeps its original combined short-note answer. A new attempt lets you answer and mark two separate short notes. Your saved answers have not been changed.</p></div>';if(r&&r.end>Date.now())h+='<div class="card tappable" onclick="bcxRender()"><div class="topic-card"><div class="icon-bubble" style="background:#FF9F0A22">▶️</div><div class="grow"><h3>Resume your exam</h3><div class="muted small">'+esc2((B(r.bid)||{}).name||'')+' · the clock kept running</div></div></div></div>';
  SEM.forEach(function(s){var ready=s.ids.filter(function(i){return P(i)&&B(i)}),all=s.ids.filter(function(i){return B(i)});if(!all.length)return;
   h+='<div class="section-title"><h2>'+s.n+'</h2></div>'+(s.note?'<p class="muted small" style="margin:0 0 8px">'+s.note+'</p>':'<p class="muted small" style="margin:0 0 8px">'+ready.length+' of '+all.length+' papers ready</p>');
   all.forEach(function(i){var b=B(i),p=P(i),best=hist().filter(function(x){return x.bid===i}).reduce(function(a,x){return Math.max(a,x.score/x.max)},-1);
@@ -1861,7 +1866,7 @@ window.bcxIntro=function(bid){var p=P(bid),b=B(bid),g=plan(bid),mx=maxOf(g);
  +'<div class="card"><b>Before you start</b><ol style="margin:8px 0 0;padding-left:20px;font-size:14px;line-height:1.55">'+p.general.map(function(x){return '<li>'+esc2(x)+'</li>'}).join('')+'</ol></div>'
  +'<div class="card"><b>How marks work here</b><div class="small" style="margin-top:6px;line-height:1.55">Fill-ins: marked exactly against the key. Written answers: type your answer; the app estimates marks by checking how many of the key points in the model answer you covered. This is an estimate, not an examiner. When you attempt more questions than needed, the best ones count, as in the paper rules. This is a practice paper written for revision, not a past university paper.</div></div>'
  +'<div class="card" style="text-align:center"><button class="btn" onclick="bcxStart(\''+bid+'\')">Start exam - clock begins</button></div>';window.scrollTo(0,0)};
-window.bcxStart=function(bid){S.bcx={bid:bid,end:Date.now()+mins(P(bid))*60000,ans:{}};save();bcxRender()};
+window.bcxStart=function(bid){S.bcx={bid:bid,paperVersion:2,end:Date.now()+mins(P(bid))*60000,ans:{}};save();bcxRender()};
 window.bcxIn=function(n,v){S.bcx.ans[n]=v;save()};
 window.bcxRender=function(){var r=S.bcx;if(!r||r.end<=Date.now()&&!r){return bcx()}var p=P(r.bid),b=B(r.bid);stop();
  var h='<div id="bcxBar" style="position:sticky;top:8px;z-index:30;padding:10px 14px;border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 6px 24px rgba(0,0,0,.14);margin-bottom:10px"><div class="row"><div class="grow"><div class="muted small">'+esc2(b.name)+'</div><b id="bcxT" style="font-size:22px">-</b></div><button class="btn soft" onclick="bcxSubmit(false)">Submit</button></div></div>';
@@ -1877,7 +1882,7 @@ window.bcxSubmit=function(auto){var r=S.bcx;if(!r)return;if(!auto&&!confirm('Sub
  var res=bcxMark(r.bid,r.ans);res.auto=!!auto;res.left=Math.max(0,r.end-Date.now());hist().push({bid:r.bid,score:res.score,max:res.max,d:new Date().toISOString().slice(0,10)});S.bcx=null;save();window.BCXR=res;bcxResult()};
 function bcxMark(bid,ans){var p=P(bid),g=plan(bid),res={bid:bid,ans:ans,groups:[],ov:{}};
  g.forEach(function(gr){var items=gr.qs.map(function(x){var si=x[0],q=x[1],qi=p.sections[si].qs.indexOf(q),t=ans[q.n]||'',got=0,att=!!norm(t);
-   if(gr.fill){got=fillOK(altsOf(bid,si,qi,q.a),t)?q.marks:0}else if(att){got=estimate(q,t)}
+   if(gr.fill){got=(norm(t)===norm(q.a)||fillOK(altsOf(bid,si,qi,q.a),t))?q.marks:0}else if(att){got=estimate(q,t)}
    return{q:q,si:si,qi:qi,t:t,got:got,att:att,fill:!!gr.fill}});
   res.groups.push({name:gr.name,need:gr.need,fill:gr.fill,items:items})});
  res.max=maxOf(g);bcxTotal(res);return res}
