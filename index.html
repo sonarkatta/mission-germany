@@ -349,7 +349,7 @@ async function unlock(pw,silent){
     const st=document.getElementById("gateStatus");if(st)st.textContent="Downloading your app - first time takes a minute...";
     const appearanceRequest=appAsset("18-56-appearance-v97.enc?v=97").then(r=>r.json());appearanceRequest.catch(()=>{});
     const advancedRequest=appAsset("66-advanced-essay-keys-v440.enc?v=440").then(r=>r.json());advancedRequest.catch(()=>{});
-    const o=await (await appAsset("1-core-fixed.enc?v=117")).json();
+    const o=await (await appAsset("1-core-fixed.enc?v=118")).json();
     if(st)st.textContent="Unlocking - one moment";
     const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
     const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(o.s),iterations:200000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt","encrypt"]);
@@ -918,7 +918,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.458-20261027-1750';
+var APP_BUILD='v97.459-20261027-2152';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
