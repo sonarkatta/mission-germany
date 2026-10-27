@@ -347,7 +347,7 @@ async function appAsset(url){
 async function unlock(pw,silent){
   try{
     const st=document.getElementById("gateStatus");if(st)st.textContent="Downloading your app - first time takes a minute...";
-    const appearanceRequest=appAsset("18-56-appearance-v97.enc?v=97").then(r=>r.json());appearanceRequest.catch(()=>{});
+    const appearanceRequest=appAsset("18-56-appearance-v97.enc?v=98").then(r=>r.json());appearanceRequest.catch(()=>{});
     const advancedRequest=appAsset("66-advanced-essay-keys-v440.enc?v=440").then(r=>r.json());advancedRequest.catch(()=>{});
     const o=await (await appAsset("1-core-fixed.enc?v=120")).json();
     if(st)st.textContent="Unlocking - one moment";
@@ -918,7 +918,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.463-20261028-0005';
+var APP_BUILD='v97.464-20261028-0030';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
