@@ -2714,7 +2714,7 @@ var GENMSG="This voice message is being re-recorded with the new voice. It will 
 var MG_DEFRE=/^def-/;
 function mgGerBlocked(files){for(var i=0;i<files.length;i++){var f=files[i];if(f==="b1u21-v35.mp3")return "de";if(f&&(MG_GERRE.test(f)||MG_TUTRE.test(f)||MG_DEFRE.test(f))&&!MG_READY[f])return MG_GERRE.test(f)?"de":"gen"}return false}
 
-var PILOT_OK={"corp-4":1,"deriv-4":1,"ethics-2":1,"ethics-5":1,"deriv-1":1,"corp-6":1,"equity-1":1,"equity-2":1,"corp-3":1,"corp-1":1,"corp-2":1,"fsa-8":1,"fsa-9":1,"ethics-3":1,"ethics-4":1,"ethics-6":1,"ethics-7":1,"ethics-8":1,"ethics-10":1,"quant-1":1,"quant-2":1,"quant-3":1,"quant-4":1,"quant-5":1,"quant-6":1,"quant-7":1,"quant-8":1,"quant-9":1,"quant-10":1,"quant-11":1,"econ-1":1,"econ-2":1,"econ-3":1,"econ-4":1,"econ-5":1,"econ-6":1,"econ-7":1,"econ-8":1,"fsa-1":1,"fsa-2":1,"fsa-4":1,"fsa-5":1,"fsa-7":1};
+var PILOT_OK={"ethics-1":1,"ethics-2":1,"ethics-3":1,"ethics-4":1,"ethics-5":1,"ethics-6":1,"ethics-7":1,"ethics-8":1,"ethics-9":1,"ethics-10":1,"quant-1":1,"quant-2":1,"quant-3":1,"quant-4":1,"quant-5":1,"quant-6":1,"quant-7":1,"quant-8":1,"quant-9":1,"quant-10":1,"quant-11":1,"econ-1":1,"econ-2":1,"econ-3":1,"econ-4":1,"econ-5":1,"econ-6":1,"econ-7":1,"econ-8":1,"fsa-1":1,"fsa-2":1,"fsa-3":1,"fsa-4":1,"fsa-5":1,"fsa-6":1,"fsa-7":1,"fsa-8":1,"fsa-9":1,"fsa-10":1,"fsa-11":1,"fsa-12":1,"corp-1":1,"corp-2":1,"corp-3":1,"corp-4":1,"corp-5":1,"corp-6":1,"corp-7":1,"equity-1":1,"equity-2":1,"equity-3":1,"equity-4":1,"equity-5":1,"equity-6":1,"equity-7":1,"equity-8":1,"equity-9":1,"equity-10":1,"equity-11":1,"equity-12":1,"fi-1":1,"fi-2":1,"fi-3":1,"fi-4":1,"fi-5":1,"fi-6":1,"fi-7":1,"fi-8":1,"fi-9":1,"fi-10":1,"fi-11":1,"fi-12":1,"fi-13":1,"fi-14":1,"fi-15":1,"fi-16":1,"fi-17":1,"fi-18":1,"fi-19":1,"deriv-1":1,"deriv-2":1,"deriv-3":1,"deriv-4":1,"deriv-5":1,"deriv-6":1,"deriv-7":1,"deriv-8":1,"deriv-9":1,"deriv-10":1,"alt-1":1,"alt-2":1,"alt-3":1,"alt-4":1,"alt-5":1,"alt-6":1,"alt-7":1,"pm-1":1,"pm-2":1,"pm-3":1,"pm-4":1,"pm-5":1,"pm-6":1};
 var _lastUserScroll=0;try{["pointerdown","touchstart","wheel"].forEach(function(ev){document.addEventListener(ev,function(){_lastUserScroll=Date.now()},{passive:true,capture:true})})}catch(e){}
 /* read-along: same machinery as the chapter reader - paragraph granularity, char-share of the narration, approximate */
 function norm(s){return String(s||"").replace(/\s+/g," ").trim()}
@@ -2793,7 +2793,7 @@ function playModule(mid){clipRequest454++;var request=++moduleRequest453,request
  var topic=typeof CFA_TOPICS!=="undefined"?CFA_TOPICS.find(function(t){return t.modules&&t.modules.some(function(m){return m.id===mid})}):null;
  var module=topic&&topic.modules.find(function(m){return m.id===mid});
  if(!topic||!module||!PILOT_OK[mid]){note(MODMSG);return}
- var title="CFA Level I - "+topic.name+" - "+module.title;
+ var restoredOld460={"ethics-1":1,"ethics-9":1,"fsa-3":1,"fsa-6":1,"fsa-10":1,"fsa-11":1,"fsa-12":1,"corp-5":1,"corp-7":1,"equity-3":1,"equity-4":1,"equity-5":1,"equity-6":1,"equity-7":1,"equity-8":1,"equity-9":1,"equity-10":1,"equity-11":1,"equity-12":1,"fi-1":1,"fi-2":1,"fi-3":1,"fi-4":1,"fi-5":1,"fi-6":1,"fi-7":1,"fi-8":1,"fi-9":1,"fi-10":1,"fi-11":1,"fi-12":1,"fi-13":1,"fi-14":1,"fi-15":1,"fi-16":1,"fi-17":1,"fi-18":1,"fi-19":1,"deriv-2":1,"deriv-3":1,"deriv-5":1,"deriv-6":1,"deriv-7":1,"deriv-8":1,"deriv-9":1,"deriv-10":1,"alt-1":1,"alt-2":1,"alt-3":1,"alt-4":1,"alt-5":1,"alt-6":1,"alt-7":1,"pm-1":1,"pm-2":1,"pm-3":1,"pm-4":1,"pm-5":1,"pm-6":1};if(restoredOld460[mid])note("Restored existing recording. Voice and narration may differ from the current notes; follow-along timing is not verified.");var title="CFA Level I - "+topic.name+" - "+module.title;
  var f=(typeof AUDIO_MANIFEST!=="undefined"&&AUDIO_MANIFEST[k])?AUDIO_MANIFEST[k]:(k+".mp3");
  var p=(typeof PACK_OF!=="undefined")?PACK_OF[f]:null;
  if(!f||!p||typeof PLAYER==="undefined"||!PLAYER||typeof PLAYER.start!=="function"){note(MODMSG);return}
@@ -2801,7 +2801,7 @@ function playModule(mid){clipRequest454++;var request=++moduleRequest453,request
  if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){
    try{if(window.MG_WEB_AUDIO)MG_WEB_AUDIO.unlock()}catch(e){}
    PLAYER.start("cfamod-"+mid,[k],title,function(){note(MODMSG);stopFollow()});
-   startFollow(mid);
+   if(!restoredOld460[mid])startFollow(mid);
   }else{note(MODMSG)}};
  if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){go()}
  else if(typeof loadPack==="function"){try{Promise.all([loadPack(p)]).then(go,function(){if(request===moduleRequest453&&requestBox&&document.contains(requestBox))note(MODMSG)})}catch(e){if(request===moduleRequest453&&requestBox&&document.contains(requestBox))note(MODMSG)}}
@@ -2900,6 +2900,17 @@ if(new URLSearchParams(location.search).get('heartTrial')==='1'){
   }catch(_){
     try{var b=JSON.parse(localStorage.getItem(BAK)||'null');if(b&&typeof b.json==='string'){JSON.parse(b.json);localStorage.setItem(KEY,b.json);}}catch(_){}
   }
+})();
+</script>
+<script id="arya460-legacy-audio-access">
+(function(){
+var boards={"CFA Level II":52,"CFA Level III":43};
+function notice(v){var n=document.createElement('div');n.className='card';n.setAttribute('role','note');n.textContent='Restored older CFA collection: existing notes and recordings, kept separate from the newer interactive chapters. The voice and wording may differ. New chapter audio is not marked complete.';var h=v.querySelector('.hero');if(h)h.after(n)}
+function arm(){if(typeof xbShelf!=='function'||typeof xbChapter!=='function'||typeof more!=='function')return false;
+if(!xbShelf.__legacy460){var os=xbShelf;xbShelf=function(board){var r=os.apply(this,arguments);if(boards[board]){notice(view());var k=view().querySelector('.kicker');if(k)k.textContent='Restored older collection';}return r};xbShelf.__legacy460=1}
+if(!xbChapter.__legacy460){var oc=xbChapter;xbChapter=function(mid){var f=typeof xbFind==='function'?xbFind(mid):null,r=oc.apply(this,arguments);if(f&&boards[f.b.board])notice(view());return r};xbChapter.__legacy460=1}
+if(!more.__legacy460){var om=more;more=function(){var r=om.apply(this,arguments),g=view().querySelector('.more-grid');if(g&&!document.getElementById('legacyCfa460')){var box=document.createElement('div');box.id='legacyCfa460';box.style.gridColumn='1 / -1';var h=document.createElement('h2');h.textContent='Restored older CFA audio';box.appendChild(h);Object.keys(boards).forEach(function(b){var bt=document.createElement('button');bt.className='btn ghost';bt.textContent=b+' - older notes + '+boards[b]+' recordings';bt.onclick=function(){xbShelf(b)};box.appendChild(bt)});g.appendChild(box)}return r};more.__legacy460=1}
+return true}var iv=setInterval(function(){if(arm())clearInterval(iv)},400);arm();
 })();
 </script>
 </body>
