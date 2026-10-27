@@ -901,7 +901,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.452-20261027-1400';
+var APP_BUILD='v97.453-20261027-1405';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2766,7 +2766,8 @@ function startFollow(mid){stopFollow();css281();if(startTimedCorp4(mid))return;
    try{var r=el.getBoundingClientRect();var vh=window.innerHeight||800;
     if((r.top<70||r.bottom>vh-120)&&(Date.now()-_lastUserScroll>4000)){el.scrollIntoView({behavior:"smooth",block:"center"})}}catch(e){}
  },300)}}
-function playModule(mid){var k="cfa-"+mid;
+var moduleRequest453=0;
+function playModule(mid){var request=++moduleRequest453,requestBox=aryaFollowBox(mid),k="cfa-"+mid;
  var topic=typeof CFA_TOPICS!=="undefined"?CFA_TOPICS.find(function(t){return t.modules&&t.modules.some(function(m){return m.id===mid})}):null;
  var module=topic&&topic.modules.find(function(m){return m.id===mid});
  if(!topic||!module||!PILOT_OK[mid]){note(MODMSG);return}
@@ -2774,15 +2775,18 @@ function playModule(mid){var k="cfa-"+mid;
  var f=(typeof AUDIO_MANIFEST!=="undefined"&&AUDIO_MANIFEST[k])?AUDIO_MANIFEST[k]:(k+".mp3");
  var p=(typeof PACK_OF!=="undefined")?PACK_OF[f]:null;
  if(!f||!p||typeof PLAYER==="undefined"||!PLAYER||typeof PLAYER.start!=="function"){note(MODMSG);return}
- var go=function(){if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){
+ var go=function(){if(request!==moduleRequest453||!requestBox||!document.contains(requestBox)||aryaFollowBox(mid)!==requestBox)return;
+ if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){
    try{if(window.MG_WEB_AUDIO)MG_WEB_AUDIO.unlock()}catch(e){}
    PLAYER.start("cfamod-"+mid,[k],title,function(){note(MODMSG);stopFollow()});
    startFollow(mid);
   }else{note(MODMSG)}};
  if(window.AUDIO_MAP&&window.AUDIO_MAP[f]){go()}
- else if(typeof loadPack==="function"){try{Promise.all([loadPack(p)]).then(go,function(){note(MODMSG)})}catch(e){note(MODMSG)}}
+ else if(typeof loadPack==="function"){try{Promise.all([loadPack(p)]).then(go,function(){if(request===moduleRequest453&&requestBox&&document.contains(requestBox))note(MODMSG)})}catch(e){if(request===moduleRequest453&&requestBox&&document.contains(requestBox))note(MODMSG)}}
  else{note(MODMSG)}}
 function arm(){var a=false,b=false,c=false,d=false;
+ if(typeof PLAYER!=="undefined"&&typeof PLAYER.close==="function"&&!PLAYER.close.__cancel453){var close453=PLAYER.close;PLAYER.close=function(){moduleRequest453++;stopFollow();return close453.apply(this,arguments)};PLAYER.close.__cancel453=1}
+
  if(typeof coverageStrip==="function"&&!coverageStrip.__audio452){var originalCoverage452=coverageStrip;coverageStrip=function(mid){var html=originalCoverage452.apply(this,arguments),file=typeof AUDIO_MANIFEST!=="undefined"?AUDIO_MANIFEST["cfa-"+mid]:null,ready=!!(PILOT_OK[mid]&&file&&typeof PACK_OF!=="undefined"&&PACK_OF[file]);return html.replace(/<span class="chip (?:green|grey)" style="font-size:11px">(?:✓|…) Audio<\/span>/,'<span class="chip '+(ready?'green':'grey')+'" style="font-size:11px">'+(ready?'✓':'…')+' Audio</span>')};coverageStrip.__audio452=1}
 
  if(typeof GERMAN_COURSE!=="undefined"){var b1fix=GERMAN_COURSE.find(function(u){return u.id==="b1-u1"});if(b1fix&&b1fix.n===21&&b1fix.vocab[34]&&b1fix.vocab[34].de==="anziehen (nachdem...)"&&b1fix.vocab[34].en==="nachdem + past-before-past"){b1fix.vocab[34]=Object.assign({},b1fix.vocab[34],{de:"nachdem ich mich angemeldet hatte",en:"after I had registered (past-before-past)"})}}
@@ -2792,8 +2796,8 @@ function arm(){var a=false,b=false,c=false,d=false;
  if(typeof playClips==="function"&&!playClips.__v288){var opc288=playClips;playClips=function(keys,fallback){var fs288;try{fs288=(typeof AUDIO_MANIFEST!=="undefined")?keys.map(function(k){return AUDIO_MANIFEST[k]}):keys;var gb288=mgGerBlocked(fs288);if(gb288){note(gb288==="de"?GERMSG:GENMSG);return}}catch(e){}return opc288.apply(this,arguments)};playClips.__v288=1}
  
  if(typeof xbListen==="function"&&!xbListen.__v276){var ox=xbListen;xbListen=function(mid){if(HOLD[mid]){note(CHAPMSG);return}return ox.apply(this,arguments)};xbListen.__v276=1;a=true}else if(typeof xbListen==="function")a=true;
- if(typeof listenModule==="function"&&!listenModule.__v282){listenModule=function(mid,tid){if(new URLSearchParams(location.search).get("readerPreview")==="1"&&typeof window.aryaPreviewReadCfa==="function"){window.aryaPreviewReadCfa(mid);return}if(!PILOT_OK[mid]){note(MODMSG);return}playModule(mid)};listenModule.__v282=1;listenModule.__v279=1;listenModule.__v278=1;b=true}else if(typeof listenModule==="function")b=true;
- if(typeof listenModuleTTS==="function"&&!listenModuleTTS.__v282){listenModuleTTS=function(mid,tid,idx){if(!PILOT_OK[mid]){note(MODMSG);return}playModule(mid)};listenModuleTTS.__v282=1;c=true}else if(typeof listenModuleTTS==="function")c=true;
+ if(typeof listenModule==="function"&&!listenModule.__v282){listenModule=function(mid,tid){moduleRequest453++;if(new URLSearchParams(location.search).get("readerPreview")==="1"&&typeof window.aryaPreviewReadCfa==="function"){window.aryaPreviewReadCfa(mid);return}if(!PILOT_OK[mid]){note(MODMSG);return}playModule(mid)};listenModule.__v282=1;listenModule.__v279=1;listenModule.__v278=1;b=true}else if(typeof listenModule==="function")b=true;
+ if(typeof listenModuleTTS==="function"&&!listenModuleTTS.__v282){listenModuleTTS=function(mid,tid,idx){moduleRequest453++;if(!PILOT_OK[mid]){note(MODMSG);return}playModule(mid)};listenModuleTTS.__v282=1;c=true}else if(typeof listenModuleTTS==="function")c=true;
  if(typeof SpeechSynthesis!=="undefined"&&!SpeechSynthesis.prototype.speak.__v282){var osp=SpeechSynthesis.prototype.speak;SpeechSynthesis.prototype.speak=function(u){try{if(u&&/^de/i.test(u.lang||"")){note(GERMSG);return}}catch(e){}return osp.apply(this,arguments)};SpeechSynthesis.prototype.speak.__v282=1;d=true}else if(typeof SpeechSynthesis!=="undefined")d=true;
  return a&&b&&c&&d}
 setInterval(arm,400);arm();
