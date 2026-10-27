@@ -901,7 +901,7 @@ var __v9759t=setInterval(function(){
 <script>
 /* v97.62: auto-update machinery - version.json marker, in-app check, gold update bar, More-section "Update app now". Never a reinstall to see updates. */
 (function(){
-var APP_BUILD='v97.442-20261027-0832';
+var APP_BUILD='v97.443-20261027-0843';
 var CHECK_MS=10*60*1000,_lastCheck=0;
 function ver(){return fetch('version.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function gateUp(){var g=document.getElementById('gate');return g&&g.offsetParent!==null}
@@ -2599,7 +2599,7 @@ var au=window.__rpAu,P=window.SpeechSynthesis.prototype,prev=P.speak,pc=P.cancel
 var css=document.createElement("style");css.textContent=".mgFollow::before{content:'Following along (approximate)';display:block;font:600 11px system-ui;color:#2f6bff;margin:0 0 4px}.mgFollow{background:rgba(47,107,255,.12)!important;border-radius:10px;box-shadow:0 0 0 6px rgba(47,107,255,.12);transition:background .2s,box-shadow .2s}";document.head.appendChild(css);
 ["touchstart","touchmove","wheel","mousedown"].forEach(function(n){addEventListener(n,function(){lastUser=Date.now()},{passive:true,capture:true})});
 function norm(s){return String(s||"").replace(/\s+/g," ").trim()}
-function clear(){document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow")})}
+function clear(){document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow","mgTimed")})}
 function stop(){st=null;clear()}
 function begin(u,d0){try{var ps=Array.prototype.slice.call(document.querySelectorAll(".module-body > p"));if(!ps.length)return;
  var tx=ps.map(function(p){return norm(p.textContent)}),joined=tx.join(" "),full=norm(u.text);
@@ -2698,8 +2698,33 @@ var _lastUserScroll=0;try{["pointerdown","touchstart","wheel"].forEach(function(
 function norm(s){return String(s||"").replace(/\s+/g," ").trim()}
 function css281(){if(document.getElementById("mgFollowCss"))return;var css=document.createElement("style");css.id="mgFollowCss";css.textContent=".mgFollow::before{content:'Following along (approximate)';display:block;font:600 11px system-ui;color:#2f6bff;margin:0 0 4px}.mgFollow{background:rgba(47,107,255,.12)!important;border-radius:10px;box-shadow:0 0 0 6px rgba(47,107,255,.12);transition:background .2s,box-shadow .2s}";document.head.appendChild(css)}
 var FOL=null;
-function stopFollow(){if(FOL&&FOL.t)clearInterval(FOL.t);FOL=null;try{document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow")})}catch(e){}}
-function startFollow(mid){stopFollow();css281();
+function stopFollow(){if(FOL&&FOL.t)clearInterval(FOL.t);FOL=null;try{document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow","mgTimed")})}catch(e){}}
+// Acoustic paragraph boundaries for the exact approved Working Capital recording.
+var ARYA_TIMED_CORP4={"file":"cfa-corp-4-recovered-20261026.mp3","duration":317.4,"starts":[5.491,42.465,75.691,116.313,141.242,177.555,211.162,222.285,236.934,251.403,266.132,281.503,295.591],"paragraphChecks":["491:3a8be40b","415:9d8f18be","419:b03ab734","306:9caca8b0","467:509b9c6a","462:83ec5460","160:b98a7690","170:60da9bd3","190:59534fbf","102:127ca981","197:7cfa07d2","185:3e2dc2b6"],"keyCheck":"235:bb81d4cc"};
+function startTimedCorp4(mid){
+ if(mid!=='corp-4')return false;
+ var map=ARYA_TIMED_CORP4,box=document.querySelector('#m-'+mid+' .module-body');if(!box)return false;
+ var file=typeof AUDIO_MANIFEST!=='undefined'?AUDIO_MANIFEST['cfa-'+mid]:null;if(file!==map.file)return false;
+ var ps=Array.from(box.querySelectorAll(':scope > p')),kp=box.querySelector('.keypoint');if(ps.length!==map.paragraphChecks.length||!kp)return false;
+ function check(t){t=norm(t);var h=2166136261;for(var i=0;i<t.length;i++){h=Math.imul(h^t.charCodeAt(i),16777619)>>>0}return t.length+':'+h.toString(16)}
+ for(var j=0;j<ps.length;j++)if(check(ps[j].textContent)!==map.paragraphChecks[j])return false;
+ if(check(norm(kp.textContent).replace(/^💡\s*/,''))!==map.keyCheck)return false;
+ var items=ps.concat([kp]),last=-1;
+ var css=document.getElementById('aryaTimedFollowCss');if(!css){css=document.createElement('style');css.id='aryaTimedFollowCss';css.textContent='.mgFollow.mgTimed::before{content:"Following recorded audio"}';document.head.appendChild(css)}
+ function tick(){var a=typeof PLAYER!=='undefined'&&PLAYER?PLAYER.a:null;
+ if(!a||a.ended||!document.contains(items[0])){stopFollow();return}
+ if(!isFinite(a.duration)||a.duration<=0)return;
+ if(Math.abs(a.duration-map.duration)>.35){stopFollow();return}
+ var idx=-1;for(var i=0;i<map.starts.length;i++){if(a.currentTime>=map.starts[i])idx=i;else break}
+ if(idx===last)return;last=idx;
+ document.querySelectorAll('.mgFollow').forEach(function(e){e.classList.remove('mgFollow','mgTimed')});
+ if(idx<0)return;var el=items[idx];el.classList.add('mgFollow','mgTimed');
+ if(!a.paused){try{var r=el.getBoundingClientRect(),vh=innerHeight||800;if((r.top<70||r.bottom>vh-120)&&Date.now()-_lastUserScroll>4000)el.scrollIntoView({behavior:'smooth',block:'center'})}catch(e){}}
+ }
+ FOL={t:setInterval(tick,100)};tick();return true;
+}
+
+function startFollow(mid){stopFollow();css281();if(startTimedCorp4(mid))return;
  var box=document.querySelector("#m-"+mid+" .module-body");if(!box)return;
  var ps=[].slice.call(box.querySelectorAll({"ethics-3":1,"corp-1":1,"corp-2":1,"corp-3":1,"corp-6":1,"deriv-1":1,"econ-3":1}[mid]?":scope>p":"p"));if(!ps.length)return;
  var kp=box.querySelector(".keypoint");
@@ -2720,7 +2745,7 @@ function startFollow(mid){stopFollow();css281();
    for(var i=0;i<cum.length;i++){if(f>=cum[i][0]&&f<cum[i][1]){idx=i;break}}
    if(idx<0&&f>=cum[cum.length-1][1])idx=cum.length-1;
    if(idx===st.idx)return;st.idx=idx;
-   document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow")});
+   document.querySelectorAll(".mgFollow").forEach(function(e){e.classList.remove("mgFollow","mgTimed")});
    if(idx<0)return;var el=items[idx].el;el.classList.add("mgFollow");
    try{var r=el.getBoundingClientRect();var vh=window.innerHeight||800;
     if((r.top<70||r.bottom>vh-120)&&(Date.now()-_lastUserScroll>4000)){el.scrollIntoView({behavior:"smooth",block:"center"})}}catch(e){}
